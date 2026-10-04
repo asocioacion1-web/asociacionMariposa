@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productos de Mariposa</title>
+  <link rel="stylesheet" href="../assets/css/productosStyle.css">
+</head>
+<body>
+  
+<!-- MENÚ NAVEGACIÓN SIMPLE -->
+   <header class="menu-superior">
+    <nav class="nav-simple">
+        <a href="/index.html" class="logo">
+            Asociación Mariposa
+        </a>
+        
+        <div class="nav-links">
+            <a href="/index.html">Inicio</a>
+        </div>
+    </nav>
+</header>
+
+  <div class="container">
+    <!-- Encabezado apartado -->
+    <header>
+      <h1>Productos de Mariposa</h1>
+      <p class="descripcion">Este es un apartado para mostrar nuestros productos. Si alguno les interesa, ¡pueden ir a la central de Mariposas para adquirirlo o conseguirlo en uno de nuestros eventos!</p>
+    </header>
+
+    <div class="separador"></div>
+
+    <!-- Formulario simplificado (sin caja blanca) -->
+    
+    <div id="form-section" class="form-seccion">
+      <h2>Publicar Producto</h2>
+      <form id="formProducto">
+        <label for="nombre">Nombre del producto:</label>
+        <input type="text" id="nombre" placeholder="Nombre del producto" required />
+
+        <label for="foto">Foto del producto:</label>
+        <input type="file" id="foto" accept="image/*" required />
+
+        <label for="info">Información del producto:</label>
+        <textarea id="info" placeholder="Información sobre el producto..." required></textarea>
+
+        <button type="submit">Publicar</button>
+      </form>
+    </div>
+
+    <div class="separador"></div>
+
+    <!-- Sección de tarjetas (Únicas con caja blanca) -->
+    <h2>Productos Publicados</h2>
+    <div id="productosContainer"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formProducto');
+    const productosContainer = document.getElementById('productosContainer');
+    let productos = [];
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById('nombre').value.trim();
+      const info = document.getElementById('info').value.trim();
+      const fotoInput = document.getElementById('foto');
+
+      if (fotoInput.files && fotoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const nuevoProducto = {
+            nombre: nombre,
+            info: info,
+            foto: e.target.result
+          };
+          productos.push(nuevoProducto);
+          mostrarProductos();
+          form.reset();
+        };
+        reader.readAsDataURL(fotoInput.files[0]);
+      }
+    });
+
+    function mostrarProductos() {
+      productosContainer.innerHTML = '';
+      productos.forEach((producto) => {
+        const div = document.createElement('div');
+        div.classList.add('producto');
+
+        div.innerHTML = `
+          <img src="${producto.foto}" alt="Foto de ${producto.nombre}" />
+          <div class="producto-contenido">
+            <div class="producto-nombre">${producto.nombre}</div>
+            <div class="producto-info">${producto.info}</div>
+          </div>
+        `;
+
+        productosContainer.appendChild(div);
+      });
+    }
+
+    const formSection = getElementById('form-section');
+
+    if(formSection){
+
+    }
+        
+  </script>
+
+</body>
+</html>

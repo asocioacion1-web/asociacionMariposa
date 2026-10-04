@@ -1,0 +1,214 @@
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    :root {
+      --azul-profundo: #1b3b6f;
+      --azul-marino: #14213d;
+      --celeste-fondo: #bde0fe;
+      --celeste-borde: #90e0ef;
+      --azul-boton: #0077b6;
+      --sombra-tarjetas: 0 8px 20px rgba(27, 59, 111, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--celeste-fondo);
+      color: var(--azul-profundo);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* --- Encabezado simple y separado --- */
+    header {
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      color: var(--azul-marino);
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h1::after {
+      font-size: 1.8rem;
+    }
+
+    .descripcion {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--azul-profundo);
+      line-height: 1.6;
+    }
+
+    /* Divisor sutil */
+    .separador {
+      height: 1px;
+      background-color: rgba(27, 59, 111, 0.15);
+      margin: 25px 0 35px 0;
+    }
+
+    /* --- Formulario súper simple --- */
+    .form-seccion {
+      margin-bottom: 45px;
+    }
+
+  
+    h2 {
+      color: var(--azul-marino);
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--azul-marino);
+    }
+
+    input[type="text"],
+    textarea,
+    input[type="file"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--azul-profundo);
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.6);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      background-color: #ffffff;
+      border-color: var(--azul-boton);
+    }
+
+    textarea {
+      height: 90px;
+      resize: vertical;
+    }
+
+    input[type="file"] {
+      background-color: transparent;
+      border: 1px dashed var(--azul-profundo);
+      cursor: pointer;
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 10px 24px;
+      background-color: var(--azul-boton);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--azul-marino);
+    }
+
+    /* --- Galería de Productos (Con caja blanca) --- */
+    #productosContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    /* Cajas blancas exclusivas para la información guardada */
+    .producto {
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--sombra-tarjetas);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .producto img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .producto-contenido {
+      padding: 16px;
+    }
+
+    .producto-nombre {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--azul-marino);
+      margin-bottom: 6px;
+    }
+
+    .producto-info {
+      font-size: 0.88rem;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    color: #0878bd;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: #0878bd;
+    text-decoration: none;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.nav-simple {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.form-section {
+  
+}

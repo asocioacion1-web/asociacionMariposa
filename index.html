@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asociacion Mariposa</title>
+
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg sticky-top py-3">
+    <div class="container">
+      <div class="nav-logo">
+        <img src="assets/imagenes/FundacionLogo.png" alt="Logo de la Asociación Mariposa Azul" class="logo">
+        <a class="navbar-brand fs-4" href="#inicio">Asociacion Civil Mariposas</a>
+      <div class="collapse navbar-collapse justify-content-end" id="menuNav">
+
+
+          <ul class="navbar-nav gap-lg-3 align-items-center">
+            <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sobre-la-fundación">Sobre la asociación</a></li>
+            <li class="nav-item"><a class="nav-link" href="#noticias">Noticias</a></li>
+            <li class="nav-item"><a class="nav-link" href="/public/galeria.html">Galería</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+            <li class="nav-item"><a class="nav-link" href="/public/ayuda.html">Ayuda</a></li>
+            <li class="nav-item"><a class="nav-link" href="/public/productos.html">Productos</a></li>
+            <li class="nav-item"><a class="nav-link" id="btnSalir" href="/public/login.html">Salir</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="inicio">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill">Asociación sin fines de lucro</span>
+          <h1 class="display-5 mb-3">Asociacion Civil Mariposas Azul</h1>
+          <p class="lead">Nosotros contamos con actividades que fomentan la participación activa de los ciudadanos, como
+            talleres educativos y eventos culturales, buscando mejorar la calidad de vida y la cohesión social.</p>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <a href="#noticias" class="btn btn-amarillo btn-lg px-4" id="btn-amarillo">Ver noticias</a>
+          </div>
+        </div>
+        <div class="col-lg-5 text-center">
+          <img src="https://placehold.co/480x360/eaf4fc/12578f?text=Taller+de+arte" class="img-fluid rounded-4"
+            alt="Niños pintando en un taller de arte">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!--Sobre la fundación-->
+  <section id="sobre-la-fundación" class="py-5">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6">
+          <h2 style="color:var(--azul-700)">Asociacion Mariposas</h2>
+          <p class="text-secondary">La Asociación Mariposa azul nació para buscar la ayudar a personas con algún
+            problema al desarrollar su vida diaria en la sociedad, pero luego se dirigió directamente a ayudar a personas con
+            trastorno del espectro autista. Actualmente hacemos eventos y actividades donde integramos a las personas y
+            adquiren las ganancias para la asocación. Principalmente orientados a ayudarlos con su educación y futuro
+            laboral.</p>
+          <a href="#historia-logo" class="btn btn-amarillo px-4 mt-3" id="btn-amarillo">Historia del Logo</a>
+        </div>
+        <div class="col-lg-6">
+          <img src="https://placehold.co/600x400/8fc4ea/0c3b66?text=Sobre+la+fundaci%C3%B3n"
+            alt="Asociación Mariposas Azul" class="img-fluid rounded-4 shadow-sm">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTICIAS -->
+  <section id="noticias" class="py-5">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
+        <div>
+          <h2 style="color:var(--azul-700)">Últimas noticias</h2>
+          <p class="text-secondary mb-0">Lo que están viviendo nuestros chicos, semana a semana</p>
+        </div>
+      </div>
+
+      <div class="text-center mb-4">
+        <a href="/public/noticia.html" id="btnCrearNoticia" class="btn btn-outline-primary px-4"
+          style="display:none; color:var(--azul-700); border-color:var(--azul-700)">Crear noticia
+        </a>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="card-noticia">
+            <img src="https://placehold.co/400x220/ff8b6b/ffffff?text=Taller+de+pintura" alt="Taller de pintura mural">
+            <div class="p-3">
+              <span class="badge-cat badge-arte"></span>
+              <p class="fecha-noticia mt-2 mb-1"></p>
+              <h5></h5>
+              <p class="text-secondary small"></p>
+              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card-noticia">
+            <img src="https://placehold.co/400x220/6a3fc9/ffffff?text=Coro+Mariposa" alt="Ensayo del coro">
+            <div class="p-3">
+              <span class="badge-cat badge-musica"></span>
+              <p class="fecha-noticia mt-2 mb-1"></p>
+              <h5></h5>
+              <p class="text-secondary small"></p>
+              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card-noticia">
+            <img src="https://placehold.co/400x220/1e8a4c/ffffff?text=Jornada+deportiva" alt="Jornada deportiva">
+            <div class="p-3">
+              <span class="badge-cat badge-deporte"></span>
+              <p class="fecha-noticia mt-2 mb-1"></p>
+              <h5></h5>
+              <p class="text-secondary small"></p>
+              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card-noticia">
+            <img src="https://placehold.co/400x220/12578f/ffffff?text=Feria+solidaria"
+              alt="Feria solidaria de la fundación">
+            <div class="p-3">
+              <span class="badge-cat badge-evento"></span>
+              <p class="fecha-noticia mt-2 mb-1"></p>
+              <h5></h5>
+              <p class="text-secondary small"></p>
+              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card-noticia">
+            <img src="https://placehold.co/400x220/ff8b6b/ffffff?text=Arte+en+cer%C3%A1mica" alt="Taller de cerámica">
+            <div class="p-3">
+              <p class="fecha-noticia mt-2 mb-1"></p>
+              <h5></h5>
+              <p class="text-secondary small"></p>
+              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card-noticia">
+            <img src="https://placehold.co/400x220/1e8a4c/ffffff?text=Torneo+de+f%C3%BAtbol"
+              alt="Torneo de fútbol adaptado">
+            <div class="p-3">
+              <p class="fecha-noticia mt-2 mb-1"></p>
+              <h5></h5>
+              <p class="text-secondary small"></p>
+              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <a href="public/verNoticias.html" class="btn btn-outline-primary px-4" style="color:var(--azul-700); border-color:var(--azul-700)">Ver
+          todas las noticias</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!--Apartado para los jovenes de la asociación-->
+  <section id="jovenes" class="py-5 seccion-clara">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 style="color:var(--azul-700)">Jóvenes de la asociación</h2>
+        <p class="text-secondary">En este apartado los jovenes contaran sus historia y experiencia en la asociación.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+            <img src="https://placehold.co/150x150/8fc4ea/0c3b66?text=Joven+1" alt="Joven 1"
+              class="rounded-circle mb-3">
+            <h6>Asociación persona</h6>
+            <p class="small text-secondary">Participa activamente en los talleres de arte y ha expuesto sus obras en
+              la feria anual.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+            <img src="https://placehold.co/150x150/ffc94d/0c3b66?text=Joven+2" alt="Joven 2"
+              class="rounded-circle mb-3">
+            <h6>Asociación persona</h6>
+            <p class="small text-secondary">Destacada en el coro Mariposa, ha participado en varias presentaciones
+              locales y regionales.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+            <img src="https://placehold.co/150x150/ff8b6b/ffffff?text=Joven+3" alt="Joven 3"
+              class="rounded-circle mb-3">
+            <h6>Asociación persona</h6>
+            <p class="small text-secondary">Ha demostrado gran habilidad en las actividades deportivas, siendo un
+              referente para sus compañeros.
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="text-center mt-5">
+        <a href="public/historiaAlumnos.html" class="btn btn-outline-primary px-4" style="color:var(--azul-700); border-color:var(--azul-700)">Mas estudiantes</a>
+      </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="py-5 seccion-clara">
+    <div class="container">
+      <div class="row g-5 align-items-stretch">
+        <!-- Formulario -->
+        <center>
+          <div class="col-lg-6" id="contacto-padre">
+            <h2 style="color:var(--azul-700)">Contactanos por estos medios (Manda mensaje de instagram)</h2>
+            <!-- Datos de contacto (al lado) -->
+            <div class="col-lg-6">
+              <div class="p-4 rounded-4 bg-white h-100 shadow-sm">
+                <h5 style="color:var(--azul-700)">Datos de contacto</h5>
+                <ul class="list-unstyled mt-3">
+                  <li class="mb-3">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Gral.+Flores+577,+85000+Trinidad"
+                      target="_blank">
+                      📍 Gral. Flores577, 85000 Trinidad
+                    </a>
+                  </li>
+                  <li class="mb-3">
+                    <a href="https://wa.me/598095409719s" target="_blank" class="call-button">📞 Llamar al 091 234 567</a>
+                  </li>
+                  <li class="mb-3">📩 acivilmariposas@gmail.com</li>
+                  <li class="mb-3">🕒 Lunes a viernes, 9 a 17 hs</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </center>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!--Historia de la mariposa azul-->
+  <section id="historia-logo" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 style="color:var(--azul-700)">Historia de la mariposa azul</h2>
+      </div>
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6">
+          <img src="/assets/imagenes/Mariposahistoria.jpeg" class="img-fluid rounded-4" alt="Ilustración de una mariposa azul">
+        </div>
+        <div class="col-lg-6">
+          <div class="p-4 rounded-4 bg-white h-100 shadow-sm">
+            <p>Había una vez un hombre viudo que vivía con sus
+              dos hijas, niñas curiosas y muy inteligentes. Siempre
+              estaban llenas de preguntas; algunas él podía responder, otras no. Deseando que recibieran la mejor
+              educación posible, decidió enviarlas a pasar un tiempo con un sabio que habitaba en lo alto de una
+              colina.</p>
+            <p>El sabio tenía fama de responder cualquier pregunta sin vacilar. Intrigadas y un poco desafiantes,
+              las niñas pensaron en idear una pregunta que él no pudiera contestar. Una de ellas encontró una
+              hermosa mariposa azul y tuvo una idea.</p>
+            <p>—“Voy a esconderla entre mis manos y preguntarle al sabio si está viva o muerta”, explicó a su
+              hermana. —“Si dice que está muerta, abriré las manos y la dejaré volar. Si dice que está viva, la
+              apretaré hasta matarla. Así, sin importar lo que diga, ¡se equivocará!”</p>
+            <p>— Con el plan listo, las dos niñas fueron a ver al sabio, que meditaba serenamente. —“Sabio, tengo
+              aquí una mariposa azul. ¿Está viva o muerta?” El sabio, sin alterarse, sonrió y respondió con calma:
+              —“Depende de ti… la mariposa está en tus manos.”</p>
+            <p>— Y así es la vida: nuestro presente y nuestro futuro dependen de nuestras decisiones. No podemos
+              culpar a otros por lo que no logramos; somos responsables de nuestras acciones y de lo que
+              construimos. Nuestra vida, como aquella mariposa azul, está en nuestras manos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="py-5 mt-4">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="text-white">Fundación Mariposa Azul</h5>
+          <p class="small">Difundiendo arte, música, deporte y comunidad para niños con el especto autista.</p>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-white">Enlaces</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#noticias">Noticias</a></li>
+            <li><a href="#galeria">Galería</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-white">Seguinos</h6>
+          <div clas="d-flex gap-3 fs-5">
+            <a href="https://www.instagram.com/asociacionmariposas?igsh=MWJvbTdoZWtnaXMydw==" _blank"
+              rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram"
+                viewBox="0 0 16 16">
+                <path
+                  d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334" />
+              </svg>
+            </a>  
+          </div>
+        </div>
+</div>
+      <hr class="border-light opacity-25 my-4">
+      <p class="small text-center mb-0">© 2026 Fundación Mariposa Azul. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    
+  const contenedor = document.querySelector("#noticias .row.g-4");
+
+  let config;
+  try {
+    config = await (await fetch("/api/config")).json();
+  } catch (e) {
+    contenedor.innerHTML = '<p class="text-danger text-center">No se pudo conectar con el servidor.</p>';
+    throw e;
+  }
+
+  const ApiKey = config.anonKey;
+  const ApiURL = `${config.url}/rest/v1/noticias`;
+  const clienteSupabase = supabase.createClient(config.url, config.anonKey);
+  
+  let esAdmin = false;
+
+  async function comprobarAdmin() {
+    const { data: { user } } = await clienteSupabase.auth.getUser();
+    if (!user) return;
+
+    const { data, error } = await clienteSupabase
+      .from("admin").select("id").eq("user_id", user.id).maybeSingle();
+
+    if (error) return console.error("Error comprobando administrador:", error);
+    esAdmin = !!data;
+  }
+
+    function aplicarVistaAdmin() {
+      document.getElementById("btnCrearNoticia").style.display = esAdmin ? "inline-block" : "none";
+      document.querySelectorAll(".btn-borrar").forEach(btn => {
+      btn.style.display = esAdmin ? "inline-block" : "none";
+    });
+  }
+
+    async function cargarNoticias() {
+
+      try {
+
+        const respuesta = await fetch(ApiURL, {
+          method: "GET",
+          headers: {
+            apikey: ApiKey,
+            Authorization: `Bearer ${ApiKey}`
+          }
+        }
+        );
+
+        if (!respuesta.ok) {
+          throw new Error(`Error HTTP: ${respuesta.status}`);
+        }
+
+        const data = await respuesta.json();
+        const contenedorNoticias = document.querySelector('#noticias .row.g-4');
+
+        // Limpiar las noticias que ya están cargadas
+        contenedorNoticias.innerHTML = "";
+
+        data.forEach(noticia => {
+
+          let palabras = noticia.parrafo.split(" ").length;
+
+          const card = document.createElement('div');
+          card.className = 'col-md-6 col-lg-4';
+          card.innerHTML = `
+            <div class="card-noticia">
+                <img 
+                  src="${noticia.imagen}" 
+                  alt="${noticia.titulo}"
+                onerror="console.error('No se pudo cargar:', this.src)"
+                >
+                <div class="p-3">
+                    </span>
+                    <p class="fecha-noticia mt-2 mb-1">
+                        ${new Date(noticia.fecha).toLocaleDateString()}
+                    </p>
+                    <h3>${noticia.titulo}</h3>
+                    <h5>${noticia.subtitulo}</h5>
+                    <p class="text-secondary small">
+                        ${noticia.parrafo}
+                    </p>
+                    ${palabras > 150 ? `
+                    <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">
+                    Leer más →
+                    </a>
+                    ` : ""}
+                    <hr>
+                    <a href="#" class="fw-bold text-decoration-none btn-borrar" data-id="${noticia.id}" style="color:var(--azul-700); display:none">
+                       Borrar
+                    </a>
+                </div>
+            </div>
+        `;
+          contenedorNoticias.appendChild(card);
+        });
+        console.log("Noticias cargadas:", data);
+      } catch (error) {
+        console.log("Error al cargar las noticias: ", error)
+      }
+    }
+
+    if (esAdmin) {
+      document.querySelectorAll(".btn-borrar").forEach(btn => {
+         btn.style.display = "inline-block";
+         btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+      const id = btn.dataset.id;
+      if (!confirm("¿Seguro que querés borrar esta noticia?")) return;
+
+      const { data: { session } } = await clienteSupabase.auth.getSession();
+      const respuesta = await fetch(`${config.url}/rest/v1/noticias?id=eq.${id}`, {
+        method: "DELETE",
+        headers: {
+          apikey: config.anonKey,
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (respuesta.ok) {
+        btn.closest(".col-md-6").remove();
+      } else {
+        alert("No se pudo borrar la noticia");
+      }
+    });
+  });
+}
+
+    document.getElementById("btnSalir").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await clienteSupabase.auth.signOut();
+      window.location.href = "/public/login.html"; 
+    });
+
+    await comprobarAdmin();
+    await cargarNoticias();
+    aplicarVistaAdmin();
+
+  </script>
+</body>
+
+</html>

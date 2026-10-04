@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear / Editar noticia</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="noticiaStyle.css">
+  <style>
+    /* Estilos puntuales para la lista de noticias existentes (edición) */
+    .panel-lista {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      margin-bottom: 24px;
+    }
+
+    .fila-noticia {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .fila-noticia:last-child {
+      border-bottom: none;
+    }
+
+    .fila-noticia-info h6 {
+      margin-bottom: 2px;
+    }
+
+    .fila-noticia-info p {
+      margin-bottom: 0;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    .aviso-edicion {
+      background: #fff7e6;
+      border: 1px solid #ffd28a;
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .aviso-edicion.oculto {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container py-5">
+
+    <div class="encabezado text-center mb-4">
+      <h1 id="titulo-pagina">Crear noticia</h1>
+      <p class="text-secondary">Completá los datos y generá el código para pegar en la sección de noticias</p>
+      <a href="index.html" class="text-decoration-none" style="color:var(--azul-700, #0d6efd)">← Volver a noticias</a>
+    </div>
+
+    <!-- LISTA DE NOTICIAS EXISTENTES (para elegir cuál editar) -->
+    <div class="panel-lista">
+      <h2 class="h5 mb-3">✏️ Editar una noticia existente</h2>
+      <p class="text-secondary small">Elegí una noticia de la lista para cargarla en el formulario de abajo.</p>
+      <div id="lista-noticias">
+        <p class="text-secondary small" id="lista-cargando">Cargando noticias...</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- FORMULARIO -->
+      <div class="col-lg-6">
+        <div class="panel-form p-4 bg-white rounded-3 shadow-sm">
+          <h2 id="titulo-panel-form" class="h4 mb-3">📝 Datos de la noticia</h2>
+
+          <div class="aviso-edicion oculto" id="aviso-edicion">
+            <span>Estás editando una noticia existente.</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="cancelarEdicion()">
+              Cancelar edición
+            </button>
+          </div>
+
+          <form id="form-noticia" onsubmit="event.preventDefault();">
+
+            <input type="hidden" id="campo-id" value="">
+
+            <div class="mb-3">
+              <label for="campo-categoria" class="form-label fw-semibold">
+                Categoría
+              </label>
+              <select class="form-select" id="campo-categoria" name="categoria">
+                <option value="arte">Arte</option>
+                <option value="musica">Música</option>
+                <option value="deporte">Deporte</option>
+                <option value="evento">Evento</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="campo-fecha" class="form-label fw-semibold">
+                Fecha
+              </label>
+              <input type="text" class="form-control" id="campo-fecha" name="fecha" placeholder="Ej: 2026-05-21" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="campo-titulo" class="form-label fw-semibold">
+                Título
+              </label>
+              <input type="text" class="form-control" id="campo-titulo" name="titulo"
+                placeholder="Ej: Terminamos el mural colectivo del patio" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="campo-parrafo" class="form-label fw-semibold">
+                Párrafo
+              </label>
+              <textarea class="form-control" id="campo-parrafo" name="parrafo" rows="4"
+                placeholder="Contá de qué se trató la actividad..." required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="campo-imagen-url" class="form-label fw-semibold">
+                URL de la imagen
+              </label>
+              <input type="text" class="form-control" id="campo-imagen-url" name="imagenUrl" placeholder="https://...">
+              <div class="form-text">Pegá el link de una imagen ya subida (por ejemplo a un bucket de Supabase).</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="campo-imagen" class="form-label fw-semibold">
+                Imagen (solo vista previa local)
+              </label>
+              <input type="file" class="form-control" id="campo-imagen" name="imagen" accept=".jpg,.jpeg,.png,.webp">
+            </div>
+
+            <button type="button" class="btn w-100 mt-2" style="background: var(--azul-700, #0d6efd); color: white;"
+              id="btn-guardar" onclick="guardarNoticia()">
+              Publicar noticia
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- VISTA PREVIA -->
+      <div class="col-lg-6" id="previa">
+        <div class="panel-previa mb-3 p-4 bg-white rounded-3 shadow-sm">
+          <h2 class="h4 mb-3">👀 Vista previa</h2>
+
+          <div class="card-noticia border rounded overflow-hidden">
+            <img id="previa-imagen" src="https://placehold.co/400x220/e6e6e6/999999?text=Imagen" alt="Vista previa" class="img-fluid w-100" style="max-height: 220px; object-fit: cover;">
+
+            <div class="p-3">
+              <span class="badge bg-primary badge-cat badge-arte" id="previa-badge">
+                Arte
+              </span>
+
+              <p class="fecha-noticia text-muted mt-2 mb-1 small" id="previa-fecha">
+                Fecha pendiente
+              </p>
+
+              <h5 id="previa-titulo" class="fw-bold">
+                Título de la noticia
+              </h5>
+
+              <p class="text-secondary small" id="previa-parrafo">
+                Acá va a aparecer el párrafo que escribas en el formulario.
+              </p>
+
+              <a href="#" id="previa-link" class="fw-bold text-decoration-none d-inline-block mb-3" style="color: var(--azul-700, #0d6efd);">
+                Leer más →
+              </a>
+
+              <button type="button" class="btn w-100" style="background: var(--azul-700, #0d6efd); color: white;"
+                onclick="actualizarPrevia()">
+                Actualizar vista previa
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const ApiKey = "sb_publishable_P7FSsXDyYBMEvZzkjVm7nA_E0vo-qNH";
+    const SupabaseUrl = "https://rmnnjxletaweppdvipgs.supabase.co/rest/v1/";
+
+    const categorias = {
+      arte: { badge: 'badge-arte', etiqueta: 'Arte' },
+      musica: { badge: 'badge-musica', etiqueta: 'Música' },
+      deporte: { badge: 'badge-deporte', etiqueta: 'Deporte' },
+      evento: { badge: 'badge-evento', etiqueta: 'Evento' }
+    };
+
+    // ID de la noticia en edición (null = modo "crear")
+    let idEnEdicion = null;
+
+    const inputImagen = document.getElementById('campo-imagen');
+    const previaImagen = document.getElementById('previa-imagen');
+
+    // Event Listeners para actualizar la vista previa en tiempo real mientras el usuario escribe
+    document.getElementById('campo-titulo').addEventListener('input', actualizarPrevia);
+    document.getElementById('campo-fecha').addEventListener('input', actualizarPrevia);
+    document.getElementById('campo-parrafo').addEventListener('input', actualizarPrevia);
+    document.getElementById('campo-categoria').addEventListener('change', actualizarPreviaCategoria);
+
+    inputImagen.addEventListener('change', function () {
+      const archivo = this.files[0];
+      if (archivo) {
+        const lector = new FileReader();
+        lector.onload = e => previaImagen.src = e.target.result;
+        lector.readAsDataURL(archivo);
+      }
+    });
+
+    document.getElementById('campo-imagen-url').addEventListener('input', function () {
+      if (this.value.trim()) {
+        previaImagen.src = this.value.trim();
+      } else {
+        previaImagen.src = 'https://placehold.co/400x220/e6e6e6/999999?text=Imagen';
+      }
+    });
+
+    function actualizarPreviaCategoria() {
+      const catVal = document.getElementById('campo-categoria').value;
+      const cat = categorias[catVal] || { badge: 'badge-arte', etiqueta: catVal };
+      const badge = document.getElementById('previa-badge');
+      badge.className = 'badge badge-cat ' + cat.badge;
+      badge.textContent = cat.etiqueta;
+    }
+
+    function actualizarPrevia() {
+      const fecha = document.getElementById('campo-fecha').value.trim() || 'Fecha pendiente';
+      const titulo = document.getElementById('campo-titulo').value.trim() || 'Título de la noticia';
+      const parrafo = document.getElementById('campo-parrafo').value.trim() || 'Acá va a aparecer el párrafo que escribas en el formulario.';
+
+      document.getElementById('previa-fecha').textContent = fecha;
+      document.getElementById('previa-titulo').textContent = titulo;
+      document.getElementById('previa-parrafo').textContent = parrafo;
+      actualizarPreviaCategoria();
+    }
+
+    // ---------- LISTADO DE NOTICIAS EXISTENTES ----------
+
+    async function cargarNoticiasExistentes() {
+      const contenedor = document.getElementById('lista-noticias');
+
+      try {
+        const respuesta = await fetch(SupabaseUrl + "noticias?select=*&order=fecha.desc", {
+          method: "GET",
+          headers: {
+            "apikey": ApiKey,
+            "Authorization": `Bearer ${ApiKey}`
+          }
+        });
+
+        if (!respuesta.ok) {
+          throw new Error(`Error HTTP: ${respuesta.status}`);
+        }
+
+        const noticias = await respuesta.json();
+        contenedor.innerHTML = "";
+
+        if (noticias.length === 0) {
+          contenedor.innerHTML = '<p class="text-secondary small">Todavía no hay noticias cargadas.</p>';
+          return;
+        }
+
+        noticias.forEach(noticia => {
+          const fila = document.createElement('div');
+          fila.className = 'fila-noticia';
+          fila.innerHTML = `
+            <div class="fila-noticia-info">
+              <h6>${noticia.titulo || 'Sin título'}</h6>
+              <p>${categorias[noticia.categoria] ? categorias[noticia.categoria].etiqueta : (noticia.categoria || 'Gral')} · ${noticia.fecha || ''}</p>
+            </div>
+            <button type="button" class="btn btn-sm" style="background: var(--azul-700, #0d6efd); color: white;">
+              Editar
+            </button>
+          `;
+          fila.querySelector('button').addEventListener('click', () => seleccionarParaEditar(noticia));
+          contenedor.appendChild(fila);
+        });
+
+      } catch (error) {
+        console.error("Error al cargar las noticias existentes: ", error);
+        contenedor.innerHTML = '<p class="text-danger small">No se pudieron cargar las noticias.</p>';
+      }
+    }
+
+    // ---------- SELECCIONAR / CANCELAR EDICIÓN ----------
+
+    function seleccionarParaEditar(noticia) {
+      idEnEdicion = noticia.id;
+
+      const categoriaKey = Object.keys(categorias).find(
+        key => key.toLowerCase() === String(noticia.categoria || '').toLowerCase()
+      ) || 'arte';
+
+      document.getElementById('campo-id').value = noticia.id ?? '';
+      document.getElementById('campo-categoria').value = categoriaKey;
+      document.getElementById('campo-fecha').value = noticia.fecha ?? '';
+      document.getElementById('campo-titulo').value = noticia.titulo ?? '';
+      document.getElementById('campo-parrafo').value = noticia.parrafo ?? '';
+      document.getElementById('campo-imagen-url').value = noticia.imagen ?? '';
+
+      previaImagen.src = (noticia.imagen && noticia.imagen.trim())
+        ? noticia.imagen
+        : 'https://placehold.co/400x220/e6e6e6/999999?text=Imagen';
+
+      actualizarPrevia();
+
+      document.getElementById('titulo-pagina').textContent = 'Editar noticia';
+      document.getElementById('titulo-panel-form').textContent = '✏️ Editando noticia';
+      document.getElementById('btn-guardar').textContent = 'Actualizar noticia';
+      document.getElementById('aviso-edicion').classList.remove('oculto');
+
+      document.getElementById('form-noticia').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function cancelarEdicion() {
+      idEnEdicion = null;
+
+      document.getElementById('form-noticia').reset();
+      document.getElementById('campo-id').value = '';
+      previaImagen.src = 'https://placehold.co/400x220/e6e6e6/999999?text=Imagen';
+
+      actualizarPrevia();
+
+      document.getElementById('titulo-pagina').textContent = 'Crear noticia';
+      document.getElementById('titulo-panel-form').textContent = '📝 Datos de la noticia';
+      document.getElementById('btn-guardar').textContent = 'Publicar noticia';
+      document.getElementById('aviso-edicion').classList.add('oculto');
+    }
+
+    // ---------- GUARDAR (CREAR o ACTUALIZAR) ----------
+
+    async function guardarNoticia() {
+      const titulo = document.getElementById("campo-titulo").value.trim();
+      const parrafo = document.getElementById("campo-parrafo").value.trim();
+      const categoria = document.getElementById("campo-categoria").value;
+      const fecha = document.getElementById("campo-fecha").value.trim();
+      const imagen = document.getElementById("campo-imagen-url").value.trim();
+
+      if (!titulo || !parrafo || !categoria || !fecha) {
+        alert("Por favor completá todos los campos obligatorios.");
+        return;
+      }
+
+      const cuerpo = {
+        titulo: titulo,
+        parrafo: parrafo,
+        categoria: categoria,
+        fecha: fecha,
+        imagen: imagen || null
+      };
+
+      try {
+        let respuesta;
+
+        if (idEnEdicion) {
+          // MODO EDICIÓN → PATCH sobre la noticia elegida
+          respuesta = await fetch(`${SupabaseUrl}noticias?id=eq.${idEnEdicion}`, {
+            method: "PATCH",
+            headers: {
+              "apikey": ApiKey,
+              "Authorization": `Bearer ${ApiKey}`,
+              "Content-Type": "application/json",
+              "Prefer": "return=representation"
+            },
+            body: JSON.stringify(cuerpo)
+          });
+        } else {
+          // MODO CREACIÓN → POST nuevo
+          respuesta = await fetch(SupabaseUrl + "noticias", {
+            method: "POST",
+            headers: {
+              "apikey": ApiKey,
+              "Authorization": `Bearer ${ApiKey}`,
+              "Content-Type": "application/json",
+              "Prefer": "return=representation"
+            },
+            body: JSON.stringify(cuerpo)
+          });
+        }
+
+        if (respuesta.ok) {
+          alert(idEnEdicion ? "Noticia actualizada correctamente" : "Noticia publicada correctamente");
+          cancelarEdicion();
+          cargarNoticiasExistentes();
+        } else {
+          const errorData = await respuesta.json();
+          console.error("Error de Supabase:", errorData);
+          alert("Error al guardar: " + (errorData.message || "Error al procesar la petición"));
+        }
+
+      } catch (error) {
+        console.error("Error de conexión:", error);
+        alert("Ocurrió un error al conectar con la base de datos.");
+      }
+    }
+
+    // Cargar la lista inicial de noticias al abrir la página
+    document.addEventListener("DOMContentLoaded", () => {
+      cargarNoticiasExistentes();
+      actualizarPrevia();
+    });
+  </script>
+</body>
+</html>

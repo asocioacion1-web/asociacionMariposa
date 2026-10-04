@@ -1,0 +1,514 @@
+/* ================================
+   CONFIGURACIÓN GENERAL
+================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #222;
+    background: #ffffff;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+
+/* ================================
+   NAVBAR
+================================ */
+
+.navbar {
+    width: 100%;
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+
+    background: #ffffff;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+}
+
+.logo span {
+    font-size: 23px;
+    font-weight: 700;
+    color: #1b4d89;
+}
+
+.navbar nav {
+    display: flex;
+    gap: 30px;
+}
+
+.navbar nav a {
+    font-size: 15px;
+    font-weight: 500;
+
+    transition: 0.3s;
+}
+
+.navbar nav a:hover {
+    color: #1b4d89;
+}
+
+
+/* ================================
+   HERO
+================================ */
+
+.hero {
+    min-height: 600px;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(10, 35, 65, 0.90),
+            rgba(10, 35, 65, 0.55),
+            rgba(10, 35, 65, 0.20)
+        ),
+        url("../imagenes/fondo-historias.jpg");
+
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-contenido {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+
+    color: white;
+}
+
+.etiqueta {
+    display: inline-block;
+
+    padding: 8px 16px;
+
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    max-width: 700px;
+
+    font-size: clamp(45px, 6vw, 75px);
+    line-height: 1.05;
+
+    margin-bottom: 25px;
+}
+
+.hero h1 span {
+    color: #6bb8ff;
+}
+
+.hero p {
+    max-width: 650px;
+
+    font-size: 18px;
+    line-height: 1.8;
+
+    margin-bottom: 35px;
+}
+
+
+/* ================================
+   BOTONES
+================================ */
+
+.boton {
+    display: inline-block;
+
+    padding: 13px 28px;
+
+    border-radius: 30px;
+
+    background: #1b4d89;
+    color: white;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.boton:hover {
+    transform: translateY(-3px);
+
+    background: #143963;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ================================
+   INTRODUCCIÓN
+================================ */
+
+.introduccion {
+    padding: 100px 0 70px;
+
+    text-align: center;
+}
+
+.introduccion .contenedor {
+    max-width: 850px;
+}
+
+.subtitulo {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #1b4d89;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.introduccion h2,
+.titulo-seccion h2 {
+    font-size: 42px;
+
+    margin-bottom: 20px;
+}
+
+.introduccion p {
+    color: #666;
+
+    line-height: 1.8;
+
+    font-size: 17px;
+}
+
+
+/* ================================
+   HISTORIAS
+================================ */
+
+.historias {
+    padding: 50px 0 110px;
+
+    background: #f5f7fa;
+}
+
+.titulo-seccion {
+    text-align: center;
+
+    margin-bottom: 50px;
+}
+
+.grid-historias {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 30px;
+}
+
+
+/* TARJETA */
+
+.historia {
+    background: white;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+
+    transition: 0.3s;
+}
+
+.historia:hover {
+    transform: translateY(-8px);
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+
+/* IMAGEN */
+
+.imagen-historia {
+    width: 100%;
+    height: 240px;
+
+    overflow: hidden;
+}
+
+.imagen-historia img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: 0.4s;
+}
+
+.historia:hover .imagen-historia img {
+    transform: scale(1.05);
+}
+
+
+/* CONTENIDO */
+
+.contenido-historia {
+    padding: 28px;
+}
+
+.fecha {
+    font-size: 12px;
+
+    color: #1b4d89;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+}
+
+.contenido-historia h3 {
+    font-size: 22px;
+
+    line-height: 1.3;
+
+    margin: 12px 0 15px;
+}
+
+.contenido-historia p {
+    color: #666;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+
+    margin-bottom: 25px;
+}
+
+
+/* AUTOR */
+
+.autor {
+    display: flex;
+    flex-direction: column;
+
+    border-top: 1px solid #eee;
+
+    padding-top: 18px;
+}
+
+.autor strong {
+    font-size: 14px;
+}
+
+.autor span {
+    font-size: 12px;
+
+    color: #888;
+}
+
+
+/* ================================
+   SECCIÓN CONTAR HISTORIA
+================================ */
+
+.contar {
+    padding: 110px 20px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            rgba(27, 77, 137, 0.94),
+            rgba(27, 77, 137, 0.94)
+        ),
+        url("../imagenes/fondo-contar.jpg");
+
+    background-size: cover;
+    background-position: center;
+
+    color: white;
+}
+
+.contar-contenido {
+    max-width: 750px;
+
+    margin: auto;
+}
+
+.contar .subtitulo {
+    color: #bcdcff;
+}
+
+.contar h2 {
+    font-size: 45px;
+
+    margin-bottom: 20px;
+}
+
+.contar p {
+    font-size: 17px;
+
+    line-height: 1.8;
+
+    margin-bottom: 35px;
+
+    color: #edf5ff;
+}
+
+.boton-claro {
+    background: white;
+
+    color: #1b4d89;
+}
+
+.boton-claro:hover {
+    background: #edf5ff;
+}
+
+
+/* ================================
+   FOOTER
+================================ */
+
+footer {
+    background: #101820;
+
+    color: white;
+
+    padding-top: 50px;
+}
+
+.footer-contenido {
+    width: 90%;
+    max-width: 1200px;
+
+    margin: auto;
+
+    text-align: center;
+
+    padding-bottom: 40px;
+}
+
+.footer-contenido h3 {
+    font-size: 24px;
+
+    margin-bottom: 10px;
+}
+
+.footer-contenido p {
+    color: #aaa;
+}
+
+.footer-abajo {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    padding: 20px;
+
+    text-align: center;
+}
+
+.footer-abajo p {
+    color: #777;
+
+    font-size: 12px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+    .grid-historias {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .navbar {
+        height: auto;
+
+        padding: 20px;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .navbar nav {
+        gap: 15px;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
+
+    .hero {
+        min-height: 550px;
+    }
+
+    .hero h1 {
+        font-size: 45px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .introduccion {
+        padding: 70px 0 50px;
+    }
+
+    .introduccion h2,
+    .titulo-seccion h2 {
+        font-size: 32px;
+    }
+
+    .grid-historias {
+        grid-template-columns: 1fr;
+    }
+
+    .contar h2 {
+        font-size: 34px;
+    }
+
+}
+```

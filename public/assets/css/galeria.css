@@ -1,0 +1,112 @@
+/* ===== GALERÍA DE FOTOS - ESTILO PAPEL / POLAROID ===== */
+
+.galeria-seccion {
+  --galeria-fondo: #f4f1ec;        /* fondo de la sección (como una mesa/corcho claro) */
+  --galeria-papel: #ffffff;        /* color del papel de la foto */
+  --galeria-texto: #3a3a3a;        /* color del texto */
+  --galeria-acento: var(--azul-700, #1d4ed8);  /* usa tu variable si existe */
+
+  background: var(--galeria-fondo);
+  overflow: hidden; /* evita scroll horizontal por las rotaciones */
+}
+
+/* ----- Encabezado ----- */
+.galeria-titulo {
+  font-weight: 800;
+  color: var(--galeria-texto);
+  margin-bottom: .25rem;
+}
+
+.galeria-subtitulo {
+  color: #7a7a7a;
+  margin: 0;
+}
+
+/* ----- Foto con forma de papel ----- */
+.foto-papel {
+  position: relative;
+  margin: 0;
+  padding: 12px 12px 8px;
+  background: var(--galeria-papel);
+  border-radius: 3px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, .12),
+    0 8px 18px rgba(0, 0, 0, .18);
+  transform: rotate(var(--giro, -2deg));
+  transition: transform .3s ease, box-shadow .3s ease;
+  cursor: pointer;
+}
+
+/* Cinta adhesiva arriba */
+.foto-papel::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 70px;
+  height: 22px;
+  background: rgba(255, 224, 130, .75);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+  transform: translateX(-50%) rotate(-3deg);
+  z-index: 2;
+}
+
+/* ----- Imagen ----- */
+.foto-marco {
+  overflow: hidden;
+  background: #ddd;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08);
+}
+
+.foto-marco img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  filter: saturate(.95) contrast(1.02);
+  transition: transform .4s ease, filter .3s ease;
+}
+
+/* ----- Pie de la foto (leyenda) ----- */
+.foto-leyenda {
+  padding: 12px 4px 6px;
+  text-align: center;
+  font-family: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--galeria-texto);
+}
+
+/* ----- Rotaciones distintas para que se vea natural ----- */
+.galeria-grid > div:nth-child(4n + 1) .foto-papel { --giro: -3deg; }
+.galeria-grid > div:nth-child(4n + 2) .foto-papel { --giro: 2deg; }
+.galeria-grid > div:nth-child(4n + 3) .foto-papel { --giro: -1deg; }
+.galeria-grid > div:nth-child(4n + 4) .foto-papel { --giro: 3deg; }
+
+/* ----- Efecto al pasar el mouse o usar el teclado ----- */
+.foto-papel:hover,
+.foto-papel:focus-within {
+  transform: rotate(0deg) scale(1.06) translateY(-6px);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, .15),
+    0 18px 32px rgba(0, 0, 0, .28);
+  z-index: 5;
+}
+
+.foto-papel:hover .foto-marco img {
+  transform: scale(1.04);
+  filter: saturate(1.1) contrast(1.05);
+}
+
+/* ----- Celulares ----- */
+@media (max-width: 575.98px) {
+  .foto-papel { padding: 8px 8px 4px; }
+  .foto-leyenda { font-size: 1rem; padding-top: 8px; }
+  .foto-papel::before { width: 50px; height: 16px; top: -8px; }
+}
+
+/* ----- Menos movimiento ----- */
+@media (prefers-reduced-motion: reduce) {
+  .foto-papel,
+  .foto-marco img { transition: none; }
+}

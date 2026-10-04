@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/loginStyle.css">
+    <title>Login - Fundación Mariposa Azul</title>
+</head>
+<body>
+
+<form class="card" id="loginForm">
+  <div class="avatar">
+    <svg viewBox="0 0 24 24">
+      <path d="M4 8h3l2-2h6l2 2h3v11H4z"/>
+      <circle cx="12" cy="13" r="3.2"/>
+      <img src="/assets/imagenes/FundacionLogo.png" alt="Logo de la Fundación Mariposa Azul" class="logo">
+    </svg>
+  </div>
+
+  <div class="field">
+    <input type="email" placeholder="Email" id="user">
+  </div>
+
+  <div class="field">
+    <input type="password" placeholder="Contraseña" id="contra">
+  </div>
+
+  <button type="submit" id="inicioSesion">INICIAR SESION</button><br><br>
+  
+  <button type="button" onclick="window.location.href='/index.html'">INVITADO</button>
+
+
+</form>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script type="module">
+
+  let config;
+  try {
+    config = await (await fetch("/api/config")).json();
+  } catch (e) {
+    alert("Error al cargar la configuración. Asegúrate de que el servidor esté en funcionamiento.");
+    throw e;
+  }
+
+  const clienteSupabase = supabase.createClient(config.url, config.anonKey);
+
+  async function enviar() {
+    const email = document.getElementById("user").value;
+    const password = document.getElementById("contra").value;
+
+    const { data, error } = await clienteSupabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.log("Error de login:", error);
+      alert("Usuario o contraseña incorrectos");
+      return;
+    }
+    window.location.href = "/index.html";
+  }
+
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await enviar();
+  });
+</script>
+
+</body>
+</html>
