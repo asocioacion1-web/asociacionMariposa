@@ -168,6 +168,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module">
 
+
       // ==========================================
       // CONFIGURACIÓN DEL SERVIDOR
       // ==========================================
@@ -196,18 +197,6 @@
       const clienteSupabase = supabase.createClient(config.url, config.anonKey);
       const { data: { session } } = await clienteSupabase.auth.getSession();
 
-      let esAdmin = false;
-      
-        async function comprobarAdmin() {
-    const { data: { user } } = await clienteSupabase.auth.getUser();
-    if (!user) return;
-
-    const { data, error } = await clienteSupabase
-      .from("admin").select("id").eq("user_id", user.id).maybeSingle();
-
-    if (error) return console.error("Error comprobando administrador:", error);
-    esAdmin = !!data;
-  }
 
       // ==========================================
       // ELEMENTOS DEL HTML
@@ -455,10 +444,6 @@
 
           console.log("Guardando noticia...");
 
-          console.log("Usuario logueado:", session?.user?.id);
-          console.log("Sesión completa:", session);
-          console.log("¿Token vencido?", Date.now() > session.expires_at * 1000);
-          
           const respuestaNoticia = await fetch(
             SupabaseRest + "noticias",
 
@@ -535,8 +520,6 @@
       document.getElementById("form-noticia").addEventListener("input", actualizarPrevia);
       
       document.getElementById("btn-publicar").addEventListener("click", publicarNoticia);
-
-      comprobarAdmin();
 
     </script>
   </body>
