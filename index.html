@@ -73,25 +73,26 @@
           </div>
         </div>
         <div class="col-lg-5 text-center">
-          <img src="https://placehold.co/480x360/eaf4fc/12578f?text=Taller+de+arte" class="img-fluid rounded-4"
-            alt="Niños pintando en un taller de arte">
+          <img src="https://placehold.co/480x360/eaf4fc/12578f?text=Taller+de+arte" class="img-fluid rounded-4" alt="Niños pintando en un taller de arte">
         </div>
       </div>
     </div>
   </header>
 
   <!--Sobre la fundación-->
-  <section id="sobre-la-fundación" class="py-5">
+  <section class="py-5">
     <div class="container">
       <div class="row g-4 align-items-center">
         <div class="col-lg-6">
-          <h2 style="color:var(--azul-700)">Asociacion Mariposas</h2>
-          <p class="text-secondary">La Asociación Mariposa azul nació para buscar la ayudar a personas con algún
+          <h2 id="titulos">Asociacion Mariposas</h2>
+          <p class="texto-normal">
+            La Asociación Mariposa azul nació para buscar la ayudar a personas con algún
             problema al desarrollar su vida diaria en la sociedad, pero luego se dirigió directamente a ayudar a
             personas con
             trastorno del espectro autista. Actualmente hacemos eventos y actividades donde integramos a las personas y
             adquiren las ganancias para la asocación. Principalmente orientados a ayudarlos con su educación y futuro
-            laboral.</p>
+            laboral.
+          </p>
           <a href="#historia-logo" class="btn btn-amarillo px-4 mt-3" id="btn-amarillo">Historia del Logo</a>
         </div>
         <div class="col-lg-6">
@@ -107,14 +108,14 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
         <div>
-          <h2 style="color:var(--azul-700)">Últimas noticias</h2>
+          <h2 id="titulos">Últimas noticias</h2>
           <p class="text-secondary mb-0">Lo que están viviendo nuestros chicos, semana a semana</p>
         </div>
       </div>
 
       <div class="text-center mb-4">
-        <a href="/public/noticia.html" id="btnCrearNoticia" class="btn btn-outline-primary px-4"
-          style="display:none; color:var(--azul-700); border-color:var(--azul-700)">Crear noticia
+        <a href="/public/noticia.html" id="btnCrearNoticia" class="btn btn-outline-primary px-4">
+          Crear noticia
         </a>
       </div>
       <div class="row g-4">
@@ -198,9 +199,8 @@
       </div>
 
       <div class="text-center mt-5">
-        <a href="public/verNoticias.html" class="btn btn-outline-primary px-4"
-          style="color:var(--azul-700); border-color:var(--azul-700)">Ver
-          todas las noticias</a>
+        <a href="public/verNoticias.html" class="btn btn-outline-primary px-4">
+          Ver todas las noticias</a>
       </div>
     </div>
   </section>
@@ -210,8 +210,8 @@
   <section id="jovenes" class="py-5 seccion-clara">
     <div class="container">
       <div class="text-center mb-5">
-        <h2 style="color:var(--azul-700)">Jóvenes de la asociación</h2>
-        <p class="text-secondary">En este apartado los jovenes contaran sus historia y experiencia en la asociación.</p>
+        <h2 class="titulos">Jóvenes de la asociación</h2>
+        <p class="text-secondary" class="texto-pequeño">En este apartado los jovenes contaran sus historia y experiencia en la asociación.</p>
       </div>
       <div class="row g-4">
         <div class="col-md-6 col-lg-4">
@@ -239,6 +239,7 @@
             <h6>Asociación persona</h6>
             <p class="small text-secondary">Ha demostrado gran habilidad en las actividades deportivas, siendo un
               referente para sus compañeros.
+            </p>
           </div>
         </div>
       </div>
@@ -255,7 +256,7 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-6" id="contacto-padre">
-        <h2 class="text-center mb-4" style="color:var(--azul-700)">
+        <h2 class="text-center mb-4" id="titulos">
           Contactanos por estos medios (Manda mensaje de instagram)
         </h2>
         <div class="p-4 rounded-4 bg-white shadow-sm" id="contacto-datos">
@@ -318,11 +319,11 @@
     <div class="container">
       <div class="row g-4">
         <div class="col-md-4">
-          <h5 class="text-white">Fundación Mariposa Azul</h5>
+          <h5>Fundación Mariposa Azul</h5>
           <p class="small">Difundiendo arte, música, deporte y comunidad para niños con el especto autista.</p>
         </div>
         <div class="col-md-4">
-          <h6 class="text-white">Enlaces</h6>
+          <h6>Enlaces</h6>
           <ul class="list-unstyled small">
             <li><a href="#noticias">Noticias</a></li>
             <li><a href="#galeria">Galería</a></li>
@@ -330,10 +331,10 @@
           </ul>
         </div>
         <div class="col-md-4">
-          <h6 class="text-white">Seguinos</h6>
+          <h6>Seguinos</h6>
           <div clas="d-flex gap-3 fs-5">
-            <a href="https://www.instagram.com/asociacionmariposas?igsh=MWJvbTdoZWtnaXMydw==" _blank"
-              rel="noopener noreferrer">
+            <a href="https://www.instagram.com/asociacionmariposas?igsh=MWJvbTdoZWtnaXMydw=="
+              rel="noopener noreferrer" target="_blank">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram"
                 viewBox="0 0 16 16">
                 <path
@@ -432,11 +433,6 @@
                     <p class="text-secondary small">
                         ${noticia.parrafo}
                     </p>
-                    ${palabras > 150 ? `
-                    <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">
-                    Leer más →
-                    </a>
-                    ` : ""}
                     <hr>
                     <a href="#" class="fw-bold text-decoration-none btn-borrar" data-id="${noticia.id}" style="color:var(--azul-700); display:none">
                        Borrar

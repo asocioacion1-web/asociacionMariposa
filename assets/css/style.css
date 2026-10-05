@@ -74,27 +74,43 @@
     padding:4.5rem 0 5rem;
     border-radius:0 0 40px 40px;
   }
-  #btn-amarillo{background:var(--amarillo); color:var(--azul-900); font-weight:700; border:none;}
-  #btn-amarillo:hover{background:#ffd873; color:var(--azul-900);}
-  #btn-outline-light-blue{border:2px solid #fff; color:#fff; font-weight:600;}
-  #btn-outline-light-blue:hover{background:#fff; color:var(--azul-700);}
 
-  .seccion-clara{background:var(--azul-100);}
-
-
-  /* Filtros de categoría */
-  .filtro-btn{
-    border:2px solid var(--azul-300);
-    background:#fff;
-    color:var(--azul-700);
-    font-weight:700;
-    border-radius:50px;
-    padding:.4rem 1.2rem;
+  .seccion-clara{
+    background:var(--azul-100);
   }
-  .filtro-btn.active, .filtro-btn:hover{
-    background:var(--azul-700);
-    border-color:var(--azul-700);
-    color:#fff;
+
+  /* Herramientas para los titulos, sub titulos, ETC */
+  #titulos{
+    color:var(--azul-700);
+  }
+  #btn-amarillo{
+    background:var(--amarillo); 
+    color:var(--azul-900); 
+    font-weight:700; 
+    border:none;
+  }
+  #btn-amarillo:hover{
+    background:#ffd873; 
+    color:var(--azul-900);
+  }
+  #btn-outline-light-blue{
+    border:2px solid #fff; 
+    color:#fff; 
+    font-weight:600;
+  }
+  #btn-outline-light-blue:hover{
+    background:#fff; 
+    color:var(--azul-700);
+  }
+  .texto-normal{
+    color:black;
+  }
+
+  #btnCrearNoticia{
+    background:var(--amarillo); 
+    color:var(--azul-900); 
+    font-weight:700; 
+    border:none;
   }
 
   /* Tarjetas de noticias */
@@ -175,7 +191,7 @@
 
   /* Contactos */
   #contacto{
-    background:#0e0d0d;
+    background:#fff;
     border-radius:20px;
     box-shadow:0 4px 18px rgba(12,59,102,.08);
     padding:2rem;

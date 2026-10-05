@@ -14,17 +14,13 @@
   <body>
     <div class="container py-5">
       <div class="encabezado text-center mb-4">
-        <h1>Crear noticia</h1>
+        <h1 id="titulo">Crear noticia</h1>
         <p class="text-secondary">
-          Completá los datos y generá el código para pegar en la sección de
-          noticias
+          Completá los datos y generá el código para pegar en la sección denoticias
         </p>
-        <a
-          href="/index.html"
-          class="text-decoration-none"
-          style="color: var(--azul-700)"
-          >← Volver a noticias</a
-        >
+        <a href="/index.html" class="text-decoration-none">
+          ← Volver a noticias
+        </a>
       </div>
 
       <div class="row g-4">
@@ -39,14 +35,7 @@
                   Fecha
                 </label>
 
-                <input
-                  type="text"
-                  class="form-control"
-                  id="campo-fecha"
-                  name="fecha"
-                  placeholder="Ej: 2026-05-21"
-                  required
-                />
+                <input type="text" class="form-control" id="campo-fecha" name="fecha" placeholder="Ej: 2026-05-21" required/>
               </div>
 
               <div class="mb-3">
@@ -54,14 +43,7 @@
                   Título
                 </label>
 
-                <input
-                  type="text"
-                  class="form-control"
-                  id="campo-titulo"
-                  name="titulo"
-                  placeholder="Ej: Terminamos el mural colectivo del patio"
-                  required
-                />
+                <input type="text" class="form-control" id="campo-titulo" name="titulo" placeholder="Ej: Terminamos el mural colectivo del patio" required/>
               </div>
 
               <div class="mb-3">
@@ -69,14 +51,7 @@
                   Subtítulo
                 </label>
 
-                <input
-                  type="text"
-                  class="form-control"
-                  id="campo-subtitulo"
-                  name="subtitulo"
-                  placeholder="Ej: Un nuevo proyecto para el patio"
-                  required
-                />
+                <input type="text" class="form-control" id="campo-subtitulo" name="subtitulo" placeholder="Ej: Un nuevo proyecto para el patio" required/>
               </div>
 
               <div class="mb-3">
@@ -84,14 +59,7 @@
                   Párrafo
                 </label>
 
-                <textarea
-                  class="form-control"
-                  id="campo-parrafo"
-                  name="parrafo"
-                  rows="4"
-                  placeholder="Contá de qué se trató la actividad..."
-                  required
-                ></textarea>
+                <textarea class="form-control" id="campo-parrafo" name="parrafo" rows="4" placeholder="Contá de qué se trató la actividad..." required></textarea>
               </div>
 
               <div class="mb-3">
@@ -99,21 +67,10 @@
                   Imagen
                 </label>
 
-                <input
-                  type="file"
-                  class="form-control"
-                  id="campo-imagen"
-                  name="imagen"
-                  accept=".jpg,.jpeg,.png,.webp"
-                />
+                <input type="file" class="form-control" id="campo-imagen" name="imagen" accept=".jpg,.jpeg,.png,.webp"/>
               </div>
 
-              <button
-                type="button"
-                class="btn w-100"
-                style="background: var(--azul-700); color: white"
-                id="btn-publicar"
-              >
+              <button type="button" class="btn w-100" id="btn-publicar">
                 Publicar noticia
               </button>
             </form>
@@ -126,11 +83,7 @@
             <h2>Vista previa</h2>
 
             <div class="card-noticia">
-              <img
-                id="previa-imagen"
-                src="https://placehold.co/400x220/e6e6e6/999999?text=Imagen"
-                alt="Vista previa"
-              />
+              <img id="previa-imagen" src="https://placehold.co/400x220/e6e6e6/999999?text=Imagen" alt="Vista previa"/>
 
               <div class="p-3">
                 <p class="fecha-noticia mt-2 mb-1" id="previa-fecha">
@@ -145,12 +98,7 @@
                   Acá va a aparecer el párrafo que escribas en el formulario.
                 </p>
 
-                <a
-                  href="#"
-                  id="previa-link"
-                  class="fw-bold text-decoration-none"
-                  style="color: var(--azul-700)"
-                >
+                <a href="#" id="previa-link" class="fw-bold text-decoration-none">
                   Leer más →
                 </a>
 

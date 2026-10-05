@@ -8,10 +8,14 @@
       font-family: 'Segoe UI', Arial, sans-serif;
     }
 
-    .encabezado h1 {
+    #titulo {
       color: var(--azul-900);
     }
 
+    #btn-publicar {
+      background: var(--azul-700);
+      color: white;
+    }
     .panel-form,
     .panel-previa {
       background: white;
@@ -44,7 +48,7 @@
       display: block;
     }
 
-    /* --- Estilos de la tarjeta de noticia (igual a la sección real) --- */
+    /* --- Estilos de la tarjeta de noticia --- */
     .card-noticia {
       background: white;
       border-radius: 12px;
