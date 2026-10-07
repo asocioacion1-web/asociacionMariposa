@@ -73,7 +73,8 @@
           </div>
         </div>
         <div class="col-lg-5 text-center">
-          <img src="https://placehold.co/480x360/eaf4fc/12578f?text=Taller+de+arte" class="img-fluid rounded-4" alt="Niños pintando en un taller de arte">
+          <img src="https://placehold.co/480x360/eaf4fc/12578f?text=Taller+de+arte" class="img-fluid rounded-4"
+            alt="Niños pintando en un taller de arte">
         </div>
       </div>
     </div>
@@ -140,7 +141,6 @@
               <p class="fecha-noticia mt-2 mb-1"></p>
               <h5></h5>
               <p class="text-secondary small"></p>
-              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
             </div>
           </div>
         </div>
@@ -211,7 +211,8 @@
     <div class="container">
       <div class="text-center mb-5">
         <h2 class="titulos">Jóvenes de la asociación</h2>
-        <p class="text-secondary" class="texto-pequeño">En este apartado los jovenes contaran sus historia y experiencia en la asociación.</p>
+        <p class="text-secondary" class="texto-pequeño">En este apartado los jovenes contaran sus historia y experiencia
+          en la asociación.</p>
       </div>
       <div class="row g-4">
         <div class="col-md-6 col-lg-4">
@@ -253,29 +254,30 @@
 
   <!-- CONTACTO -->
   <section id="contacto" class="py-5 seccion-clara">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-6" id="contacto-padre">
-        <h2 class="text-center mb-4" id="titulos">
-          Contactanos por estos medios (Manda mensaje de instagram)
-        </h2>
-        <div class="p-4 rounded-4 bg-white shadow-sm" id="contacto-datos">
-          <h5 style="color:var(--azul-700)">Datos de contacto</h5>
-          <ul class="list-unstyled mt-3">
-            <li class="mb-3">
-              <a href="https://www.google.com/maps/search/?api=1&query=Gral.+Flores+577,+85000+Trinidad" target="_blank">
-                📍 Gral. Flores 577, 85000 Trinidad
-              </a>
-            </li>
-            <li class="mb-3"><a href="tel:+59891234567" class="call-button">📞 Llamar al 091 234 567</a></li>
-            <li class="mb-3">📩 acivilmariposas@gmail.com</li>
-            <li class="mb-3">🕒 Lunes a viernes, 9 a 17 hs</li>
-          </ul>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-6" id="contacto-padre">
+          <h2 class="text-center mb-4" id="titulos">
+            Contactanos por estos medios (Manda mensaje de instagram)
+          </h2>
+          <div class="p-4 rounded-4 bg-white shadow-sm" id="contacto-datos">
+            <h5 style="color:var(--azul-700)">Datos de contacto</h5>
+            <ul class="list-unstyled mt-3">
+              <li class="mb-3">
+                <a href="https://www.google.com/maps/search/?api=1&query=Gral.+Flores+577,+85000+Trinidad"
+                  target="_blank">
+                  📍 Gral. Flores 577, 85000 Trinidad
+                </a>
+              </li>
+              <li class="mb-3"><a href="tel:+59891234567" class="call-button">📞 Llamar al 091 234 567</a></li>
+              <li class="mb-3">📩 acivilmariposas@gmail.com</li>
+              <li class="mb-3">🕒 Lunes a viernes, 9 a 17 hs</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!--Historia de la mariposa azul-->
   <section id="historia-logo" class="py-5">
@@ -333,8 +335,8 @@
         <div class="col-md-4">
           <h6>Seguinos</h6>
           <div clas="d-flex gap-3 fs-5">
-            <a href="https://www.instagram.com/asociacionmariposas?igsh=MWJvbTdoZWtnaXMydw=="
-              rel="noopener noreferrer" target="_blank">
+            <a href="https://www.instagram.com/asociacionmariposas?igsh=MWJvbTdoZWtnaXMydw==" rel="noopener noreferrer"
+              target="_blank">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram"
                 viewBox="0 0 16 16">
                 <path
@@ -382,8 +384,41 @@
 
     function aplicarVistaAdmin() {
       document.getElementById("btnCrearNoticia").style.display = esAdmin ? "inline-block" : "none";
+
+      document.querySelectorAll(".btn-editar").forEach(btn => {
+        btn.style.display = esAdmin ? "inline-block" : "none";
+
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = btn.dataset.id;
+          window.location.href = `/public/editarNoticia.html?id=${id}`;
+        });
+      });
+
       document.querySelectorAll(".btn-borrar").forEach(btn => {
         btn.style.display = esAdmin ? "inline-block" : "none";
+
+        btn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const id = btn.dataset.id;
+          if (!confirm("¿Seguro que querés borrar esta noticia?")) return;
+
+          const { data: { session } } = await clienteSupabase.auth.getSession();
+          const respuesta = await fetch(`${config.url}/rest/v1/noticias?id=eq.${id}`, {
+            method: "DELETE",
+            headers: {
+              apikey: config.anonKey,
+              Authorization: `Bearer ${session.access_token}`,
+            },
+          });
+
+          if (respuesta.ok) {
+            location.reload();
+            btn.closest(".col-md-6").remove();
+          } else {
+            alert("No se pudo borrar la noticia");
+          }
+        });
       });
     }
 
@@ -430,9 +465,12 @@
                         ${noticia.parrafo}
                     </p>
                     <hr>
-                    <a href="#" class="fw-bold text-decoration-none btn-borrar" data-id="${noticia.id}"  display:none">
+                    <button class="fw-bold text-decoration-none btn-borrar" data-id="${noticia.id}" id="btn-borrar" style="display: none;" >
                        Borrar
-                    </a>
+                    </button>
+                    <button class="fw-bold text-decoration-none btn-editar" id="btn-editar" data-id="${noticia.id}" style="display: none;">
+                       Editar
+                    </button>
                 </div>
             </div>
         `;
@@ -444,31 +482,6 @@
       }
     }
 
-    if (esAdmin) {
-      document.querySelectorAll(".btn-borrar").forEach(btn => {
-        btn.style.display = "inline-block";
-        btn.addEventListener("click", async (e) => {
-          e.preventDefault();
-          const id = btn.dataset.id;
-          if (!confirm("¿Seguro que querés borrar esta noticia?")) return;
-
-          const { data: { session } } = await clienteSupabase.auth.getSession();
-          const respuesta = await fetch(`${config.url}/rest/v1/noticias?id=eq.${id}`, {
-            method: "DELETE",
-            headers: {
-              apikey: config.anonKey,
-              Authorization: `Bearer ${session.access_token}`,
-            },
-          });
-
-          if (respuesta.ok) {
-            btn.closest(".col-md-6").remove();
-          } else {
-            alert("No se pudo borrar la noticia");
-          }
-        });
-      });
-    }
 
     document.getElementById("btnSalirMenu").addEventListener("click", async (e) => {
       e.preventDefault();

@@ -16,7 +16,7 @@
       <div class="encabezado text-center mb-4">
         <h1 id="titulo">Crear noticia</h1>
         <p class="text-secondary">
-          Completá los datos y generá el código para pegar en la sección denoticias
+          Completá los datos correctamente y hacé click en "Publicar noticia" para generar la noticia.
         </p>
         <a href="/index.html" class="text-decoration-none">
           ← Volver a noticias
@@ -31,11 +31,11 @@
 
             <form id="form-noticia">
               <div class="mb-3">
-                <label for="campo-fecha" class="form-label fw-semibold">
+                <label for="campo-fecha" class="form-label fw-semibold" type="date">
                   Fecha
                 </label>
 
-                <input type="text" class="form-control" id="campo-fecha" name="fecha" placeholder="Ej: 2026-05-21" required/>
+                <input type="date" class="form-control" id="campo-fecha" name="fecha" required/>
               </div>
 
               <div class="mb-3">
@@ -209,21 +209,13 @@
       // ==========================================
 
       function actualizarPrevia() {
-        const fecha =
-          document.getElementById("campo-fecha").value.trim() ||
-          "Fecha pendiente";
+        const fecha = document.getElementById("campo-fecha").value.trim() || "Fecha pendiente";
 
-        const titulo =
-          document.getElementById("campo-titulo").value.trim() ||
-          "Título de la noticia";
+        const titulo = document.getElementById("campo-titulo").value.trim() || "Título de la noticia";
 
-        const subtitulo =
-          document.getElementById("campo-subtitulo").value.trim() ||
-          "Subtítulo de la noticia";
+        const subtitulo = document.getElementById("campo-subtitulo").value.trim() || "Subtítulo de la noticia";
 
-        const parrafo =
-          document.getElementById("campo-parrafo").value.trim() ||
-          "Escribí el contenido de la noticia.";
+        const parrafo = document.getElementById("campo-parrafo").value.trim() || "Escribí el contenido de la noticia.";
 
         document.getElementById("previa-fecha").textContent = fecha;
 

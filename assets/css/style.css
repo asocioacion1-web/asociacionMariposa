@@ -105,7 +105,17 @@
   .texto-normal{
     color:black;
   }
+  #btn-borrar{
+    background:none; 
+    color:var(--azul-900);
 
+    font-weight:700; 
+    border:2px solid var(--azul-900);
+  }
+  #btn-borrar:hover{
+    color:red;
+    border:2px solid red;
+  }
   #btnCrearNoticia{
     background:var(--amarillo); 
     color:var(--azul-900); 

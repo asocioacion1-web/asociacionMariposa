@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar noticia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/noticiaStyle.css" />
+</head>
+
+<body>
+    <div class="container py-5">
+        <div class="encabezado text-center mb-4">
+            <h1 id="titulo">Editar noticia</h1>
+            <p class="text-secondary">
+                Completá los datos correctamente y hacé click en "Guardar cambios" para actualizar la noticia.
+            </p>
+            <a href="/index.html" class="text-decoration-none">
+                ← Volver a noticias
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <!-- FORMULARIO -->
+            <div class="col-lg-6">
+                <div class="panel-form">
+                    <h2>📝 Datos de la noticia</h2>
+
+                    <form id="form-noticia">
+                        <div class="mb-3">
+                            <label for="campo-fecha" class="form-label fw-semibold" type="date">
+                                Fecha
+                            </label>
+
+                            <input type="date" class="form-control" id="campo-fecha" name="fecha" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="campo-titulo" class="form-label fw-semibold">
+                                Título
+                            </label>
+
+                            <input type="text" class="form-control" id="campo-titulo" name="titulo"
+                                placeholder="Ej: Terminamos el mural colectivo del patio" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="campo-subtitulo" class="form-label fw-semibold">
+                                Subtítulo
+                            </label>
+
+                            <input type="text" class="form-control" id="campo-subtitulo" name="subtitulo"
+                                placeholder="Ej: Un nuevo proyecto para el patio" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="campo-parrafo" class="form-label fw-semibold">
+                                Párrafo
+                            </label>
+
+                            <textarea class="form-control" id="campo-parrafo" name="parrafo" rows="4" placeholder="Contá de qué se trató la actividad..." required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="campo-imagen" class="form-label fw-semibold">
+                                Imagen
+                            </label>
+
+                            <input type="file" class="form-control" id="campo-imagen" name="imagen"
+                                accept=".jpg,.jpeg,.png,.webp" />
+                        </div>
+
+                        <button type="button" class="btn w-100" id="btn-publicar">
+                            Guardar cambios
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- VISTA PREVIA -->
+            <div class="col-lg-6" id="previa">
+                <div class="panel-previa mb-3">
+                    <h2>Vista previa</h2>
+
+                    <div class="card-noticia">
+                        <img id="previa-imagen" src="https://placehold.co/400x220/e6e6e6/999999?text=Imagen"
+                            alt="Vista previa" />
+
+                        <div class="p-3">
+                            <p class="fecha-noticia mt-2 mb-1" id="previa-fecha">
+                                18 de julio, 2026
+                            </p>
+
+                            <h3 id="previa-titulo">Título de la noticia</h3>
+
+                            <h5 id="previa-subtitulo">Subtítulo de la noticia</h5>
+
+                            <p class="text-secondary small" id="previa-parrafo">
+                                Acá va a aparecer el párrafo que escribas en el formulario.
+                            </p>
+
+                            <a href="#" id="previa-link" class="fw-bold text-decoration-none">
+                                Leer más →
+                            </a>
+
+                            <div class="container text-center">
+                                <p class="mb-1">© 2026 - Noticias</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+
+        // ==========================================
+        // CONFIGURACIÓN DEL SERVIDOR
+        // ==========================================
+        const contenedor = document.querySelector("#noticias .row.g-4");
+
+        let config;
+        try {
+            config = await(await fetch("/api/config")).json();
+        } catch (e) {
+            contenedor.innerHTML = '<p class="text-danger text-center">No se pudo conectar con el servidor.</p>';
+            throw e;
+        }
+
+        // ==========================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ==========================================
+
+        const SupabaseUrl = config.url;
+        const ApiKey = config.anonKey;
+        const SupabaseRest = SupabaseUrl + "/rest/v1/";
+        const SupabaseStorage = SupabaseUrl + "/storage/v1/object/";
+
+        const clienteSupabase = supabase.createClient(config.url, config.anonKey);
+        const { data: { session } } = await clienteSupabase.auth.getSession();
+
+        // ==========================================
+        // ID DE LA NOTICIA A EDITAR (viene de la URL)
+        // ==========================================
+
+        const parametros = new URLSearchParams(window.location.search);
+        const idNoticia = parametros.get("id");
+
+        if (!idNoticia) {
+            alert("No se especificó qué noticia editar.");
+            window.location.href = "/index.html";
+        }
+
+        let urlImagenActual = ""; // guarda la imagen existente por si no suben una nueva
+
+        // ==========================================
+        // CARGAR DATOS DE LA NOTICIA EXISTENTE
+        // ==========================================
+
+        async function cargarNoticia() {
+            const respuesta = await fetch(
+                `${SupabaseRest}noticias?id=eq.${idNoticia}&select=*`,
+                {
+                    headers: {
+                        apikey: ApiKey,
+                        Authorization: `Bearer ${session?.access_token || ApiKey}`,
+                    },
+                }
+            );
+
+            if (!respuesta.ok) {
+                alert("No se pudo cargar la noticia.");
+                return;
+            }
+
+            const datos = await respuesta.json();
+
+            if (!datos.length) {
+                alert("La noticia no existe.");
+                window.location.href = "/index.html";
+                return;
+            }
+
+            const noticia = datos[0];
+
+            document.getElementById("campo-fecha").value = noticia.fecha;
+            document.getElementById("campo-titulo").value = noticia.titulo;
+            document.getElementById("campo-subtitulo").value = noticia.subtitulo;
+            document.getElementById("campo-parrafo").value = noticia.parrafo;
+
+            urlImagenActual = noticia.imagen;
+            document.getElementById("previa-imagen").src = noticia.imagen;
+
+            document.getElementById("titulo").textContent = "Editar noticia";
+            document.getElementById("btn-publicar").textContent = "Guardar cambios";
+
+            actualizarPrevia();
+        }
+
+        // ==========================================
+        // ELEMENTOS DEL HTML
+        // ==========================================
+
+        const inputImagen = document.getElementById("campo-imagen");
+        const previaImagen = document.getElementById("previa-imagen");
+
+        // ==========================================
+        // VISTA PREVIA DE LA IMAGEN
+        // ==========================================
+
+        inputImagen.addEventListener("change", function () {
+            const archivo = this.files[0];
+            if (!archivo) return;
+
+            if (
+                archivo.type !== "image/webp" &&
+                archivo.type !== "image/jpeg" &&
+                archivo.type !== "image/png" &&
+                archivo.type !== "image/jpg" &&
+                !archivo.name.toLowerCase().endsWith(".webp") &&
+                !archivo.name.toLowerCase().endsWith(".jpeg") &&
+                !archivo.name.toLowerCase().endsWith(".jpg") &&
+                !archivo.name.toLowerCase().endsWith(".png")
+            ) {
+                alert("Solo se permiten imágenes .webp/.jpeg/.jpg/.png");
+                inputImagen.value = "";
+                return;
+            }
+
+            const lector = new FileReader();
+            lector.onload = function (e) {
+                previaImagen.src = e.target.result;
+            };
+            lector.readAsDataURL(archivo);
+        });
+
+        // ==========================================
+        // ACTUALIZAR VISTA PREVIA
+        // ==========================================
+
+        function actualizarPrevia() {
+            const fecha = document.getElementById("campo-fecha").value.trim() || "Fecha pendiente";
+            const titulo = document.getElementById("campo-titulo").value.trim() || "Título de la noticia";
+            const subtitulo = document.getElementById("campo-subtitulo").value.trim() || "Subtítulo de la noticia";
+            const parrafo = document.getElementById("campo-parrafo").value.trim() || "Escribí el contenido de la noticia.";
+
+            document.getElementById("previa-fecha").textContent = fecha;
+            document.getElementById("previa-titulo").textContent = titulo;
+            document.getElementById("previa-subtitulo").textContent = subtitulo;
+            document.getElementById("previa-parrafo").textContent = parrafo;
+        }
+
+        // ==========================================
+        // GUARDAR CAMBIOS (editar noticia)
+        // ==========================================
+
+        async function convertirAWebP(archivo) {
+            const imagen = new Image();
+            const url = URL.createObjectURL(archivo);
+            imagen.src = url;
+
+            await new Promise((resolve, reject) => {
+                imagen.onload = resolve;
+                imagen.onerror = reject;
+            });
+
+            const canvas = document.createElement("canvas");
+            canvas.width = imagen.naturalWidth;
+            canvas.height = imagen.naturalHeight;
+            canvas.getContext("2d").drawImage(imagen, 0, 0);
+
+            const webpBlob = await new Promise((resolve, reject) => {
+                canvas.toBlob(
+                    (blob) => blob ? resolve(blob) : reject(new Error("No se pudo convertir la imagen a WebP.")),
+                    "image/webp",
+                    0.85
+                );
+            });
+
+            URL.revokeObjectURL(url);
+            return webpBlob;
+        }
+
+        async function guardarCambios() {
+            const session = (await clienteSupabase.auth.getSession()).data.session;
+
+            const titulo = document.getElementById("campo-titulo").value.trim();
+            const parrafo = document.getElementById("campo-parrafo").value.trim();
+            const subtitulo = document.getElementById("campo-subtitulo").value.trim();
+            const fecha = document.getElementById("campo-fecha").value.trim();
+            const archivo = document.getElementById("campo-imagen").files[0];
+
+            if (!titulo || !parrafo || !subtitulo || !fecha) {
+                alert("Por favor completá todos los campos.");
+                return;
+            }
+
+            try {
+                let urlImagenFinal = urlImagenActual; // si no suben nueva imagen, se mantiene la actual
+
+                // ========================================
+                // SI SUBIERON UNA IMAGEN NUEVA, LA SUBIMOS
+                // ========================================
+
+                if (archivo) {
+                    if (
+                        archivo.type !== "image/webp" &&
+                        archivo.type !== "image/jpeg" &&
+                        archivo.type !== "image/jpg" &&
+                        archivo.type !== "image/png" &&
+                        !archivo.name.toLowerCase().endsWith(".webp") &&
+                        !archivo.name.toLowerCase().endsWith(".jpeg") &&
+                        !archivo.name.toLowerCase().endsWith(".jpg") &&
+                        !archivo.name.toLowerCase().endsWith(".png")
+                    ) {
+                        alert("La imagen debe estar en formato .webp/.jpeg/.jpg/.png.");
+                        return;
+                    }
+
+                    console.log("Convirtiendo imagen a WebP...");
+                    const webpBlob = await convertirAWebP(archivo);
+
+                    const nombreOriginal = archivo.name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9._-]/g, "");
+                    const nombreSinExtension = nombreOriginal.replace(/\.[^/.]+$/, "");
+                    const nombreArchivo = Date.now() + "_" + nombreSinExtension + ".webp";
+
+                    console.log("Subiendo imagen nueva a Storage...");
+                    const respuestaImagen = await fetch(
+                        SupabaseStorage + "noticias/" + nombreArchivo,
+                        {
+                            method: "POST",
+                            headers: {
+                                apikey: ApiKey,
+                                Authorization: `Bearer ${session.access_token}`,
+                                "Content-Type": "image/webp",
+                            },
+                            body: webpBlob,
+                        }
+                    );
+
+                    if (!respuestaImagen.ok) {
+                        const errorImagen = await respuestaImagen.text();
+                        throw new Error("No se pudo subir la imagen: " + errorImagen);
+                    }
+
+                    urlImagenFinal = SupabaseStorage + "noticias/" + nombreArchivo;
+                }
+
+                // ========================================
+                // ACTUALIZAR LA NOTICIA (PATCH, no POST)
+                // ========================================
+
+                console.log("Guardando cambios...");
+
+                const respuestaNoticia = await fetch(
+                    `${SupabaseRest}noticias?id=eq.${idNoticia}`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            apikey: ApiKey,
+                            Authorization: `Bearer ${session.access_token}`,
+                            "Content-Type": "application/json",
+                            Prefer: "return=representation",
+                        },
+                        body: JSON.stringify({
+                            titulo,
+                            parrafo,
+                            subtitulo,
+                            fecha,
+                            imagen: urlImagenFinal,
+                        }),
+                    }
+                );
+
+                const resultado = await respuestaNoticia.json();
+                console.log("Status:", respuestaNoticia.status);
+                console.log("Resultado:", resultado);
+
+                if (!respuestaNoticia.ok) {
+                    throw new Error(resultado.message || "No se pudo guardar los cambios.");
+                }
+
+                alert("¡Noticia actualizada correctamente!");
+                window.location.href = "/index.html";
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Ocurrió un error: " + error.message);
+            }
+        }
+
+        document.getElementById("form-noticia").addEventListener("input", actualizarPrevia);
+        document.getElementById("btn-publicar").addEventListener("click", guardarCambios);
+
+        await cargarNoticia();
+
+    </script>
+
+</body>
+
+</html>
