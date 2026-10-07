@@ -16,7 +16,7 @@ app.get("/api/config", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.use(express.static(path.join(__dirname, "/")));
@@ -26,9 +26,6 @@ app.get("/:pagina.html", (req, res, next) => {
   res.sendFile(path.join(__dirname, `${req.params.pagina}.html`));
 });
 
-app.get("/index", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
 
 if (require.main === module) {
   app.listen(3000, () => console.log("Servidor en http://localhost:3000"));
