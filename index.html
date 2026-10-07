@@ -418,11 +418,7 @@
           card.className = 'col-md-6 col-lg-4';
           card.innerHTML = `
             <div class="card-noticia">
-                <img 
-                  src="${noticia.imagen}" 
-                  alt="${noticia.titulo}"
-                onerror="console.error('No se pudo cargar:', this.src)"
-                >
+                <img src="${noticia.imagen}" alt="${noticia.titulo}" onerror="console.error('No se pudo cargar:', this.src)">
                 <div class="p-3">
                     </span>
                     <p class="fecha-noticia mt-2 mb-1">
@@ -434,7 +430,7 @@
                         ${noticia.parrafo}
                     </p>
                     <hr>
-                    <a href="#" class="fw-bold text-decoration-none btn-borrar" data-id="${noticia.id}" style="color:var(--azul-700); display:none">
+                    <a href="#" class="fw-bold text-decoration-none btn-borrar" data-id="${noticia.id}"  display:none">
                        Borrar
                     </a>
                 </div>
