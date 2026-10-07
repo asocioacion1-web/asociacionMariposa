@@ -1,0 +1,80 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mi sesión</title>
+
+    <link rel="stylesheet" href="/assets/css/sesion.css">
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Mi sesión</h1>
+
+        <!-- INFORMACIÓN DEL ADMIN -->
+        <div id="admin" class="info-admin">
+            <h2>Información del administrador</h2>
+
+            <p><strong>Nombre:</strong> Pablo Marichal</p>
+            <p><strong>Rol:</strong> Administrador</p>
+            <p><strong>Email:</strong> admin@gmail.com</p>
+        </div>
+
+        <!-- MENSAJE PARA INVITADO -->
+        <div id="invitado" class="mensaje">
+            <h2>🔒 Inicia sesión</h2>
+            <p>Debes iniciar sesión para ver tu información.</p>
+
+            <button onclick="iniciarSesion()">
+                Iniciar sesión
+            </button>
+        </div>
+
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script type="module">
+
+    // Obtener configuración de Supabase
+    const config = await (await fetch("/api/config")).json();
+
+    // Conectar con Supabase
+    const clienteSupabase = supabase.createClient(
+        config.url,
+        config.anonKey
+    );
+
+    // Ver quién está conectado
+    const { data: { user } } = await clienteSupabase.auth.getUser();
+
+    if (user) {
+
+        // Hay un usuario conectado
+        document.getElementById("admin").style.display = "block";
+        document.getElementById("invitado").style.display = "none";
+
+    } else {
+
+        // No hay usuario conectado
+        document.getElementById("admin").style.display = "none";
+        document.getElementById("invitado").style.display = "block";
+
+    }
+
+
+    // Botón "Iniciar sesión"
+    window.iniciarSesion = function() {
+        window.location.href = "login.html";
+    };
+
+</script>
+
+</body>
+</html>
