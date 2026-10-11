@@ -43,18 +43,51 @@
   <!-- MENU LATERAL -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="menuLateralLabel" style="color:var(--azul-700)">Menú</h5>
+      <h5 class="offcanvas-title" id="menuLateralLabel">Menú</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
     </div>
     <div class="offcanvas-body">
       <div class="d-flex flex-column gap-2">
-        <a href="/public/perfil.html" class="btn btn-outline-primary text-start"
-          style="color:var(--azul-700); border-color:var(--azul-700)">👤 Mi sesión</a>
-        <a href="/public/galeria.html" class="btn btn-outline-primary text-start"
-          style="color:var(--azul-700); border-color:var(--azul-700)">🖼️ Galería</a>
-        <a href="/public/ayuda.html" class="btn btn-outline-primary text-start"
-          style="color:var(--azul-700); border-color:var(--azul-700)">❓ Ayuda</a>
+        <a href="/public/perfil.html" class="btn btn-outline-primary text-start">👤 Mi sesión</a>
+        <a href="/public/galeria.html" class="btn btn-outline-primary text-start">🖼️ Galería</a>
+        <a href="/public/ayuda.html" class="btn btn-outline-primary text-start">❓ Ayuda</a>
         <button id="btnSalirMenu" class="btn btn-outline-danger text-start">🚪 Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL BORRAR NOTICIA -->
+  <div class="modal fade" id="modalBorrar" tabindex="-1" aria-labelledby="modalBorrarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalBorrarLabel">Borrar noticia</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          ¿Seguro que querés borrar esta noticia? Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="btnConfirmarBorrar">Sí, borrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de noticias-->
+  <div class="modal fade" id="modalNoticia" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalNoticiaTitulo"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <img id="modalNoticiaImagen" class="img-fluid rounded mb-3 d-none" alt="">
+          <p class="text-muted small mb-1" id="modalNoticiaFecha"></p>
+          <h6 id="modalNoticiaSubtitulo"></h6>
+          <p id="modalNoticiaParrafo" style="white-space: pre-line"></p>
+        </div>
       </div>
     </div>
   </div>
@@ -115,10 +148,11 @@
       </div>
 
       <div class="text-center mb-4">
-        <a href="/public/noticia.html" id="btnCrearNoticia" class="btn btn-outline-primary px-4">
+        <a href="/public/noticia.html" id="btnCrearNoticia" class="btn btn-outline-primary px-4" style="display:none">
           Crear noticia
         </a>
       </div>
+
       <div class="row g-4">
         <div class="col-md-6 col-lg-4">
           <div class="card-noticia">
@@ -128,7 +162,7 @@
               <p class="fecha-noticia mt-2 mb-1"></p>
               <h5></h5>
               <p class="text-secondary small"></p>
-              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+              <a href="#" class="fw-bold text-decoration-none">Leer más →</a>
             </div>
           </div>
         </div>
@@ -153,7 +187,7 @@
               <p class="fecha-noticia mt-2 mb-1"></p>
               <h5></h5>
               <p class="text-secondary small"></p>
-              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+              <a href="#" class="fw-bold text-decoration-none">Leer más →</a>
             </div>
           </div>
         </div>
@@ -167,7 +201,7 @@
               <p class="fecha-noticia mt-2 mb-1"></p>
               <h5></h5>
               <p class="text-secondary small"></p>
-              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+              <a href="#" class="fw-bold text-decoration-none">Leer más →</a>
             </div>
           </div>
         </div>
@@ -179,7 +213,7 @@
               <p class="fecha-noticia mt-2 mb-1"></p>
               <h5></h5>
               <p class="text-secondary small"></p>
-              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+              <a href="#" class="fw-bold text-decoration-none">Leer más →</a>
             </div>
           </div>
         </div>
@@ -192,7 +226,7 @@
               <p class="fecha-noticia mt-2 mb-1"></p>
               <h5></h5>
               <p class="text-secondary small"></p>
-              <a href="#" class="fw-bold text-decoration-none" style="color:var(--azul-700)">Leer más →</a>
+              <a href="#" class="fw-bold text-decoration-none">Leer más →</a>
             </div>
           </div>
         </div>
@@ -200,7 +234,8 @@
 
       <div class="text-center mt-5">
         <a href="public/verNoticias.html" class="btn btn-outline-primary px-4">
-          Ver todas las noticias</a>
+          Ver todas las noticias
+        </a>
       </div>
     </div>
   </section>
@@ -247,8 +282,7 @@
     </div>
     </div>
     <div class="text-center mt-5">
-      <a href="public/historiaAlumnos.html" class="btn btn-outline-primary px-4"
-        style="color:var(--azul-700); border-color:var(--azul-700)">Mas estudiantes</a>
+      <a href="public/historiaAlumnos.html" class="btn btn-outline-primary px-4">Mas estudiantes</a>
     </div>
   </section>
 
@@ -261,7 +295,7 @@
             Contactanos por estos medios (Manda mensaje de instagram)
           </h2>
           <div class="p-4 rounded-4 bg-white shadow-sm" id="contacto-datos">
-            <h5 style="color:var(--azul-700)">Datos de contacto</h5>
+            <h5>Datos de contacto</h5>
             <ul class="list-unstyled mt-3">
               <li class="mb-3">
                 <a href="https://www.google.com/maps/search/?api=1&query=Gral.+Flores+577,+85000+Trinidad"
@@ -283,7 +317,7 @@
   <section id="historia-logo" class="py-5">
     <div class="container">
       <div class="text-center mb-5">
-        <h2 style="color:var(--azul-700)">Historia de la mariposa azul</h2>
+        <h2>Historia de la mariposa azul</h2>
       </div>
       <div class="row g-4 align-items-center">
         <div class="col-lg-6">
@@ -334,7 +368,7 @@
         </div>
         <div class="col-md-4">
           <h6>Seguinos</h6>
-          <div clas="d-flex gap-3 fs-5">
+          <div class="d-flex gap-3 fs-5">
             <a href="https://www.instagram.com/asociacionmariposas?igsh=MWJvbTdoZWtnaXMydw==" rel="noopener noreferrer"
               target="_blank">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram"
@@ -354,12 +388,12 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module">
-
+    import { mostrarMensaje } from "/assets/js/mensajes.js";
     const contenedor = document.querySelector("#noticias .row.g-4");
 
     let config;
     try {
-      config = await(await fetch("/api/config")).json();
+      config = await (await fetch("/api/config")).json();
     } catch (e) {
       contenedor.innerHTML = '<p class="text-danger text-center">No se pudo conectar con el servidor.</p>';
       throw e;
@@ -375,57 +409,87 @@
       const { data: { user } } = await clienteSupabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await clienteSupabase
-        .from("admin").select("id").eq("user_id", user.id).maybeSingle();
+      const { data, error } = await clienteSupabase.from("admin").select("id").eq("user_id", user.id).maybeSingle();
 
       if (error) return console.error("Error comprobando administrador:", error);
       esAdmin = !!data;
     }
 
+
     function aplicarVistaAdmin() {
       document.getElementById("btnCrearNoticia").style.display = esAdmin ? "inline-block" : "none";
-
-      document.querySelectorAll(".btn-editar").forEach(btn => {
-        btn.style.display = esAdmin ? "inline-block" : "none";
-
-        btn.addEventListener("click", (e) => {
+      document.querySelectorAll(".pie-noticia").forEach((p) => { p.style.display = esAdmin ? "block" : "none"; });
+      document.querySelectorAll(".btn-editar").forEach(btn => { btn.style.display = esAdmin ? "inline-block" : "none";
+        
+      btn.addEventListener("click", (e) => {
           e.preventDefault();
           const id = btn.dataset.id;
           window.location.href = `/public/editarNoticia.html?id=${id}`;
         });
       });
-
-      document.querySelectorAll(".btn-borrar").forEach(btn => {
-        btn.style.display = esAdmin ? "inline-block" : "none";
-
-        btn.addEventListener("click", async (e) => {
+      
+      document.querySelectorAll(".btn-borrar").forEach(btn => { btn.style.display = esAdmin ? "inline-block" : "none";
+        btn.addEventListener("click", (e) => {
           e.preventDefault();
-          const id = btn.dataset.id;
-          if (!confirm("¿Seguro que querés borrar esta noticia?")) return;
-
-          const { data: { session } } = await clienteSupabase.auth.getSession();
-          const respuesta = await fetch(`${config.url}/rest/v1/noticias?id=eq.${id}`, {
-            method: "DELETE",
-            headers: {
-              apikey: config.anonKey,
-              Authorization: `Bearer ${session.access_token}`,
-            },
-          });
-
-          if (respuesta.ok) {
-            location.reload();
-            btn.closest(".col-md-6").remove();
-          } else {
-            alert("No se pudo borrar la noticia");
-          }
+          idPorBorrar = btn.dataset.id;
+          modalBorrar.show();
         });
       });
     }
 
-    async function cargarNoticias() {
+    const modalBorrar = new bootstrap.Modal(document.getElementById("modalBorrar"));
+    const btnConfirmarBorrar = document.getElementById("btnConfirmarBorrar");
+    let idPorBorrar = null;
+
+    btnConfirmarBorrar.addEventListener("click", async () => {
+      if (!idPorBorrar) return;
+
+      btnConfirmarBorrar.disabled = true; // evita doble clic
 
       try {
+        const { data: { session } } = await clienteSupabase.auth.getSession();
 
+        const respuesta = await fetch(`${config.url}/rest/v1/noticias?id=eq.${idPorBorrar}`, {
+          method: "DELETE",
+          headers: {
+            apikey: config.anonKey,
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
+
+        if (respuesta.ok) {
+          location.reload();
+        } else {
+          modalBorrar.hide();
+          mostrarMensaje("No se pudo borrar la noticia.", "danger");
+        }
+      } catch (error) {
+        console.error("Error al borrar:", error);
+        modalBorrar.hide();
+        mostrarMensaje("Ocurrió un error al borrar la noticia.", "danger");
+      } finally {
+        btnConfirmarBorrar.disabled = false;
+      }
+    });
+
+    const modalNoticia = new bootstrap.Modal(document.getElementById("modalNoticia"));
+
+    function abrirNoticia(noticia) {
+      document.getElementById("modalNoticiaTitulo").textContent = noticia.titulo;
+      document.getElementById("modalNoticiaFecha").textContent = new Date(noticia.fecha).toLocaleDateString();
+      document.getElementById("modalNoticiaSubtitulo").textContent = noticia.subtitulo;
+      document.getElementById("modalNoticiaParrafo").textContent = noticia.parrafo;
+
+      const img = document.getElementById("modalNoticiaImagen");
+      if (noticia.imagen) { img.src = noticia.imagen; img.alt = noticia.titulo; img.classList.remove("d-none"); }
+      else {
+        img.classList.add("d-none");
+      }
+      modalNoticia.show();
+    }
+
+    async function cargarNoticias() {
+      try {
         const respuesta = await fetch(ApiURL, {
           method: "GET",
           headers: {
@@ -445,53 +509,61 @@
         // Limpiar las noticias que ya están cargadas
         contenedorNoticias.innerHTML = "";
 
-        data.forEach(noticia => {
-
-          let palabras = noticia.parrafo.split(" ").length;
-
-          const card = document.createElement('div');
-          card.className = 'col-md-6 col-lg-4';
+        data.forEach((noticia) => {
+          const card = document.createElement("div");
+          card.className = "col-md-6 col-lg-4 d-flex";
           card.innerHTML = `
-            <div class="card-noticia">
-                <img src="${noticia.imagen}" alt="${noticia.titulo}" onerror="console.error('No se pudo cargar:', this.src)">
-                <div class="p-3">
-                    </span>
-                    <p class="fecha-noticia mt-2 mb-1">
-                        ${new Date(noticia.fecha).toLocaleDateString()}
-                    </p>
-                    <h3>${noticia.titulo}</h3>
-                    <h5>${noticia.subtitulo}</h5>
-                    <p class="text-secondary small">
-                        ${noticia.parrafo}
-                    </p>
-                    <hr>
-                    <button class="fw-bold text-decoration-none btn-borrar" data-id="${noticia.id}" id="btn-borrar" style="display: none;" >
-                       Borrar
-                    </button>
-                    <button class="fw-bold text-decoration-none btn-editar" id="btn-editar" data-id="${noticia.id}" style="display: none;">
-                       Editar
-                    </button>
-                </div>
-            </div>
-        `;
+    <div class="card-noticia">
+      ${noticia.imagen ? `<img src="${noticia.imagen}" alt="${noticia.titulo}">` : ""}
+      <div class="cuerpo-noticia p-3">
+        <p class="fecha-noticia mb-1">${new Date(noticia.fecha).toLocaleDateString()}</p>
+        <h3 class="titulo-noticia">${noticia.titulo}</h3>
+        <h5 class="subtitulo-noticia">${noticia.subtitulo}</h5>
+        <p class="text-secondary small texto-noticia">${noticia.parrafo}</p>
+        <button type="button" class="btn btn-link p-0 fw-bold text-start ver-mas d-none"
+                style="color:var(--azul-700)">Ver más →</button>
+        <div class="pie-noticia">
+          <hr class="mt-0">
+          <div class="d-flex gap-2">
+            <button class="fw-bold text-decoration-none btn-borrar" id="btn-borrar" data-id="${noticia.id}" style="display:none">Borrar</button>
+            <button class="fw-bold text-decoration-none btn-editar" id="btn-editar" data-id="${noticia.id}" style="display:none">Editar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
           contenedorNoticias.appendChild(card);
         });
-        console.log("Noticias cargadas:", data);
-      } catch (error) {
-        console.log("Error al cargar las noticias: ", error)
+          await document.fonts.ready;
+
+          document.querySelectorAll("#noticias .card-noticia").forEach((tarjeta, i) => {
+            const cortado = [".titulo-noticia", ".subtitulo-noticia", ".texto-noticia"].some((sel) => {
+              const el = tarjeta.querySelector(sel);
+              return el.scrollHeight - el.clientHeight > 1;
+            });
+
+            if (cortado) {
+              const btn = tarjeta.querySelector(".ver-mas");
+              btn.classList.remove("d-none");
+              btn.addEventListener("click", () => abrirNoticia(data[i]));
+            }
+          });
+        } catch (error) {
+          console.error("Error al cargar noticias:", error);
+          contenedor.innerHTML = '<p class="text-danger text-center">No se pudieron cargar las noticias.</p>';
+        }
       }
-    }
 
 
     document.getElementById("btnSalirMenu").addEventListener("click", async (e) => {
-      e.preventDefault();
-      await clienteSupabase.auth.signOut();
-      window.location.href = "/public/login.html";
-    });
+        e.preventDefault();
+        await clienteSupabase.auth.signOut();
+        window.location.href = "/public/login.html";
+      });
 
-    await comprobarAdmin();
-    await cargarNoticias();
-    aplicarVistaAdmin();
+      await comprobarAdmin();
+      await cargarNoticias();
+      aplicarVistaAdmin();
 
   </script>
 </body>

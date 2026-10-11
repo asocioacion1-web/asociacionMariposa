@@ -14,7 +14,8 @@
         <div class="encabezado text-center mb-4">
             <h1 id="titulo">Editar noticia</h1>
             <p class="text-secondary">
-                Completá los datos correctamente y hacé click en "Guardar cambios" para actualizar la noticia.
+                Completá los datos correctamente y hacé click en "Guardar cambios"
+                para actualizar la noticia.
             </p>
             <a href="/index.html" class="text-decoration-none">
                 ← Volver a noticias
@@ -59,7 +60,8 @@
                                 Párrafo
                             </label>
 
-                            <textarea class="form-control" id="campo-parrafo" name="parrafo" rows="4" placeholder="Contá de qué se trató la actividad..." required></textarea>
+                            <textarea class="form-control" id="campo-parrafo" name="parrafo" rows="4"
+                                placeholder="Contá de qué se trató la actividad..." required></textarea>
                         </div>
 
                         <div class="mb-3">
@@ -117,23 +119,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module">
+import { mostrarMensaje } from "/assets/js/mensajes.js";
+        // CONFIGURACIÓN DE SUPABASE
 
-        // ==========================================
-        // CONFIGURACIÓN DEL SERVIDOR
-        // ==========================================
         const contenedor = document.querySelector("#noticias .row.g-4");
-
         let config;
+
         try {
             config = await(await fetch("/api/config")).json();
         } catch (e) {
-            contenedor.innerHTML = '<p class="text-danger text-center">No se pudo conectar con el servidor.</p>';
+            contenedor.innerHTML =
+                '<p class="text-danger text-center">No se pudo conectar con el servidor.</p>';
             throw e;
         }
-
-        // ==========================================
-        // CONFIGURACIÓN DE SUPABASE
-        // ==========================================
 
         const SupabaseUrl = config.url;
         const ApiKey = config.anonKey;
@@ -141,25 +139,32 @@
         const SupabaseStorage = SupabaseUrl + "/storage/v1/object/";
 
         const clienteSupabase = supabase.createClient(config.url, config.anonKey);
-        const { data: { session } } = await clienteSupabase.auth.getSession();
+        const { data: { session }, } = await clienteSupabase.auth.getSession();
 
-        // ==========================================
         // ID DE LA NOTICIA A EDITAR (viene de la URL)
-        // ==========================================
 
         const parametros = new URLSearchParams(window.location.search);
         const idNoticia = parametros.get("id");
 
         if (!idNoticia) {
-            alert("No se especificó qué noticia editar.");
+            mostrarMensaje("Falta el id de la noticia. Redirigiendo a la página principal...", "error");
             window.location.href = "/index.html";
+            throw new Error("Falta el id de la noticia");
         }
 
-        let urlImagenActual = ""; // guarda la imagen existente por si no suben una nueva
+        let urlImagenActual = "";
 
-        // ==========================================
+        let datosOriginales = null;
+        function leerCampos() {
+            return {
+                titulo: document.getElementById("campo-titulo").value.trim(),
+                subtitulo: document.getElementById("campo-subtitulo").value.trim(),
+                parrafo: document.getElementById("campo-parrafo").value.trim(),
+                fecha: document.getElementById("campo-fecha").value.trim(),
+            };
+        }
+
         // CARGAR DATOS DE LA NOTICIA EXISTENTE
-        // ==========================================
 
         async function cargarNoticia() {
             const respuesta = await fetch(
@@ -169,19 +174,20 @@
                         apikey: ApiKey,
                         Authorization: `Bearer ${session?.access_token || ApiKey}`,
                     },
-                }
+                },
             );
 
             if (!respuesta.ok) {
-                alert("No se pudo cargar la noticia.");
+                mostrarMensaje("No se pudo cargar la noticia. Redirigiendo a la página principal...", "error");
+                setTimeout(() => (window.location.href = "/index.html"), 1500);
                 return;
             }
 
             const datos = await respuesta.json();
 
             if (!datos.length) {
-                alert("La noticia no existe.");
-                window.location.href = "/index.html";
+                mostrarMensaje("La noticia no existe. Redirigiendo a la página principal...", "error");
+                setTimeout(() => (window.location.href = "/index.html"), 1500);
                 return;
             }
 
@@ -198,25 +204,24 @@
             document.getElementById("titulo").textContent = "Editar noticia";
             document.getElementById("btn-publicar").textContent = "Guardar cambios";
 
+            datosOriginales = leerCampos();
+
             actualizarPrevia();
         }
 
-        // ==========================================
         // ELEMENTOS DEL HTML
-        // ==========================================
 
         const inputImagen = document.getElementById("campo-imagen");
         const previaImagen = document.getElementById("previa-imagen");
 
-        // ==========================================
         // VISTA PREVIA DE LA IMAGEN
-        // ==========================================
 
         inputImagen.addEventListener("change", function () {
             const archivo = this.files[0];
             if (!archivo) return;
 
             if (
+                archivo &&
                 archivo.type !== "image/webp" &&
                 archivo.type !== "image/jpeg" &&
                 archivo.type !== "image/png" &&
@@ -226,7 +231,7 @@
                 !archivo.name.toLowerCase().endsWith(".jpg") &&
                 !archivo.name.toLowerCase().endsWith(".png")
             ) {
-                alert("Solo se permiten imágenes .webp/.jpeg/.jpg/.png");
+                mostrarMensaje("La imagen debe estar en formato .webp/.jpeg/.jpg/.png.", "error");
                 inputImagen.value = "";
                 return;
             }
@@ -238,9 +243,7 @@
             lector.readAsDataURL(archivo);
         });
 
-        // ==========================================
         // ACTUALIZAR VISTA PREVIA
-        // ==========================================
 
         function actualizarPrevia() {
             const fecha = document.getElementById("campo-fecha").value.trim() || "Fecha pendiente";
@@ -254,13 +257,13 @@
             document.getElementById("previa-parrafo").textContent = parrafo;
         }
 
-        // ==========================================
         // GUARDAR CAMBIOS (editar noticia)
-        // ==========================================
 
         async function convertirAWebP(archivo) {
             const imagen = new Image();
+
             const url = URL.createObjectURL(archivo);
+
             imagen.src = url;
 
             await new Promise((resolve, reject) => {
@@ -269,20 +272,57 @@
             });
 
             const canvas = document.createElement("canvas");
+
             canvas.width = imagen.naturalWidth;
             canvas.height = imagen.naturalHeight;
-            canvas.getContext("2d").drawImage(imagen, 0, 0);
+
+            const contexto = canvas.getContext("2d");
+
+            contexto.drawImage(imagen, 0, 0);
 
             const webpBlob = await new Promise((resolve, reject) => {
                 canvas.toBlob(
-                    (blob) => blob ? resolve(blob) : reject(new Error("No se pudo convertir la imagen a WebP.")),
+                    (blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error("No se pudo convertir la imagen a WebP."));
+                        }
+                    },
                     "image/webp",
-                    0.85
+                    0.85,
                 );
             });
 
             URL.revokeObjectURL(url);
+
             return webpBlob;
+        }
+
+        async function hashArchivo(archivo) {
+            const buffer = await archivo.arrayBuffer();
+            const hash = await crypto.subtle.digest("SHA-256", buffer);
+            return Array.from(new Uint8Array(hash))
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join("")
+                .slice(0, 32);
+        }
+
+        //Validar los campos del formulario
+
+        function validarNoticia({ titulo, subtitulo, parrafo, fecha }) {
+            const errores = [];
+
+            if (titulo.length < 3 || titulo.length > 100)
+                errores.push("El título debe tener entre 3 y 100 caracteres.");
+            if (subtitulo.length < 3 || subtitulo.length > 150)
+                errores.push("El subtítulo debe tener entre 3 y 150 caracteres.");
+            if (parrafo.length < 10 || parrafo.length > 5000)
+                errores.push("El párrafo debe tener entre 10 y 5000 caracteres.");
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha) || isNaN(new Date(fecha)))
+                errores.push("La fecha no es válida.");
+
+            return errores;
         }
 
         async function guardarCambios() {
@@ -294,17 +334,16 @@
             const fecha = document.getElementById("campo-fecha").value.trim();
             const archivo = document.getElementById("campo-imagen").files[0];
 
-            if (!titulo || !parrafo || !subtitulo || !fecha) {
-                alert("Por favor completá todos los campos.");
+            const errores = validarNoticia({ titulo, subtitulo, parrafo, fecha, archivo, });
+            if (errores.length > 0) {
+                mostrarMensaje(errores.join("\n"), "error");
                 return;
             }
 
             try {
-                let urlImagenFinal = urlImagenActual; // si no suben nueva imagen, se mantiene la actual
+                let urlImagenFinal = urlImagenActual;
 
-                // ========================================
                 // SI SUBIERON UNA IMAGEN NUEVA, LA SUBIMOS
-                // ========================================
 
                 if (archivo) {
                     if (
@@ -317,16 +356,15 @@
                         !archivo.name.toLowerCase().endsWith(".jpg") &&
                         !archivo.name.toLowerCase().endsWith(".png")
                     ) {
-                        alert("La imagen debe estar en formato .webp/.jpeg/.jpg/.png.");
+                        mostrarMensaje("La imagen debe estar en formato .webp/.jpeg/.jpg/.png.", "error");
                         return;
                     }
 
                     console.log("Convirtiendo imagen a WebP...");
                     const webpBlob = await convertirAWebP(archivo);
 
-                    const nombreOriginal = archivo.name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9._-]/g, "");
-                    const nombreSinExtension = nombreOriginal.replace(/\.[^/.]+$/, "");
-                    const nombreArchivo = Date.now() + "_" + nombreSinExtension + ".webp";
+                    // Mismo contenido = mismo nombre
+                    const nombreArchivo = (await hashArchivo(archivo)) + ".webp";
 
                     console.log("Subiendo imagen nueva a Storage...");
                     const respuestaImagen = await fetch(
@@ -337,25 +375,40 @@
                                 apikey: ApiKey,
                                 Authorization: `Bearer ${session.access_token}`,
                                 "Content-Type": "image/webp",
+                                "x-upsert": "false",
                             },
                             body: webpBlob,
-                        }
+                        },
                     );
 
                     if (!respuestaImagen.ok) {
                         const errorImagen = await respuestaImagen.text();
-                        throw new Error("No se pudo subir la imagen: " + errorImagen);
+                        const yaExiste = errorImagen.includes("Duplicate") || errorImagen.includes("already exists");
+
+                        if (yaExiste) {
+                            console.log("La imagen ya existía en Storage, se reutiliza.");
+                        } else {
+                            throw new Error("No se pudo subir la imagen: " + errorImagen);
+                        }
                     }
 
                     urlImagenFinal = SupabaseStorage + "noticias/" + nombreArchivo;
                 }
 
-                // ========================================
                 // ACTUALIZAR LA NOTICIA (PATCH, no POST)
-                // ========================================
 
-                console.log("Guardando cambios...");
+                const sinCambios =
+                    datosOriginales &&
+                    titulo === datosOriginales.titulo &&
+                    subtitulo === datosOriginales.subtitulo &&
+                    parrafo === datosOriginales.parrafo &&
+                    fecha === datosOriginales.fecha &&
+                    !archivo; // si eligió una imagen nueva, cuenta como cambio
 
+                if (sinCambios) {
+                    mostrarMensaje("No hiciste ningún cambio en la noticia.", "error");
+                    return;
+                }
                 const respuestaNoticia = await fetch(
                     `${SupabaseRest}noticias?id=eq.${idNoticia}`,
                     {
@@ -373,7 +426,7 @@
                             fecha,
                             imagen: urlImagenFinal,
                         }),
-                    }
+                    },
                 );
 
                 const resultado = await respuestaNoticia.json();
@@ -381,15 +434,16 @@
                 console.log("Resultado:", resultado);
 
                 if (!respuestaNoticia.ok) {
-                    throw new Error(resultado.message || "No se pudo guardar los cambios.");
+                    throw new Error(
+                        resultado.message || "No se pudo guardar los cambios.",
+                    );
                 }
 
-                alert("¡Noticia actualizada correctamente!");
-                window.location.href = "/index.html";
-
+                mostrarMensaje("¡Noticia actualizada correctamente!", "success");
+                setTimeout(() => (window.location.href = "/index.html"), 1500);
             } catch (error) {
                 console.error("Error:", error);
-                alert("Ocurrió un error: " + error.message);
+                mostrarMensaje("Ocurrió un error: " + error.message, "error");
             }
         }
 
@@ -397,9 +451,7 @@
         document.getElementById("btn-publicar").addEventListener("click", guardarCambios);
 
         await cargarNoticia();
-
     </script>
-
 </body>
 
 </html>
