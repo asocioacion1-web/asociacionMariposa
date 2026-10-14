@@ -1,118 +1,671 @@
-<!-- ===== SECCIÓN GALERÍA DE FOTOS (estilo papel / polaroid) ===== -->
- <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Historias que dejan huella</title>
+    <title>Fotos de la comunidad · Asociación Civil Mariposas</title>
 
-    <link rel="stylesheet" href="assets/css/galeria.css">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historias que dejan huella</title>
+    <!-- Fuentes -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Caveat:wght@400;600;700&family=Figtree:wght@400;500;600&display=swap">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/galeria.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/galeria.css">
+
+   
 </head>
-</head>
+
 <body>
-<section class="galeria-seccion py-5" id="galeria">
-  <div class="container">
 
-    <div class="galeria-encabezado text-center mb-5">
-      <h2 class="galeria-titulo">Galería de fotos</h2>
-      <p class="galeria-subtitulo">Momentos que quedaron guardados</p>
-    </div>
+    <!-- MENÚ PRINCIPAL -->
+    <header class="cabecera">
 
-    <div class="row g-4 galeria-grid">  
-            <!-- Foto 1 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <figure class="foto-papel">
-          <div class="foto-marco">
-            <img src="https://placehold.co/400x400/ff8b6b/ffffff?text=Foto+1" alt="Descripción de la foto 1" loading="lazy">
-          </div>
-          <figcaption class="foto-leyenda">Taller de pintura</figcaption>
-        </figure>
-      </div>
-      
+        <a class="marca" href="/index.html">
+            <span class="marca-punto"></span>
+            Asociación Civil Mariposas
+        </a>
 
-      <!-- Foto 2 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <figure class="foto-papel">
-          <div class="foto-marco">
-            <img src="https://placehold.co/400x400/6bb5ff/ffffff?text=Foto+2" alt="Descripción de la foto 2" loading="lazy">
-          </div>
-          <figcaption class="foto-leyenda">Día de campo</figcaption>
-        </figure>
-      </div>
+        <nav class="menu">
+            <a href="/index.html">Inicio</a>
+        </nav>
 
-      <!-- Foto 3 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <figure class="foto-papel">
-          <div class="foto-marco">
-            <img src="https://placehold.co/400x400/8bd48b/ffffff?text=Foto+3" alt="Descripción de la foto 3" loading="lazy">
-          </div>
-          <figcaption class="foto-leyenda">Reunión de amigos</figcaption>
-        </figure>
-      </div>
+    </header>
 
-      <!-- Foto 4 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <figure class="foto-papel">
-          <div class="foto-marco">
-            <img src="https://placehold.co/400x400/f2c94c/ffffff?text=Foto+4" alt="Descripción de la foto 4" loading="lazy">
-          </div>
-          <figcaption class="foto-leyenda">Fiesta de cumpleaños</figcaption>
-        </figure>
-      </div>
+    <main>
 
-      <!-- Foto 5 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <figure class="foto-papel">
-          <div class="foto-marco">
-            <img src="https://placehold.co/400x400/bb86fc/ffffff?text=Foto+5" alt="Descripción de la foto 5" loading="lazy">
-          </div>
-          <figcaption class="foto-leyenda">Atardecer</figcaption>
-        </figure>
-      </div>
+        <!-- PRESENTACIÓN -->
+        <section class="intro">
 
-      <!-- Foto 6 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <figure class="foto-papel">
-          <div class="foto-marco">
-            <img src="https://placehold.co/400x400/ef6f6c/ffffff?text=Foto+6" alt="Descripción de la foto 6" loading="lazy">
-          </div>
-          <figcaption class="foto-leyenda">Paseo en familia</figcaption>
-        </figure>
-      </div>
+            <h1>Fotos de la comunidad</h1>
 
-      <!-- Foto 7 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <figure class="foto-papel">
-          <div class="foto-marco">
-            <img src="https://placehold.co/400x400/4dd0e1/ffffff?text=Foto+7" alt="Descripción de la foto 7" loading="lazy">
-          </div>
-          <figcaption class="foto-leyenda">En la playa</figcaption>
-        </figure>
-      </div>
+            <p>
+                Donde cada momento es capturado
+                por nuestra comunidad.
+            </p>
 
-      <!-- Foto 8 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <figure class="foto-papel">
-          <div class="foto-marco">
-            <img src="https://placehold.co/400x400/a1887f/ffffff?text=Foto+8" alt="Descripción de la foto 8" loading="lazy">
-          </div>
-          <figcaption class="foto-leyenda">Recuerdos</figcaption>
-        </figure>
-      </div>
+            <button type="button" class="btn-agregar" id="abrirNuevo">
+                + Agregar fotografía
+            </button>
 
-      <!-- Para agregar más fotos, copiá y pegá uno de los bloques <div class="col-6 ..."> -->
-        
-      </div>
-    </div>
-  </div>
-</section>
-<!-- ===== FIN GALERÍA ===== -->
+        </section>
+
+        <!-- GALERÍA POLAROID -->
+        <ul class="galeria" id="galeria"></ul>
+
+    </main>
+
+    <!-- MODAL CREAR / EDITAR FOTO -->
+    <dialog class="modal-foto" id="modalFoto" aria-labelledby="tituloModal">
+
+        <form id="formFoto">
+
+            <div class="modal-cabecera">
+
+                <h2 id="tituloModal">Agregar fotografía</h2>
+
+                <button type="button" class="btn-cerrar" id="cerrarModal" aria-label="Cerrar">
+                    &times;
+                </button>
+
+            </div>
+
+            <p class="modal-descripcion">
+                Compartí uno de los momentos especiales
+                de nuestra comunidad.
+            </p>
+
+            <!-- TÍTULO -->
+            <div class="campo">
+                <label for="fotoTitulo">Título de la fotografía</label>
+
+                <input
+                    type="text"
+                    id="fotoTitulo"
+                    placeholder="Ej: Una tarde con nuestros alumnos"
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <!-- DESCRIPCIÓN -->
+            <div class="campo">
+                <label for="fotoDescripcion">Descripción</label>
+
+                <textarea
+                    id="fotoDescripcion"
+                    rows="3"
+                    placeholder="Contanos la historia de esta fotografía..."
+                ></textarea>
+            </div>
+
+            <!-- FIRMA -->
+            <div class="campo">
+                <label for="fotoFirma">Nombre o firma</label>
+
+                <input
+                    type="text"
+                    id="fotoFirma"
+                    placeholder="Ej: Silvia · Asociación Civil Mariposas"
+                >
+            </div>
+
+            <!-- IMAGEN -->
+            <div class="campo">
+                <label for="imagenArchivo">Seleccionar imagen</label>
+
+                <input
+                    type="file"
+                    id="imagenArchivo"
+                    accept="image/*"
+                >
+            </div>
+
+            <p class="separador-modal">O utilizá una ruta o URL de imagen</p>
+
+            <div class="campo">
+                <label for="imagenUrl">Ruta de la imagen</label>
+
+                <input
+                    type="text"
+                    id="imagenUrl"
+                    placeholder="/assets/imagenes/foto.jpg"
+                >
+            </div>
+
+            <!-- VISTA PREVIA -->
+            <div class="previsualizacion" id="cajaPreview" hidden>
+                <img id="imagenPreview" alt="Vista previa de la fotografía">
+            </div>
+
+            <!-- ERRORES -->
+            <p class="mensaje-error" id="mensajeError" role="alert"></p>
+
+            <!-- BOTONES -->
+            <div class="modal-acciones">
+
+                <button type="button" class="btn-cancelar" id="cancelarModal">
+                    Cancelar
+                </button>
+
+                <button type="submit" class="btn-guardar" id="guardarFoto">
+                    Guardar fotografía
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="final">
+        Asociación Civil Mariposas · Historias que dejan huella.
+    </footer>
+<script> 
+// ===== FOTOS INICIALES =====
+
+const fotosIniciales = [
+    {
+        id: "1",
+        titulo: "Una tarde con nuestros alumnos.",
+        descripcion: "Compartimos una de las tardes.",
+        firma: "Silvia · Asociación Civil Mariposas",
+        imagen: "/public/html/imagenes/Fotos/Andresito.jpeg"
+    },
+    {
+        id: "2",
+        titulo: "Punta Ballena",
+        descripcion: "Una visita a Punta Ballena, es una de las mejores fotos que he tomado.",
+        firma: "Lucía · Laguna del Sauce",
+        imagen: "/public/html/imagenes/puntaBallena.jpeg"
+    },
+    {
+        id: "3",
+        titulo: "Un recuerdo para compartir",
+        descripcion: "Una tarde de pesca con amigos, paciencia y un buen pique.",
+        firma: "Nico · Punta del Este",
+        imagen: "imagenes/corvina.jpg"
+    }
+];
+
+// ===== ELEMENTOS DEL HTML =====
+
+const galeria = document.getElementById("galeria");
+const modal = document.getElementById("modalFoto");
+const formulario = document.getElementById("formFoto");
+
+const tituloModal = document.getElementById("tituloModal");
+const campoTitulo = document.getElementById("fotoTitulo");
+const campoDescripcion = document.getElementById("fotoDescripcion");
+const campoFirma = document.getElementById("fotoFirma");
+
+const imagenArchivo = document.getElementById("imagenArchivo");
+const imagenUrl = document.getElementById("imagenUrl");
+
+const cajaPreview = document.getElementById("cajaPreview");
+const imagenPreview = document.getElementById("imagenPreview");
+
+const mensajeError = document.getElementById("mensajeError");
+const botonGuardar = document.getElementById("guardarFoto");
+
+const botonAgregar = document.getElementById("abrirNuevo");
+const botonCerrar = document.getElementById("cerrarModal");
+const botonCancelar = document.getElementById("cancelarModal");
+
+// ===== ALMACENAMIENTO =====
+
+const CLAVE = "galeria_mariposas_fotos";
+
+function cargarFotos() {
+    try {
+        const guardado = localStorage.getItem(CLAVE);
+
+        if (guardado === null) {
+            return fotosIniciales;
+        }
+
+        const datos = JSON.parse(guardado);
+
+        return Array.isArray(datos) ? datos : fotosIniciales;
+
+    } catch (error) {
+        return fotosIniciales;
+    }
+}
+
+let fotos = cargarFotos();
+
+let fotoEnEdicion = null;
+let imagenActual = "";
+let urlTemporal = null;
+
+// ===== CREAR ELEMENTOS =====
+
+function crearTexto(etiqueta, clase, contenido) {
+    const elemento = document.createElement(etiqueta);
+    elemento.className = clase;
+    elemento.textContent = contenido;
+    return elemento;
+}
+
+// ===== MOSTRAR FOTOGRAFÍAS =====
+
+function mostrarFotos() {
+
+    galeria.replaceChildren();
+
+    fotos.forEach((foto, posicion) => {
+
+        const li = document.createElement("li");
+
+        const figura = document.createElement("figure");
+        figura.className = "polaroid";
+
+        if (posicion % 4 === 0) {
+            figura.classList.add("con-cinta");
+        }
+
+        // Imagen
+
+        const marco = document.createElement("div");
+        marco.className = "foto";
+
+        const imagen = document.createElement("img");
+        imagen.src = foto.imagen;
+        imagen.alt = foto.titulo || "Foto de la comunidad";
+        imagen.loading = "lazy";
+
+        marco.appendChild(imagen);
+
+        // Pie de foto
+
+        const pie = document.createElement("figcaption");
+        pie.className = "pie";
+
+        const titulo = crearTexto(
+            "h2",
+            "titulo",
+            foto.titulo
+        );
+
+        const descripcion = crearTexto(
+            "p",
+            "descripcion",
+            foto.descripcion
+        );
+
+        const firma = crearTexto(
+            "p",
+            "firma",
+            foto.firma
+        );
+
+        // Botones
+
+        const acciones = document.createElement("div");
+        acciones.className = "acciones-foto";
+
+        const editar = document.createElement("button");
+        editar.type = "button";
+        editar.className = "btn-editar";
+        editar.textContent = "Editar";
+
+        editar.addEventListener("click", () => {
+            abrirModal(foto.id);
+        });
+
+        const eliminar = document.createElement("button");
+        eliminar.type = "button";
+        eliminar.className = "btn-eliminar";
+        eliminar.textContent = "Eliminar";
+
+        eliminar.addEventListener("click", () => {
+            eliminarFoto(foto.id);
+        });
+
+        acciones.append(editar, eliminar);
+
+        pie.append(
+            titulo,
+            descripcion,
+            firma,
+            acciones
+        );
+
+        figura.append(marco, pie);
+        li.appendChild(figura);
+        galeria.appendChild(li);
+    });
+}
+
+// ===== VISTA PREVIA =====
+
+function actualizarPreview(origen) {
+
+    if (origen) {
+        imagenPreview.src = origen;
+        cajaPreview.hidden = false;
+    } else {
+        imagenPreview.removeAttribute("src");
+        cajaPreview.hidden = true;
+    }
+}
+
+function limpiarUrlTemporal() {
+
+    if (urlTemporal) {
+        URL.revokeObjectURL(urlTemporal);
+        urlTemporal = null;
+    }
+}
+
+// ===== ABRIR MODAL =====
+
+function abrirModal(id = null) {
+
+    formulario.reset();
+    limpiarUrlTemporal();
+
+    mensajeError.textContent = "";
+    fotoEnEdicion = id;
+    imagenActual = "";
+
+    if (id !== null) {
+
+        // EDITAR
+
+        const foto = fotos.find(f => f.id === id);
+
+        if (!foto) return;
+
+        tituloModal.textContent = "Editar fotografía";
+
+        campoTitulo.value = foto.titulo;
+        campoDescripcion.value = foto.descripcion;
+        campoFirma.value = foto.firma;
+
+        imagenActual = foto.imagen;
+
+        if (!foto.imagen.startsWith("data:")) {
+            imagenUrl.value = foto.imagen;
+        }
+
+        actualizarPreview(foto.imagen);
+
+    } else {
+
+        // CREAR
+
+        tituloModal.textContent = "Agregar fotografía";
+        actualizarPreview("");
+    }
+
+    modal.showModal();
+}
+
+// ===== CERRAR MODAL =====
+
+function cerrarModal() {
+    modal.close();
+}
+
+botonAgregar.addEventListener("click", () => {
+    abrirModal();
+});
+
+botonCerrar.addEventListener("click", cerrarModal);
+botonCancelar.addEventListener("click", cerrarModal);
+
+modal.addEventListener("click", (evento) => {
+    if (evento.target === modal) {
+        cerrarModal();
+    }
+});
+
+modal.addEventListener("close", () => {
+    limpiarUrlTemporal();
+    formulario.reset();
+    mensajeError.textContent = "";
+});
+
+// ===== PREVISUALIZAR ARCHIVO =====
+
+imagenArchivo.addEventListener("change", () => {
+
+    limpiarUrlTemporal();
+
+    const archivo = imagenArchivo.files[0];
+
+    if (archivo) {
+
+        urlTemporal = URL.createObjectURL(archivo);
+
+        imagenUrl.value = "";
+        actualizarPreview(urlTemporal);
+
+    } else {
+
+        actualizarPreview(imagenUrl.value.trim() || imagenActual);
+    }
+});
+
+// ===== PREVISUALIZAR RUTA =====
+
+imagenUrl.addEventListener("input", () => {
+
+    imagenArchivo.value = "";
+    limpiarUrlTemporal();
+
+    actualizarPreview(imagenUrl.value.trim() || imagenActual);
+});
+
+// ===== OPTIMIZAR IMAGEN SUBIDA =====
+
+// Reduce las dimensiones y el peso para poder
+// guardarla en el navegador.
+
+function optimizarImagen(archivo) {
+
+    return new Promise((resolver, rechazar) => {
+
+        if (!archivo.type.startsWith("image/")) {
+            rechazar(new Error("Seleccioná un archivo de imagen válido."));
+            return;
+        }
+
+        const url = URL.createObjectURL(archivo);
+        const imagen = new Image();
+
+        imagen.onload = () => {
+
+            try {
+
+                const limite = 1000;
+
+                const escala = Math.min(
+                    1,
+                    limite / Math.max(imagen.width, imagen.height)
+                );
+
+                const canvas = document.createElement("canvas");
+
+                canvas.width = Math.round(imagen.width * escala);
+                canvas.height = Math.round(imagen.height * escala);
+
+                const contexto = canvas.getContext("2d");
+
+                contexto.fillStyle = "#ffffff";
+                contexto.fillRect(0, 0, canvas.width, canvas.height);
+
+                contexto.drawImage(
+                    imagen,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                const resultado = canvas.toDataURL("image/jpeg", 0.72);
+
+                resolver(resultado);
+
+            } catch (error) {
+                rechazar(error);
+            } finally {
+                URL.revokeObjectURL(url);
+            }
+        };
+
+        imagen.onerror = () => {
+            URL.revokeObjectURL(url);
+            rechazar(new Error("No se pudo leer la imagen."));
+        };
+
+        imagen.src = url;
+    });
+}
+
+// ===== GUARDAR FOTOGRAFÍA =====
+
+formulario.addEventListener("submit", async (evento) => {
+
+    evento.preventDefault();
+
+    const titulo = campoTitulo.value.trim();
+    const descripcion = campoDescripcion.value.trim();
+    const firma = campoFirma.value.trim();
+
+    mensajeError.textContent = "";
+
+    botonGuardar.disabled = true;
+    botonGuardar.textContent = "Guardando...";
+
+    try {
+
+        let imagen = imagenActual;
+
+        // Si se subió una imagen desde la computadora
+        if (imagenArchivo.files.length > 0) {
+
+            imagen = await optimizarImagen(
+                imagenArchivo.files[0]
+            );
+
+        } else if (imagenUrl.value.trim()) {
+
+            // Si se ingresó una URL o ruta
+            imagen = imagenUrl.value.trim();
+        }
+
+        if (!titulo) {
+            throw new Error("Ingresá un título.");
+        }
+
+        if (!imagen) {
+            throw new Error("Seleccioná una imagen o ingresá su ruta.");
+        }
+
+        const nuevaFoto = {
+            id: fotoEnEdicion || (
+                Date.now().toString() + "-" +
+                Math.random().toString(36).slice(2, 8)
+            ),
+            titulo: titulo,
+            descripcion: descripcion,
+            firma: firma,
+            imagen: imagen
+        };
+
+        let nuevasFotos;
+
+        if (fotoEnEdicion !== null) {
+
+            // Actualizar la fotografía existente
+
+            nuevasFotos = fotos.map(foto => {
+                if (foto.id === fotoEnEdicion) {
+                    return nuevaFoto;
+                }
+
+                return foto;
+            });
+
+        } else {
+
+            // Agregar una nueva fotografía
+
+            nuevasFotos = [...fotos, nuevaFoto];
+        }
+
+        // Guardar antes de modificar la galería
+
+        localStorage.setItem(
+            CLAVE,
+            JSON.stringify(nuevasFotos)
+        );
+
+        fotos = nuevasFotos;
+
+        mostrarFotos();
+        cerrarModal();
+
+    } catch (error) {
+
+        if (error.name === "QuotaExceededError") {
+
+            mensajeError.textContent =
+                "Se agotó el espacio de almacenamiento del navegador. Probá con una imagen más pequeña o usá una ruta de imagen.";
+
+        } else {
+
+            mensajeError.textContent =
+                error.message || "No se pudo guardar la fotografía.";
+        }
+
+    } finally {
+
+        botonGuardar.disabled = false;
+        botonGuardar.textContent = "Guardar fotografía";
+    }
+});
+
+// ===== ELIMINAR FOTOGRAFÍA =====
+
+function eliminarFoto(id) {
+
+    const foto = fotos.find(f => f.id === id);
+
+    if (!foto) return;
+
+    const confirmar = confirm(
+        '¿Seguro que querés eliminar "' + foto.titulo + '"?'
+    );
+
+    if (!confirmar) return;
+
+    const nuevasFotos = fotos.filter(foto => foto.id !== id);
+
+    try {
+
+        localStorage.setItem(
+            CLAVE,
+            JSON.stringify(nuevasFotos)
+        );
+
+        fotos = nuevasFotos;
+
+        mostrarFotos();
+
+    } catch (error) {
+
+        alert("No se pudo eliminar la fotografía.");
+    }
+}
+
+// ===== INICIAR GALERÍA =====
+
+mostrarFotos();
+</script>
+</body>
+</html>
