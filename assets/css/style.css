@@ -298,3 +298,12 @@
     padding: 2rem;
     text-align: center;
   }
+  #modalNoticiaImagen {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    object-fit: contain;
+    aspect-ratio: auto;
+    background: #f1f4f8;
+  }
