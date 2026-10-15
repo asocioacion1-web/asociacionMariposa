@@ -19,11 +19,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.use(express.static(path.join(__dirname, "/")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
-app.get("/:pagina.html", (req, res, next) => {
-  if (!paginas.includes(req.params.pagina)) return next();
-  res.sendFile(path.join(__dirname, `${req.params.pagina}.html`));
+app.get("/index.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 
