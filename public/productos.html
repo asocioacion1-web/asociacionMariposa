@@ -1,113 +1,509 @@
+
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Productos de Mariposa</title>
-  <link rel="stylesheet" href="../assets/css/productosStyle.css">
-</head>
-<body>
-  
-<!-- MENÚ NAVEGACIÓN SIMPLE -->
-   <header class="menu-superior">
-    <nav class="nav-simple">
-        <a href="/index.html" class="logo">
-            Asociación Mariposa
-        </a>
-        
-        <div class="nav-links">
-            <a href="/index.html">Inicio</a>
-        </div>
-    </nav>
-</header>
 
-  <div class="container">
-    <!-- Encabezado apartado -->
-    <header>
-      <h1>Productos de Mariposa</h1>
-      <p class="descripcion">Este es un apartado para mostrar nuestros productos. Si alguno les interesa, ¡pueden ir a la central de Mariposas para adquirirlo o conseguirlo en uno de nuestros eventos!</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Productos | Asociación Civil Mariposas</title>
+
+    <link rel="stylesheet" href="../assets/css/productosStyle.css">
+</head>
+
+<body>
+
+    <!-- MENÚ SUPERIOR -->
+    <header class="menu-superior">
+        <nav class="nav-simple">
+
+            <a href="/index.html" class="logo">
+                🦋 Asociación Civil Mariposas
+            </a>
+
+            <div class="nav-links">
+                <a href="/index.html">Inicio</a>
+            </div>
+
+        </nav>
     </header>
 
-    <div class="separador"></div>
 
-    <!-- Formulario simplificado (sin caja blanca) -->
-    
-    <div id="form-section" class="form-seccion">
-      <h2>Publicar Producto</h2>
-      <form id="formProducto">
-        <label for="nombre">Nombre del producto:</label>
-        <input type="text" id="nombre" placeholder="Nombre del producto" required />
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container">
 
-        <label for="foto">Foto del producto:</label>
-        <input type="file" id="foto" accept="image/*" required />
+        <section class="encabezado-productos">
 
-        <label for="info">Información del producto:</label>
-        <textarea id="info" placeholder="Información sobre el producto..." required></textarea>
+            <span class="etiqueta">Nuestra comunidad</span>
 
-        <button type="submit">Publicar</button>
-      </form>
+            <h1>Productos de Mariposas</h1>
+
+            <p class="descripcion">
+                Conocé los productos de nuestra asociación.
+                Si alguno te interesa, podés acercarte a nuestra
+                sede o conseguirlo en alguno de nuestros eventos.
+            </p>
+
+        </section>
+
+        <div class="separador"></div>
+
+
+        <!-- ADMINISTRACIÓN -->
+        <section class="administracion-productos">
+
+            <button id="abrirModal"
+                    class="btn-agregar"
+                    type="button">
+
+                + Agregar producto
+
+            </button>
+
+        </section>
+
+
+        <!-- GALERÍA DE PRODUCTOS -->
+        <section class="galeria-productos">
+
+            <div class="galeria-encabezado">
+                <h2>Productos publicados</h2>
+                <p>Explorá los artículos de nuestra asociación.</p>
+            </div>
+
+            <div id="productosContainer"></div>
+
+            <p id="sinProductos" class="sin-productos">
+                Todavía no hay productos publicados.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- MODAL PARA AGREGAR PRODUCTOS -->
+    <div id="modalProducto"
+         class="modal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="tituloModal"
+         hidden>
+
+        <div class="modal-contenido">
+
+            <!-- CABECERA -->
+            <div class="modal-header">
+
+                <div>
+                    <h2 id="tituloModal">Nuevo producto</h2>
+
+                    <p>
+                        Sumá un artículo a nuestra tienda
+                    </p>
+                </div>
+
+                <button id="cerrarModal"
+                        class="cerrar"
+                        type="button"
+                        aria-label="Cerrar modal">
+
+                    &times;
+
+                </button>
+
+            </div>
+
+
+            <!-- FORMULARIO -->
+            <form id="formProducto">
+
+                <!-- IMAGEN -->
+                <div class="campo">
+
+                    <label for="foto">
+                        Fotografía del producto
+                    </label>
+
+                    <label class="zona-imagen" for="foto">
+
+                        <span class="icono-imagen">📷</span>
+
+                        <strong>Seleccionar fotografía</strong>
+
+                        <small>JPG, PNG o WebP · Máximo 5 MB</small>
+
+                        <img id="vistaPrevia"
+                             alt="Vista previa"
+                             hidden>
+
+                    </label>
+
+                    <input type="file"
+                           id="foto"
+                           accept="image/jpeg,image/png,image/webp"
+                           required
+                           hidden>
+
+                </div>
+
+
+                <!-- NOMBRE -->
+                <div class="campo">
+
+                    <label for="nombre">
+                        Nombre del producto
+                    </label>
+
+                    <input type="text"
+                           id="nombre"
+                           maxlength="100"
+                           placeholder="Ej: Taza artesanal"
+                           required>
+
+                </div>
+
+
+                <!-- PRECIO Y STOCK -->
+                <div class="campos-fila">
+
+                    <div class="campo">
+
+                        <label for="precio">
+                            Precio ($ UYU)
+                        </label>
+
+                        <input type="number"
+                               id="precio"
+                               min="0"
+                               step="0.01"
+                               placeholder="350"
+                               required>
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="stock">
+                            Stock disponible
+                        </label>
+
+                        <input type="number"
+                               id="stock"
+                               min="0"
+                               step="1"
+                               placeholder="10"
+                               required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CATEGORÍA -->
+                <div class="campo">
+
+                    <label for="categoria">
+                        Categoría
+                    </label>
+
+                    <select id="categoria" required>
+
+                        <option value="">
+                            Seleccionar categoría
+                        </option>
+
+                        <option value="Artesanías">Artesanías</option>
+                        <option value="Ropa">Ropa</option>
+                        <option value="Accesorios">Accesorios</option>
+                        <option value="Decoración">Decoración</option>
+                        <option value="Otros">Otros</option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DESCRIPCIÓN -->
+                <div class="campo">
+
+                    <label for="info">
+                        Descripción del producto
+                    </label>
+
+                    <textarea id="info"
+                              rows="4"
+                              placeholder="Contanos sobre este producto..."
+                              required></textarea>
+
+                </div>
+
+
+                <!-- MENSAJES -->
+                <p id="mensajeProducto"
+                   role="status"
+                   aria-live="polite"></p>
+
+
+                <!-- BOTONES -->
+                <div class="modal-footer">
+
+                    <button id="cancelar"
+                            type="button"
+                            class="btn-cancelar">
+
+                        Cancelar
+
+                    </button>
+
+                    <button id="publicarProducto"
+                            type="submit"
+                            class="btn-publicar">
+
+                        Publicar producto
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <div class="separador"></div>
 
-    <!-- Sección de tarjetas (Únicas con caja blanca) -->
-    <h2>Productos Publicados</h2>
-    <div id="productosContainer"></div>
-  </div>
+    <!-- JAVASCRIPT -->
+    <script>
+// =====================================
+// ASOCIACIÓN CIVIL MARIPOSAS
+// PRODUCTOS - DEMOSTRACIÓN LOCAL
+// =====================================
 
-  <script>
-    const form = document.getElementById('formProducto');
-    const productosContainer = document.getElementById('productosContainer');
-    let productos = [];
+// ELEMENTOS HTML
+const modal = document.getElementById("modalProducto");
+const abrirModal = document.getElementById("abrirModal");
+const cerrar = document.getElementById("cerrarModal");
+const cancelar = document.getElementById("cancelar");
 
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
+const formulario = document.getElementById("formProducto");
+const productosContainer = document.getElementById("productosContainer");
+const sinProductos = document.getElementById("sinProductos");
 
-      const nombre = document.getElementById('nombre').value.trim();
-      const info = document.getElementById('info').value.trim();
-      const fotoInput = document.getElementById('foto');
+const inputFoto = document.getElementById("foto");
+const vistaPrevia = document.getElementById("vistaPrevia");
+const mensaje = document.getElementById("mensajeProducto");
 
-      if (fotoInput.files && fotoInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const nuevoProducto = {
-            nombre: nombre,
-            info: info,
-            foto: e.target.result
-          };
-          productos.push(nuevoProducto);
-          mostrarProductos();
-          form.reset();
-        };
-        reader.readAsDataURL(fotoInput.files[0]);
-      }
+let productos = [];
+let urlPrevia = null;
+
+// =====================================
+// ABRIR MODAL
+// =====================================
+
+abrirModal.addEventListener("click", () => {
+    modal.hidden = false;
+    document.getElementById("nombre").focus();
+});
+
+// =====================================
+// CERRAR MODAL
+// =====================================
+
+function cerrarModal() {
+    modal.hidden = true;
+}
+
+cerrar.addEventListener("click", cerrarModal);
+cancelar.addEventListener("click", cerrarModal);
+
+// Cerrar tocando fuera de la ventana
+modal.addEventListener("click", (evento) => {
+    if (evento.target === modal) {
+        cerrarModal();
+    }
+});
+
+// Cerrar con Escape
+document.addEventListener("keydown", (evento) => {
+    if (evento.key === "Escape" && !modal.hidden) {
+        cerrarModal();
+    }
+});
+
+// =====================================
+// VISTA PREVIA DE LA FOTOGRAFÍA
+// =====================================
+
+inputFoto.addEventListener("change", () => {
+
+    const archivo = inputFoto.files[0];
+
+    if (urlPrevia) {
+        URL.revokeObjectURL(urlPrevia);
+        urlPrevia = null;
+    }
+
+    if (!archivo) {
+        vistaPrevia.hidden = true;
+        vistaPrevia.removeAttribute("src");
+        return;
+    }
+
+    const formatos = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if (!formatos.includes(archivo.type) ||
+        archivo.size > 5 * 1024 * 1024) {
+
+        mensaje.textContent =
+            "Seleccioná una imagen JPG, PNG o WebP de hasta 5 MB.";
+
+        inputFoto.value = "";
+        vistaPrevia.hidden = true;
+        return;
+    }
+
+    mensaje.textContent = "";
+
+    urlPrevia = URL.createObjectURL(archivo);
+    vistaPrevia.src = urlPrevia;
+    vistaPrevia.hidden = false;
+
+});
+
+// =====================================
+// PUBLICAR PRODUCTO
+// =====================================
+
+formulario.addEventListener("submit", (evento) => {
+
+    evento.preventDefault();
+
+    const nombre = document.getElementById("nombre").value.trim();
+    const precio = Number(document.getElementById("precio").value);
+    const stock = Number(document.getElementById("stock").value);
+    const categoria = document.getElementById("categoria").value;
+    const info = document.getElementById("info").value.trim();
+
+    const foto = inputFoto.files[0];
+
+    if (!nombre || !info || !categoria || !foto) {
+        mensaje.textContent = "Completá todos los campos.";
+        return;
+    }
+
+    if (!Number.isFinite(precio) || precio < 0 ||
+        !Number.isInteger(stock) || stock < 0) {
+
+        mensaje.textContent = "Revisá el precio y el stock.";
+        return;
+    }
+
+    if (!["image/jpeg", "image/png", "image/webp"].includes(foto.type)
+        || foto.size > 5 * 1024 * 1024) {
+
+        mensaje.textContent = "La fotografía no es válida.";
+        return;
+    }
+
+    const producto = {
+        nombre,
+        precio,
+        stock,
+        categoria,
+        info,
+        foto: URL.createObjectURL(foto)
+    };
+
+    productos.push(producto);
+
+    mostrarProductos();
+
+    formulario.reset();
+    mensaje.textContent = "";
+
+    vistaPrevia.hidden = true;
+    vistaPrevia.removeAttribute("src");
+
+    if (urlPrevia) {
+        URL.revokeObjectURL(urlPrevia);
+        urlPrevia = null;
+    }
+
+    cerrarModal();
+
+});
+
+// =====================================
+// MOSTRAR PRODUCTOS
+// =====================================
+
+function mostrarProductos() {
+
+    productosContainer.replaceChildren();
+
+    sinProductos.hidden = productos.length > 0;
+
+    productos.forEach((producto) => {
+
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "producto";
+
+        const imagen = document.createElement("img");
+        imagen.src = producto.foto;
+        imagen.alt = `Fotografía de ${producto.nombre}`;
+
+        const contenido = document.createElement("div");
+        contenido.className = "producto-contenido";
+
+        const categoria = document.createElement("p");
+        categoria.className = "producto-categoria";
+        categoria.textContent = producto.categoria;
+
+        const nombre = document.createElement("h3");
+        nombre.className = "producto-nombre";
+        nombre.textContent = producto.nombre;
+
+        const info = document.createElement("p");
+        info.className = "producto-info";
+        info.textContent = producto.info;
+
+        const precio = document.createElement("p");
+        precio.className = "producto-precio";
+        precio.textContent = producto.precio.toLocaleString("es-UY", {
+            style: "currency",
+            currency: "UYU"
+        });
+
+        const stock = document.createElement("p");
+        stock.className = "producto-stock";
+
+        stock.textContent = producto.stock > 0
+            ? `Disponibles: ${producto.stock}`
+            : "Sin stock";
+
+        contenido.append(
+            categoria,
+            nombre,
+            info,
+            precio,
+            stock
+        );
+
+        tarjeta.append(imagen, contenido);
+        productosContainer.appendChild(tarjeta);
+
     });
 
-    function mostrarProductos() {
-      productosContainer.innerHTML = '';
-      productos.forEach((producto) => {
-        const div = document.createElement('div');
-        div.classList.add('producto');
+}
 
-        div.innerHTML = `
-          <img src="${producto.foto}" alt="Foto de ${producto.nombre}" />
-          <div class="producto-contenido">
-            <div class="producto-nombre">${producto.nombre}</div>
-            <div class="producto-info">${producto.info}</div>
-          </div>
-        `;
-
-        productosContainer.appendChild(div);
-      });
-    }
-
-    const formSection = getElementById('form-section');
-
-    if(formSection){
-
-    }
-        
-  </script>
+// Estado inicial
+mostrarProductos();
+</script>
 
 </body>
 </html>
