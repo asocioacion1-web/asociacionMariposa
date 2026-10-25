@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/css/loginStyle.css">
     <title>Login - Fundación Mariposa Azul</title>
+    <link rel="icon" type="image/png" href="/assets/imagenes/FundacionLogo.png">
+    
+    
+    <link rel="stylesheet" href="/assets/css/loginStyle.css">
 </head>
 <body>
 
@@ -26,38 +29,83 @@
   </div>
 
   <button type="submit" id="inicioSesion">INICIAR SESION</button><br><br>
+
+  <button type="button" id="abrirRegistro">REGISTRARSE</button><br><br>
   
   <button type="button" onclick="window.location.href='/index.html'">INVITADO</button>
 
-
 </form>
+<dialog id="modalRegistro" class="modal-registro">
+  <form id="registroForm" novalidate>
+    <h2>Crear cuenta</h2>
 
+    <div class="reg-fila">
+      <input type="text" id="regNombre" placeholder="Nombre" maxlength="50">
+      <input type="text" id="regApellido" placeholder="Apellido" maxlength="50">
+    </div>
+
+    <label for="regNacimiento">Fecha de nacimiento</label>
+    <input type="date" id="regNacimiento">
+
+    <input type="tel" id="regTelefono" placeholder="Teléfono" maxlength="20">
+    <input type="email" id="regEmail" placeholder="Email">
+    <input type="password" id="regPassword" placeholder="Contraseña (mínimo 8 caracteres)">
+
+
+    <div class="reg-acciones">
+      <button type="button" id="cerrarRegistro">CANCELAR</button>
+      <button type="submit" id="enviarRegistro">CREAR CUENTA</button>
+    </div>
+  </form>
+</dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/mensajes.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script type="module">
 
   let config;
   try {
     config = await (await fetch("/api/config")).json();
   } catch (e) {
-    alert("Error al cargar la configuración. Asegúrate de que el servidor esté en funcionamiento.");
+    mostrarMensaje("Error al cargar la configuración. Asegúrate de que el servidor esté en funcionamiento.");
     throw e;
   }
 
   const clienteSupabase = supabase.createClient(config.url, config.anonKey);
+  const modalRegistro = document.getElementById("modalRegistro");
+
+  // Muestra un aviso; si el modal está abierto, lo pone adentro para que se vea
+  function avisar(mensajes, tipo = "danger") {
+    mostrarMensaje(mensajes, tipo);
+    const contenedor = document.getElementById("contenedor-toasts");
+    const destino = modalRegistro.open ? modalRegistro : document.body;
+    if (contenedor && contenedor.parentElement !== destino) destino.appendChild(contenedor);
+  }
+
+  async function hashContrasena(email, password) {
+    const texto = `${email.trim().toLowerCase()}:${password}:mariposa-azul`;
+    const datos = new TextEncoder().encode(texto);
+    const buffer = await crypto.subtle.digest("SHA-256", datos);
+    return [...new Uint8Array(buffer)]
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
 
   async function enviar() {
     const email = document.getElementById("user").value;
     const password = document.getElementById("contra").value;
 
+    const passwordHash = await hashContrasena(email, password);
+
     const { data, error } = await clienteSupabase.auth.signInWithPassword({
       email,
-      password,
+      password: passwordHash,
     });
 
     if (error) {
       console.log("Error de login:", error);
-      alert("Usuario o contraseña incorrectos");
+      avisar("Usuario o contraseña incorrectos");
       return;
     }
     window.location.href = "/index.html";
@@ -66,6 +114,69 @@
   document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     await enviar();
+  });
+
+  // ===== Registro =====
+  const hoy = () => new Date().toLocaleDateString("sv-SE"); // AAAA-MM-DD
+
+  document.getElementById("abrirRegistro").addEventListener("click", () => {
+    document.getElementById("registroForm").reset();
+    document.getElementById("regNacimiento").max = hoy();
+    modalRegistro.showModal();
+  });
+
+  document.getElementById("cerrarRegistro").addEventListener("click", () => modalRegistro.close());
+
+  document.getElementById("registroForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById("regNombre").value.trim();
+    const apellido = document.getElementById("regApellido").value.trim();
+    const nacimiento = document.getElementById("regNacimiento").value;
+    const telefono = document.getElementById("regTelefono").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const password = document.getElementById("regPassword").value;
+
+    const errores = [];
+    if (nombre.length < 2) errores.push("Ingresá tu nombre.");
+    if (apellido.length < 2) errores.push("Ingresá tu apellido.");
+    if (!nacimiento) errores.push("Ingresá tu fecha de nacimiento.");
+    else if (nacimiento > hoy() || nacimiento < "1900-01-01") errores.push("La fecha de nacimiento no es válida.");
+    if (!/^\+?[0-9\s-]{8,15}$/.test(telefono)) errores.push("El teléfono no es válido.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errores.push("El email no es válido.");
+    if (password.length < 8) errores.push("La contraseña debe tener al menos 8 caracteres.");
+
+    if (errores.length) return avisar(errores);
+
+    const boton = document.getElementById("enviarRegistro");
+    boton.disabled = true;
+
+    const passwordHash = await hashContrasena(email, password);
+
+    const { data, error } = await clienteSupabase.auth.signUp({
+      email,
+      password: passwordHash,
+      options: {
+        data: { nombre, apellido, fecha_nacimiento: nacimiento, telefono }
+      }
+    });
+
+    boton.disabled = false;
+
+    if (error) {
+      console.log("Error de registro:", error);
+      return avisar(error.message.includes("already")
+        ? "Ese email ya está registrado."
+        : "No se pudo crear la cuenta. Revisá los datos.");
+    }
+
+    modalRegistro.close(); // primero se cierra, así el aviso sale en la página
+    if (data.session) {
+      avisar("¡Cuenta creada! Entrando...", "success");
+      setTimeout(() => { window.location.href = "/index.html"; }, 1200);
+    } else {
+      avisar("Cuenta creada. Revisá tu correo para confirmarla.", "success");
+    }
   });
 </script>
 
