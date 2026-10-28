@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muro de Mariposas</title>
+    <link rel="stylesheet" href="/assets/css/contar-historia.css">
+</head>
+<body>
+
+<div class="wrap">
+
+    <header>
+        <h1>Muro de Mariposas</h1>
+        <p>Compartí tus historias con la Asociación Mariposas.</p>
+    </header>
+
+    <div class="grid">
+
+        <section class="panel">
+            <h2>Escribí tu publicación</h2>
+
+            <form id="formulario">
+
+                <label>Tu nombre</label>
+                <input id="nombre" maxlength="60" required>
+
+                <label>Tipo</label>
+                <select id="categoria">
+                    <option>Cuento</option>
+                    <option>Poesía</option>
+                    <option>Reflexión</option>
+                    <option>Novedad del grupo</option>
+                    <option>Otro</option>
+                </select>
+
+                <label>Título</label>
+                <input id="titulo" maxlength="90" required>
+
+                <label>Texto</label>
+                <textarea id="texto" maxlength="2000" required></textarea>
+
+                <p id="contador">0 / 2000</p>
+
+                <button id="enviar" type="submit">
+                    Enviar para revisión
+                </button>
+
+                <p id="estado" role="status"></p>
+            </form>
+        </section>
+
+        
+<script>
+    
+const $ = id => document.getElementById(id);
+
+let db;
+let usuario = null;
+let admin = false;
+let publicaciones = [];
+let aprobados = {};
+
+// Contador de caracteres
+$("texto").oninput = () => {
+    $("contador").textContent = $("texto").value.length + " / 2000";
+};
+
+// Filtrar publicaciones
+$("filtro").onchange = mostrarPublicaciones;
+
+// Mostrar publicaciones
+function mostrarPublicaciones() {
+    const lista = $("lista");
+    lista.innerHTML = "";
+
+    const filtro = $("filtro").value;
+
+    const visibles = publicaciones
+        .filter(p => filtro === "Todos" || p.categoria === filtro)
+        .filter(p => aprobados[p.id] || admin || p.autor === usuario)
+        .sort((a, b) => b.creado - a.creado);
+
+    if (visibles.length === 0) {
+        lista.textContent = "Todavía no hay publicaciones.";
+        return;
+    }
+
+    visibles.forEach(p => {
+        const pendiente = !aprobados[p.id];
+
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "post" + (pendiente ? " pending" : "");
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = p.titulo;
+
+        const info = document.createElement("p");
+        info.textContent = `${p.categoria} - ${p.nombre}`;
+
+        const texto = document.createElement("p");
+        texto.textContent = p.texto;
+
+        tarjeta.append(titulo, info, texto);
+
+        if (pendiente) {
+            const estado = document.createElement("p");
+            estado.textContent = "En revisión";
+            tarjeta.appendChild(estado);
+        }
+
+        if (admin) {
+            const boton = document.createElement("button");
+
+            boton.textContent = pendiente ? "Aprobar" : "Volver a revisión";
+
+            boton.onclick = async () => {
+                boton.disabled = true;
+
+                try {
+                    if (pendiente) {
+                        await db.doc("approvals/" + p.id).set({
+                            en: Date.now()
+                        });
+                    } else {
+                        await db.doc("approvals/" + p.id).delete();
+                    }
+                } catch (error) {
+                    alert("No se pudo cambiar el estado.");
+                    boton.disabled = false;
+                }
+            };
+
+            const eliminar = document.createElement("button");
+            eliminar.textContent = "Eliminar";
+
+            eliminar.onclick = async () => {
+                if (!confirm("¿Eliminar esta publicación?")) return;
+
+                try {
+                    await db.doc("posts/" + p.id).delete();
+                    await db.doc("approvals/" + p.id).delete();
+                } catch (error) {
+                    alert("No se pudo eliminar.");
+                }
+            };
+
+            tarjeta.append(boton, eliminar);
+        }
+
+        lista.appendChild(tarjeta);
+    });
+
+    const pendientes = publicaciones.filter(p => !aprobados[p.id]).length;
+
+    $("aviso").textContent = admin
+        ? `Publicaciones pendientes: ${pendientes}`
+        : "";
+}
+
+// Enviar publicación
+$("formulario").onsubmit = async (e) => {
+    e.preventDefault();
+
+    if (!db) return;
+
+    const boton = $("enviar");
+    boton.disabled = true;
+
+    const datos = {
+        nombre: $("nombre").value.trim(),
+        categoria: $("categoria").value,
+        titulo: $("titulo").value.trim(),
+        texto: $("texto").value.trim(),
+        autor: usuario,
+        creado: Date.now()
+    };
+
+    if (!datos.nombre || !datos.titulo || !datos.texto) {
+        $("estado").textContent = "Completá todos los campos.";
+        boton.disabled = false;
+        return;
+    }
+
+    try {
+        const ref = db.collection("posts").doc();
+
+        await ref.set(datos);
+
+        if (admin) {
+            await db.doc("approvals/" + ref.id).set({
+                en: Date.now()
+            });
+        }
+
+        $("formulario").reset();
+        $("contador").textContent = "0 / 2000";
+
+        $("estado").textContent = admin
+            ? "Publicación creada."
+            : "Publicación enviada para revisión.";
+
+    } catch (error) {
+        $("estado").textContent = "Error al enviar la publicación.";
+    }
+
+    boton.disabled = false;
+};
+
+// Conectar con la base de datos
+async function iniciar() {
+    try {
+        db = await claude.use("db");
+
+        const user = await claude.use("user");
+
+        if (user) {
+            usuario = await user.id();
+            admin = await user.canEdit();
+        }
+
+        db.collection("approvals").onSnapshot(snapshot => {
+            aprobados = {};
+
+            snapshot.docs.forEach(doc => {
+                aprobados[doc.id] = true;
+            });
+
+            mostrarPublicaciones();
+        });
+
+        db.collection("posts").onSnapshot(snapshot => {
+            publicaciones = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            mostrarPublicaciones();
+        });
+
+    } catch (error) {
+        $("estado").textContent = "No se pudo conectar.";
+        $("enviar").disabled = true;
+    }
+}
+
+iniciar();
+</script>
+
+</body>
+</html>
