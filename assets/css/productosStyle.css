@@ -55,6 +55,46 @@
     z-index: 1000;
   }
 
+  .navbar-brand {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+  }
+
+  #navbar {
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(12, 59, 102, .08);
+  }
+
+  #navbar .navbar-brand {
+    color: var(--azul-900);
+  }
+
+  #navbar .nav-link {
+    color: var(--azul-700);
+    font-weight: 600;
+  }
+
+  #navbar .nav-link.active,
+  #navbar .nav-link:hover {
+    color: var(--azul-500);
+  }
+
+  #navbar .nav-logo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+
+    background-color: rgb(248, 244, 244);
+    padding: 0 20px;
+
+    z-index: 1000;
+  }
+
   #navbar {
     border-bottom: 40px solid #1a1a1a;
   }

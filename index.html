@@ -17,9 +17,8 @@
     <div class="container">
       <div class="nav-logo">
         <img src="assets/imagenes/FundacionLogo.png" alt="Logo de la Asociación Mariposa Azul" class="logo">
-        <a class="navbar-brand fs-4" href="#inicio">Asociacion Civil Mariposas</a>
+        <a class="navbar-brand fs-4" href="/index.html">Asociacion Civil Mariposas</a>
         <div class="collapse navbar-collapse justify-content-end" id="menuNav">
-
 
           <ul class="navbar-nav gap-lg-3 align-items-center">
             <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
@@ -48,7 +47,7 @@
     <div class="offcanvas-body">
       <div class="d-flex flex-column gap-2">
         <a id="linkMiSesion" href="/public/sesion.html" class="btn btn-outline-primary text-start d-none">👤 Mi sesión</a>
-        <a id="btnIniciarSesion" href="/public/login.html" class="btn text-start d-none" style="background:var(--azul-700); color:#fff">🔑 Iniciar sesión</a>
+        <a id="btnIniciarSesion" href="/public/login.html" class="btn text-start d-none" >🔑 Iniciar sesión</a>
         <a href="/public/galeria.html" class="btn btn-outline-primary text-start">🖼️ Galería</a>
         <a href="/public/productos.html" class="btn btn-outline-primary text-start">🛍️ Productos</a>
         <a href="/public/ayuda.html" class="btn btn-outline-primary text-start">❓ Ayuda</a>
@@ -445,8 +444,6 @@
           modalBorrar.show();
         });
       });
-
-
     }
 
     const modalBorrar = new bootstrap.Modal(document.getElementById("modalBorrar"));
@@ -456,7 +453,7 @@
     btnConfirmarBorrar.addEventListener("click", async () => {
       if (!idPorBorrar) return;
 
-      btnConfirmarBorrar.disabled = true; // evita doble clic
+      btnConfirmarBorrar.disabled = true; 
 
       try {
         const { data: { session } } = await clienteSupabase.auth.getSession();
