@@ -195,6 +195,77 @@ img
   padding: 20px;
 }
 
+/* ===== Modal de registro ===== */
+dialog.modal-registro {
+  width: min(92vw, 420px);
+  max-width: 420px;
+  padding: 24px;
+  margin: auto;
+  border: none;
+  border-radius: 16px;
+  background: #fff;
+  color: #1b2a49;
+}
+
+dialog.modal-registro::backdrop {
+  background: rgba(0, 0, 0, .55);
+}
+
+dialog.modal-registro form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+dialog.modal-registro h2 {
+  margin: 0 0 4px;
+  text-align: center;
+  color: #1b2a49;
+}
+
+dialog.modal-registro label {
+  font-size: .85rem;
+  color: #1b2a49;
+}
+
+dialog.modal-registro input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #c9d1e0;
+  border-radius: 8px;
+  background: #fff;
+  color: #1b2a49;
+}
+
+.reg-fila {
+  display: flex;
+  gap: 10px;
+}
+
+.reg-fila input {
+  min-width: 0;
+}
+
+.reg-acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.reg-acciones button {
+  flex: 1;
+}
+
+.reg-mensaje {
+  margin: 0;
+  font-size: .9rem;
+  color: #b00020;
+}
+
+.reg-mensaje.ok {
+  color: #1b7a3a;
+}
 /* Estilos para celulares */
 @media (max-width: 768px) {
   .contenedor {
@@ -206,3 +277,56 @@ img
     width: 100%;
   }
 }
+/* ===== Avisos (toasts) ===== */
+#contenedor-toasts {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  width: min(100vw, 360px);
+  padding: 16px;
+}
+
+#contenedor-toasts .toast {
+  display: none;
+  opacity: 1;
+  transition: opacity .15s linear;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+  font-size: .95rem;
+}
+
+#contenedor-toasts .toast.show { display: block; }
+#contenedor-toasts .toast.showing { opacity: 0; }
+
+#contenedor-toasts .d-flex {
+  display: flex;
+  align-items: center;
+}
+
+#contenedor-toasts .toast-body {
+  flex: 1;
+  padding: 12px 14px;
+}
+
+#contenedor-toasts .text-bg-danger  { background: #dc3545; color: #fff; }
+#contenedor-toasts .text-bg-success { background: #198754; color: #fff; }
+#contenedor-toasts .text-bg-warning { background: #ffc107; color: #000; }
+#contenedor-toasts .text-bg-info    { background: #0dcaf0; color: #000; }
+#contenedor-toasts .text-bg-primary { background: #0d6efd; color: #fff; }
+
+#contenedor-toasts .btn-close {
+  all: unset;
+  margin: 0 12px;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: .8;
+}
+
+#contenedor-toasts .btn-close::before { content: "×"; }
+#contenedor-toasts .btn-close-white { color: #fff; }
