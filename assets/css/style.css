@@ -307,3 +307,29 @@
     aspect-ratio: auto;
     background: #f1f4f8;
   }
+
+  .logo-link{
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .logo-link:hover {
+    transform: scale(1.1);
+  }
+
+  .logo-link:active{
+    transform: scale(1);
+  }
+
+  /*Esto servira si en algun punto ponemos una opcion para que el usuario desactive las animnaciones*/
+  @media(prefers-reduced-motion: reduce){
+    .logo-link{
+      transition: none;
+    }
+
+  .logo-link:hover,
+  .logo-link:active{
+    transform: none;
+    }
+  }
+
