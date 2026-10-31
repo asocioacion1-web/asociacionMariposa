@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Productos de Mariposa</title>
   <link rel="icon" type="image/png" href="/assets/imagenes/FundacionLogo.png">
-
+ 
+  <link rel="stylesheet" href="/assets/css/navbar.css">
   <link rel="stylesheet" href="/assets/css/productosStyle.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
+ 
 <body>
-
+ 
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg sticky-top py-3" id="navbar">
     <div class="container">
@@ -19,8 +20,8 @@
         <img src="/assets/imagenes/FundacionLogo.png" alt="Logo de la Asociación Mariposa Azul" class="logo">
         <a class="navbar-brand fs-4" href="/index.html">Asociacion Civil Mariposas</a>
         <div class="collapse navbar-collapse justify-content-end" id="menuNav">
-
-
+ 
+ 
           <ul class="navbar-nav gap-lg-3 align-items-center">
             <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuLateral" aria-controls="menuLateral">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
@@ -33,7 +34,7 @@
       </div>
     </div>
   </nav>
-
+ 
   <!-- MENU LATERAL -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
     <div class="offcanvas-header">
@@ -50,9 +51,9 @@
       </div>
     </div>
   </div>
-
+ 
   <main>
-
+ 
     <section class="encabezado-productos">
       <span class="etiqueta">Nuestra comunidad</span>
       <h1>Productos de Mariposas</h1>
@@ -62,97 +63,77 @@
         sede o conseguirlo en alguno de nuestros eventos.
       </p>
     </section>
-
+ 
     <div class="separador"></div>
-
+ 
     <!-- ADMINISTRACIÓN -->
     <section class="administracion-productos" style="display: none;">
       <button id="abrirModal" class="btn-agregar" type="button">
         + Agregar producto
       </button>
     </section>
-
+ 
     <!-- GALERÍA DE PRODUCTOS -->
     <section class="galeria-productos">
-
+ 
       <div class="galeria-encabezado">
         <h2>Productos publicados</h2>
         <p>Explorá los artículos de nuestra asociación.</p>
       </div>
-
+ 
       <div id="productosContainer"></div>
-
+ 
       <p id="sinProductos" class="sin-productos">
         Todavía no hay productos publicados.
       </p>
-
+ 
     </section>
-
+ 
   </main>
-
-
+ 
+ 
   <!-- MODAL PARA AGREGAR PRODUCTOS -->
-  <div id="modalProducto"
-       class="modal-producto"
-       role="dialog"
-       aria-modal="true"
-       aria-labelledby="tituloModal"
-       hidden>
-
+  <div id="modalProducto"class="modal-producto" role="dialog" aria-modal="true"aria-labelledby="tituloModal" hidden>
+ 
     <div class="modal-contenido">
-
+ 
       <!-- CABECERA -->
       <div class="modal-producto-header">
         <div>
           <h2 id="tituloModal">Nuevo producto</h2>
           <p>Sumá un artículo a nuestra tienda</p>
         </div>
-
-        <button id="cerrarModal"
-                class="cerrar"
-                type="button"
-                aria-label="Cerrar modal">
+ 
+        <button id="cerrarModal" class="cerrar" type="button" aria-label="Cerrar modal">
           &times;
         </button>
       </div>
-
+ 
 
       <!-- FORMULARIO -->
       <form id="formProducto" novalidate>
-
-        <!-- IMAGEN -->
+ 
         <div class="campo">
-
+ 
           <label for="foto">Fotografía del producto</label>
-
+ 
           <label class="zona-imagen" for="foto">
             <span class="icono-imagen">📷</span>
             <strong>Seleccionar fotografía</strong>
             <small>JPG, PNG o WebP · Máximo 5 MB</small>
             <img id="vistaPrevia" alt="Vista previa" hidden>
           </label>
-
-          <input type="file"
-                 id="foto"
-                 accept="image/jpeg,image/png,image/webp"
-                 hidden>
-
+ 
+          <input type="file" id="foto" accept="image/jpeg,image/png,image/webp" hidden>
         </div>
 
-
-        <!-- NOMBRE -->
         <div class="campo">
           <label for="nombre">Nombre del producto</label>
-          <input type="text"
-                 id="nombre"
-                 maxlength="100"
-                 placeholder="Ej: Taza artesanal">
+          <input type="text" id="nombre" maxlength="100" placeholder="Ej: Taza artesanal">
         </div>
-
-
-        <!-- PRECIO Y STOCK -->
+ 
         <div class="campos-fila">
-
+ 
           <div class="campo">
             <label for="precio">Precio ($ UYU)</label>
             <input type="number"
@@ -161,7 +142,7 @@
                    step="0.01"
                    placeholder="350">
           </div>
-
+ 
           <div class="campo">
             <label for="stock">Stock disponible</label>
             <input type="number"
@@ -170,14 +151,12 @@
                    step="1"
                    placeholder="10">
           </div>
-
+ 
         </div>
 
-
-        <!-- CATEGORÍA -->
         <div class="campo">
           <label for="categoria">Categoría</label>
-
+ 
           <select id="categoria">
             <option value="">Seleccionar categoría</option>
             <option value="Artesanías">Artesanías</option>
@@ -187,9 +166,7 @@
             <option value="Otros">Otros</option>
           </select>
         </div>
-
-
-        <!-- DESCRIPCIÓN -->
+ 
         <div class="campo">
           <label for="info">Descripción del producto</label>
           <textarea id="info"
@@ -197,54 +174,69 @@
                     maxlength="1000"
                     placeholder="Contanos sobre este producto..."></textarea>
         </div>
-
-
-        <!-- MENSAJES -->
+ 
         <p id="mensajeProducto" role="status" aria-live="polite"></p>
-
-
-        <!-- BOTONES -->
+ 
         <div class="modal-producto-footer">
           <button id="cancelar" type="button" class="btn-cancelar">
             Cancelar
           </button>
-
+ 
           <button id="publicarProducto" type="submit" class="btn-publicar">
             Publicar producto
           </button>
         </div>
-
+ 
       </form>
-
+ 
     </div>
-
+ 
   </div>
-
-
+ 
+  <div class="modal fade" id="modalVerProducto" tabindex="-1" aria-labelledby="modalVerProductoTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+ 
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalVerProductoTitulo"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+ 
+        <div class="modal-body">
+          <img id="modalVerProductoImagen" class="mb-3" alt="">
+ 
+          <p class="producto-categoria mb-1" id="modalVerProductoCategoria"></p>
+          <p class="modal-producto-precio" id="modalVerProductoPrecio"></p>
+          <p class="producto-stock mb-3" id="modalVerProductoStock"></p>
+ 
+          <p id="modalVerProductoInfo" style="white-space: pre-line"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+ 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module">
-
-    // ===== Elementos =====
     const formulario = document.getElementById("formProducto");
     const productosContainer = document.getElementById("productosContainer");
     const sinProductos = document.getElementById("sinProductos");
-
+ 
     const inputFoto = document.getElementById("foto");
     const vistaPrevia = document.getElementById("vistaPrevia");
     const mensaje = document.getElementById("mensajeProducto");
     const botonPublicar = document.getElementById("publicarProducto");
-
+ 
     const modal = document.getElementById("modalProducto");
     const abrirModal = document.getElementById("abrirModal");
     const cerrar = document.getElementById("cerrarModal");
     const cancelar = document.getElementById("cancelar");
-
+ 
     let productos = [];
     let urlPrevia = null;
     let esAdmin = false;
-
-    // ===== Configuración y Supabase =====
+ 
     let config;
     try {
       config = await (await fetch("/api/config")).json();
@@ -253,47 +245,44 @@
       sinProductos.hidden = false;
       throw e;
     }
-
+ 
     const clienteSupabase = supabase.createClient(config.url, config.anonKey);
-
-    // ===== Admin =====
+ 
     async function comprobarAdmin() {
       const { data: { user } } = await clienteSupabase.auth.getUser();
       if (!user) return;
-
+ 
       const { data, error } = await clienteSupabase
         .from("admin").select("id").eq("user_id", user.id).maybeSingle();
-
+ 
       if (error) return console.error("Error comprobando administrador:", error);
       esAdmin = !!data;
     }
-
+ 
     function aplicarVistaAdmin() {
       document.querySelector(".administracion-productos").style.display = esAdmin ? "" : "none";
     }
-
-    // ===== Modal =====
+ 
     abrirModal.addEventListener("click", () => {
       modal.hidden = false;
       document.getElementById("nombre").focus();
     });
-
+ 
     function cerrarModal() {
       modal.hidden = true;
     }
-
+ 
     cerrar.addEventListener("click", cerrarModal);
     cancelar.addEventListener("click", cerrarModal);
-
+ 
     modal.addEventListener("click", (evento) => {
       if (evento.target === modal) cerrarModal();
     });
-
+ 
     document.addEventListener("keydown", (evento) => {
       if (evento.key === "Escape" && !modal.hidden) cerrarModal();
     });
-
-    // ===== Vista previa de la fotografía =====
+ 
     function limpiarVistaPrevia() {
       if (urlPrevia) {
         URL.revokeObjectURL(urlPrevia);
@@ -302,38 +291,37 @@
       vistaPrevia.hidden = true;
       vistaPrevia.removeAttribute("src");
     }
-
+ 
     inputFoto.addEventListener("change", () => {
       const archivo = inputFoto.files[0];
-
+ 
       limpiarVistaPrevia();
       if (!archivo) return;
-
+ 
       const formatos = ["image/jpeg", "image/png", "image/webp"];
-
+ 
       if (!formatos.includes(archivo.type) || archivo.size > 5 * 1024 * 1024) {
         mensaje.textContent = "Seleccioná una imagen JPG, PNG o WebP de hasta 5 MB.";
         inputFoto.value = "";
         return;
       }
-
+ 
       mensaje.textContent = "";
       urlPrevia = URL.createObjectURL(archivo);
       vistaPrevia.src = urlPrevia;
       vistaPrevia.hidden = false;
     });
-
-    // ===== Imagen: convertir a WebP y subir sin repetir =====
+ 
     async function convertirAWebP(archivo) {
       const bitmap = await createImageBitmap(archivo);
-      const MAX = 1200; // lado más largo, en píxeles
+      const MAX = 1200; 
       const escala = Math.min(1, MAX / Math.max(bitmap.width, bitmap.height));
-
+ 
       const canvas = document.createElement("canvas");
       canvas.width = Math.round(bitmap.width * escala);
       canvas.height = Math.round(bitmap.height * escala);
       canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-
+ 
       return new Promise((resolve, reject) => {
         canvas.toBlob(
           (blob) => blob ? resolve(blob) : reject(new Error("No se pudo convertir la imagen")),
@@ -342,85 +330,82 @@
         );
       });
     }
-
+ 
     async function hashBlob(blob) {
       const buffer = await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
       return [...new Uint8Array(buffer)]
         .map(b => b.toString(16).padStart(2, "0"))
         .join("");
     }
-
+ 
     async function subirImagen(blob) {
-      // El nombre sale del contenido: la misma imagen siempre tiene el mismo nombre
       const nombreArchivo = `${await hashBlob(blob)}.webp`;
-
+ 
       const { error } = await clienteSupabase.storage
         .from("Productos")
         .upload(nombreArchivo, blob, { contentType: "image/webp", upsert: false });
-
-      // Si ya existe, no es un error: se reutiliza y no se vuelve a subir
+ 
       const codigo = String(error?.statusCode ?? error?.status ?? "");
       const yaExiste = error && (codigo === "409" || /already exists|Duplicate/i.test(error.message || ""));
       if (error && !yaExiste) throw error;
-
+ 
       const { data } = clienteSupabase.storage.from("Productos").getPublicUrl(nombreArchivo);
       return data.publicUrl;
     }
 
-    // ===== Publicar producto =====
     formulario.addEventListener("submit", async (evento) => {
       evento.preventDefault();
-
+ 
       const nombre = document.getElementById("nombre").value.trim();
       const precio = Number(document.getElementById("precio").value);
       const stock = Number(document.getElementById("stock").value);
       const categoria = document.getElementById("categoria").value;
       const info = document.getElementById("info").value.trim();
       const foto = inputFoto.files[0];
-
+ 
       if (!esAdmin) {
         mensaje.textContent = "Solo un administrador puede publicar productos.";
         return;
       }
-
+ 
       if (!nombre || !info || !categoria || !foto) {
         mensaje.textContent = "Completá todos los campos.";
         return;
       }
-
+ 
       if (document.getElementById("precio").value === "" || document.getElementById("stock").value === "") {
         mensaje.textContent = "Completá el precio y el stock.";
         return;
       }
-
+ 
       if (!Number.isFinite(precio) || precio < 0 || !Number.isInteger(stock) || stock < 0) {
         mensaje.textContent = "Revisá el precio y el stock.";
         return;
       }
-
+ 
       if (!["image/jpeg", "image/png", "image/webp"].includes(foto.type) || foto.size > 5 * 1024 * 1024) {
         mensaje.textContent = "La fotografía no es válida.";
         return;
       }
-
+ 
       botonPublicar.disabled = true;
       mensaje.textContent = "Publicando...";
-
+ 
       try {
         const webp = await convertirAWebP(foto);
         const imagen = await subirImagen(webp);
-
+ 
         const { error } = await clienteSupabase
           .from("productos")
           .insert({ nombre, precio, stock, categoria, info, imagen });
-
+ 
         if (error) throw error;
-
+ 
         formulario.reset();
         limpiarVistaPrevia();
         mensaje.textContent = "";
         cerrarModal();
-
+ 
         await cargarProductos();
       } catch (error) {
         console.error("Error al publicar el producto:", error);
@@ -429,79 +414,102 @@
         botonPublicar.disabled = false;
       }
     });
-
-    // ===== Cargar productos desde Supabase =====
+ 
     async function cargarProductos() {
       const { data, error } = await clienteSupabase
         .from("productos")
         .select("*")
         .order("creado_en", { ascending: false });
-
+ 
       if (error) {
         console.error("Error al cargar productos:", error);
         sinProductos.textContent = "No se pudieron cargar los productos.";
         sinProductos.hidden = false;
         return;
       }
-
+ 
       productos = data;
       mostrarProductos();
     }
-
-    // ===== Mostrar productos =====
+ 
+    //Ver un producto completo 
+    const modalVerProducto = new bootstrap.Modal(document.getElementById("modalVerProducto"));
+ 
+    function formatearPrecio(valor) {
+      return Number(valor).toLocaleString("es-UY", { style: "currency", currency: "UYU" });
+    }
+ 
+    function textoStock(stock) {
+      return stock > 0 ? `Disponibles: ${stock}` : "Sin stock";
+    }
+ 
+    function abrirProducto(producto) {
+      document.getElementById("modalVerProductoTitulo").textContent = producto.nombre;
+      document.getElementById("modalVerProductoCategoria").textContent = producto.categoria;
+      document.getElementById("modalVerProductoPrecio").textContent = formatearPrecio(producto.precio);
+      document.getElementById("modalVerProductoStock").textContent = textoStock(producto.stock);
+      document.getElementById("modalVerProductoInfo").textContent = producto.info;
+ 
+      const img = document.getElementById("modalVerProductoImagen");
+      img.src = producto.imagen;
+      img.alt = `Fotografía de ${producto.nombre}`;
+ 
+      modalVerProducto.show();
+    }
+ 
     function mostrarProductos() {
       productosContainer.replaceChildren();
-
+ 
       sinProductos.textContent = "Todavía no hay productos publicados.";
       sinProductos.hidden = productos.length > 0;
-
+ 
       productos.forEach((producto) => {
         const tarjeta = document.createElement("article");
         tarjeta.className = "producto";
-
+ 
         const imagen = document.createElement("img");
         imagen.src = producto.imagen;
         imagen.alt = `Fotografía de ${producto.nombre}`;
-
+ 
         const contenido = document.createElement("div");
         contenido.className = "producto-contenido";
-
+ 
         const categoria = document.createElement("p");
         categoria.className = "producto-categoria";
         categoria.textContent = producto.categoria;
-
+ 
         const nombre = document.createElement("h3");
         nombre.className = "producto-nombre";
         nombre.textContent = producto.nombre;
-
+ 
         const info = document.createElement("p");
         info.className = "producto-info";
         info.textContent = producto.info;
-
+ 
         const precio = document.createElement("p");
         precio.className = "producto-precio";
-        precio.textContent = Number(producto.precio).toLocaleString("es-UY", {
-          style: "currency",
-          currency: "UYU"
-        });
-
+        precio.textContent = formatearPrecio(producto.precio);
+ 
         const stock = document.createElement("p");
         stock.className = "producto-stock";
-        stock.textContent = producto.stock > 0
-          ? `Disponibles: ${producto.stock}`
-          : "Sin stock";
-
-        contenido.append(categoria, nombre, info, precio, stock);
+        stock.textContent = textoStock(producto.stock);
+ 
+        const verMas = document.createElement("button");
+        verMas.type = "button";
+        verMas.className = "producto-ver";
+        verMas.textContent = "Ver producto →";
+        verMas.addEventListener("click", () => abrirProducto(producto));
+ 
+        contenido.append(categoria, nombre, info, precio, stock, verMas);
         tarjeta.append(imagen, contenido);
         productosContainer.appendChild(tarjeta);
       });
     }
-
-    // ===== Estado inicial =====
+ 
     await comprobarAdmin();
     aplicarVistaAdmin();
     await cargarProductos();
   </script>
-
+ 
 </body>
 </html>

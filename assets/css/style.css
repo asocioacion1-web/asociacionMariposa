@@ -14,82 +14,6 @@
     background: #ffffff;
   }
 
-  h1, h2, h3, h4,
-  .navbar-brand {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-  }
-
-  #navbar {
-    background: #fff;
-    box-shadow: 0 2px 10px rgba(12, 59, 102, .08);
-  }
-
-  #navbar .navbar-brand {
-    color: var(--azul-900);
-  }
-
-  #navbar .nav-link {
-    color: var(--azul-700);
-    font-weight: 600;
-  }
-
-  #navbar .nav-link.active,
-  #navbar .nav-link:hover {
-    color: var(--azul-500);
-  }
-
-  #navbar .nav-logo {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-
-    display: flex;
-    align-items: center;
-
-    background-color: rgb(248, 244, 244);
-    padding: 0 20px;
-
-    z-index: 1000;
-  }
-
-  #navbar {
-    border-bottom: 40px solid #1a1a1a;
-  }
-
-  /* Logo */
-  .logo {
-    width: 60px;
-    height: 60px;
-
-    border-radius: 70%;
-    overflow: hidden;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--azul-500);
-  }
-
-  .logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  /* Menú */
-  .menu {
-    display: flex;
-    gap: 25px;
-    margin-left: 30px;
-  }
-
-  .menu a {
-    text-decoration: none;
-    color: black;
-  }
 
   .hero {
     background: linear-gradient(135deg, var(--azul-900) 0%, var(--azul-500) 100%);
@@ -169,34 +93,62 @@
   }
 
   /* Tarjetas de noticias */
-  .card-noticia {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.card-noticia {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 }
 
+.card-noticia img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    border: 2px solid;
+}
+
+/* Cuerpo de la noticia */
 .cuerpo-noticia {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
-/* Límites de líneas: el resto se corta con "..." */
+/* Límites de líneas */
 .titulo-noticia,
 .subtitulo-noticia,
 .texto-noticia {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
 }
-.titulo-noticia    { -webkit-line-clamp: 2; line-clamp: 2; }
-.subtitulo-noticia { -webkit-line-clamp: 2; line-clamp: 2; }
-.texto-noticia     { -webkit-line-clamp: 4; line-clamp: 4; }
+
+.titulo-noticia {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.subtitulo-noticia {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.texto-noticia {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+}
+
+.ver-mas {
+    margin-top: auto;
+    align-self: flex-start;
+}
 
 .pie-noticia {
-  margin-top: auto;
-  padding-top: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
 }
 
   .card-noticia img {
@@ -205,6 +157,7 @@
     object-fit: cover;
     object-position: center top;
     display: block;
+    border: 2px solid;
   }
 
   .badge-cat {
@@ -273,6 +226,20 @@
     color: var(--amarillo);
   }
 
+  footer .container {
+  position: relative;
+}
+
+.logo-utu {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  width: 80px;
+  height: auto;
+  border-radius: 12px;
+  background: #fff;
+}
+
   .btn-donar {
     background: var(--amarillo);
     color: var(--azul-900);
@@ -307,3 +274,34 @@
     aspect-ratio: auto;
     background: #f1f4f8;
   }
+
+  .logo-link{
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .logo-link:hover {
+    transform: scale(1.1);
+  }
+
+  .logo-link:active{
+    transform: scale(1);
+  }
+
+  /*Esto servira si en algun punto ponemos una opcion para que el usuario desactive las animnaciones*/
+  @media(prefers-reduced-motion: reduce){
+    .logo-link{
+      transition: none;
+    }
+
+  .logo-link:hover,
+  .logo-link:active{
+    transform: none;
+    }
+  }
+/*esto es para el logo de la utu*/
+@media (max-width: 575.98px) {
+  .logo-footer {
+    width: 56px;
+  }
+}

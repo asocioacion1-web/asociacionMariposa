@@ -223,12 +223,12 @@
 
       if (!titulo || !parrafo || !subtitulo || !fecha)
         errores.push("Por favor completá todos los campos.");
-      if (titulo && (titulo.length < 3 || titulo.length > 100))
-        errores.push("El título debe tener entre 3 y 100 caracteres.");
-      if (subtitulo && (subtitulo.length < 3 || subtitulo.length > 150))
-        errores.push("El subtítulo debe tener entre 3 y 150 caracteres.");
-      if (parrafo && (parrafo.length < 10 || parrafo.length > 5000))
-        errores.push("El párrafo debe tener entre 10 y 5000 caracteres.");
+      if (titulo && (titulo.length < 10 || titulo.length > 100))
+        errores.push("El título debe tener entre 10 y 100 caracteres.");
+      if (subtitulo && (subtitulo.length < 15 || subtitulo.length > 150))
+        errores.push("El subtítulo debe tener entre 15 y 150 caracteres.");
+      if (parrafo && (parrafo.length < 20 || parrafo.length > 5000))
+        errores.push("El párrafo debe tener entre 20 y 5000 caracteres.");
       if (fecha && (!/^\d{4}-\d{2}-\d{2}$/.test(fecha) || isNaN(new Date(fecha))))
         errores.push("La fecha no es válida.");
 
