@@ -1,0 +1,164 @@
+
+/* Colores principales */
+:root {
+    --fondo: #059be1;
+    --blanco: #FFFFFF;
+    --texto: #1D1830;
+    --borde: #E2DDEC;
+    --morado: #005baf;
+}
+
+/* Estilo general */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 30px 15px;
+    font-family: Arial, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+}
+
+.wrap {
+    max-width: 1040px;
+    margin: auto;
+}
+
+/* Encabezado */
+header {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 36px;
+    color: var(--morado);
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 22px;
+}
+
+/* Formulario y publicaciones */
+.grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 25px;
+}
+
+/* Formulario */
+.panel, .post {
+    background: var(--blanco);
+    padding: 20px;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+}
+
+form {
+    display: grid;
+    gap: 12px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    background: var(--blanco);
+    color: var(--texto);
+}
+
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+/* Botones */
+button {
+    padding: 10px;
+    background: var(--morado);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Publicaciones */
+#filtro {
+    margin-bottom: 15px;
+}
+
+.list {
+    display: grid;
+    gap: 15px;
+}
+
+.post h3 {
+    margin: 0 0 10px;
+    color: var(--morado);
+}
+
+.post p {
+    margin: 8px 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.post button {
+    margin: 10px 5px 0 0;
+}
+
+/* Publicaciones pendientes */
+.pending {
+    border: 2px dashed orange;
+}
+
+/* Mensajes */
+#estado, #contador {
+    font-size: 14px;
+}
+
+#aviso {
+    margin-bottom: 10px;
+}
+
+/* Diseño para celulares */
+@media (max-width: 800px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+}
+
+/* Modo oscuro automático */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --fondo: #4ca4dba0;
+        --blanco: #1E1A2E;
+        --texto: #EEEAF8;
+        --borde: #342E4A;
+        --morado: #e8e5ef;
+    }
+
+    button {
+        color: #17112B;
+    }
+}
