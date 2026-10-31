@@ -80,15 +80,11 @@
 
     <!-- MODAL CREAR / EDITAR FOTO -->
     <dialog class="modal-foto" id="modalFoto" aria-labelledby="tituloModal">
-
         <form id="formFoto">
-
             <div class="modal-cabecera">
 
                 <h2 id="tituloModal">Agregar fotografía</h2>
-                <button type="button" class="btn-cerrar" id="cerrarModal" aria-label="Cerrar">
-                  
-                </button>
+                <button type="button" class="btn-cerrar" id="cerrarModal" aria-label="Cerrar"></button>
 
             </div>
 
@@ -144,11 +140,22 @@
                 <button type="submit" class="btn-guardar" id="guardarFoto">
                     Guardar fotografía
                 </button>
-
             </div>
-
         </form>
+    </dialog>
+    <!-- modal borrar -->
+    <dialog id="modalEliminar" class="modal-eliminar">
+    <h2>¿Eliminar esta fotografía?</h2>
 
+    <img id="eliminarImagen" alt="">
+    <p id="eliminarTitulo"></p>
+
+    <p id="eliminarMensaje" class="mensaje-eliminar"></p>
+
+    <div class="acciones-eliminar">
+        <button type="button" id="cancelarEliminar" class="btn-cancelar-eliminar">Cancelar</button>
+        <button type="button" id="confirmarEliminar" class="btn-confirmar-eliminar">Eliminar</button>
+    </div>
     </dialog>
 
     <!-- PIE DE PÁGINA -->
@@ -158,6 +165,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/mensajes.js"></script>
 <script type="module">
 
 //ELEMENTOS DEL HTML 
@@ -613,32 +621,77 @@ formulario.addEventListener("submit", async (evento) => {
 
 //ELIMINAR FOTOGRAFÍA 
 
-async function eliminarFoto(id) {
+    const modalEliminar = document.getElementById("modalEliminar");
+    const eliminarImagen = document.getElementById("eliminarImagen");
+    const eliminarTitulo = document.getElementById("eliminarTitulo");
+    const eliminarMensaje = document.getElementById("eliminarMensaje");
+    const botonConfirmarEliminar = document.getElementById("confirmarEliminar");
+    const botonCancelarEliminar = document.getElementById("cancelarEliminar");
+
+    let fotoParaEliminar = null;
+
+// Abre el mini modal con la foto
+function eliminarFoto(id) {
 
     const foto = fotos.find(f => f.id === id);
 
     if (!foto) return;
 
-    const confirmar = confirm(
-        '¿Seguro que querés eliminar "' + (foto.titulo || "esta fotografía") + '"?'
-    );
+    fotoParaEliminar = id;
 
-    if (!confirmar) return;
+    eliminarImagen.src = foto.imagen;
+    eliminarImagen.alt = foto.titulo || "Fotografía";
+    eliminarTitulo.textContent = foto.titulo || "";
+    eliminarMensaje.textContent = "";
+
+    botonConfirmarEliminar.disabled = false;
+    botonConfirmarEliminar.textContent = "Eliminar";
+
+    modalEliminar.showModal();
+}
+
+botonCancelarEliminar.addEventListener("click", () => {
+    modalEliminar.close();
+});
+
+// Clic en el fondo oscuro = cancelar
+modalEliminar.addEventListener("click", (evento) => {
+    if (evento.target === modalEliminar) {
+        modalEliminar.close();
+    }
+});
+
+modalEliminar.addEventListener("close", () => {
+    fotoParaEliminar = null;
+    eliminarImagen.removeAttribute("src");
+});
+
+// Confirmar: borra de la base de datos
+botonConfirmarEliminar.addEventListener("click", async () => {
+
+    if (fotoParaEliminar === null) return;
+
+    botonConfirmarEliminar.disabled = true;
+    botonConfirmarEliminar.textContent = "Eliminando...";
+    eliminarMensaje.textContent = "";
 
     const { data, error } = await clienteSupabase
         .from("galeria")
         .delete()
-        .eq("id", id)
+        .eq("id", fotoParaEliminar)
         .select();
 
     if (error || !data || data.length === 0) {
         console.error("Error al eliminar la fotografía:", error);
-        alert("No se pudo eliminar la fotografía.");
+        eliminarMensaje.textContent = "No se pudo eliminar la fotografía. Intentá de nuevo.";
+        botonConfirmarEliminar.disabled = false;
+        botonConfirmarEliminar.textContent = "Eliminar";
         return;
     }
 
+    modalEliminar.close();
     await cargarFotos();
-}
+});
 
 
 aplicarVistaSesion();
