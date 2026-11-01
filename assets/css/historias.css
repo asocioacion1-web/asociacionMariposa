@@ -1,0 +1,242 @@
+/* ===== Página de historias ===== */
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: #1f2d3a;
+            background: #f4f8fc;
+        }
+
+        .historias-main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 110px 16px 64px;
+        }
+
+        .historias-encabezado { text-align: center; margin-bottom: 24px; }
+        .historias-encabezado h1 { color: #12578f; font-weight: 800; }
+        .historias-encabezado p  { color: #5b6b7b; max-width: 620px; margin: 8px auto 0; }
+
+        .historias-acciones {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .h-btn {
+            padding: .65rem 1.5rem;
+            border: 0;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .h-btn:disabled { opacity: .6; cursor: wait; }
+
+        .h-btn-principal { background: #ffc94d; color: #0c3b66; }
+        .h-btn-principal:hover { background: #ffd873; }
+        .h-btn-secundario { background: #12578f; color: #fff; }
+        .h-btn-secundario:hover { background: #0c3b66; }
+        .h-btn-gris { background: #e9eef4; color: #0c3b66; }
+        .h-btn-peligro { background: #d93025; color: #fff; }
+
+        #avisoRol {
+            text-align: center;
+            color: #5b6b7b;
+            margin-bottom: 16px;
+        }
+
+        /* Filtros por tipo */
+        .filtros {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .filtro {
+            padding: .4rem 1rem;
+            border: 2px solid #12578f;
+            border-radius: 50px;
+            background: #fff;
+            color: #12578f;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .filtro.activo, .filtro:hover { background: #12578f; color: #fff; }
+
+        /* Tarjetas */
+        #listaHistorias {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .historia {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px rgba(12, 59, 102, .12);
+        }
+
+        .historia-tipo {
+            align-self: flex-start;
+            padding: .2rem .8rem;
+            border-radius: 50px;
+            background: #eaf4fc;
+            color: #12578f;
+            font-size: .75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .historia-titulo { margin: 0; font-size: 1.2rem; font-weight: 800; color: #0c3b66; overflow-wrap: anywhere; }
+        .historia-autor  { margin: 0; font-size: .85rem; color: #5b6b7b; }
+
+        .historia-vista {
+            margin: 0;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 5;
+            line-clamp: 5;
+            overflow: hidden;
+        }
+
+        .historia-pie {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 8px;
+        }
+
+        .link-leer, .link-borrar {
+            padding: 0;
+            border: 0;
+            background: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .link-leer   { color: #12578f; }
+        .link-leer:hover { text-decoration: underline; }
+        .link-borrar { color: #d93025; }
+        .link-borrar:hover { text-decoration: underline; }
+
+        .aviso-lista {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #5b6b7b;
+        }
+
+        /* ===== Ventanas (dialog nativo) ===== */
+        dialog.ventana {
+            width: min(92vw, 560px);
+            max-height: 90vh;
+            padding: 24px;
+            border: 0;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
+        }
+        dialog.ventana::backdrop { background: rgba(0, 0, 0, .55); }
+
+        .ventana-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .ventana-cabecera h2 { margin: 0; font-size: 1.35rem; color: #12578f; font-weight: 800; overflow-wrap: anywhere; }
+        .ventana-cabecera p  { margin: 4px 0 0; color: #5b6b7b; font-size: .9rem; }
+
+        .ventana-cerrar {
+            border: 0;
+            background: none;
+            font-size: 1.8rem;
+            line-height: 1;
+            cursor: pointer;
+            color: #5b6b7b;
+        }
+
+        .ventana-acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+
+        .mensaje-error { min-height: 1.2em; margin: 6px 0 0; color: #b00020; font-size: .9rem; }
+
+        .campo-h { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+        .campo-h label { font-weight: 700; font-size: .9rem; }
+        .campo-h input, .campo-h select, .campo-h textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid #c9d1e0;
+            border-radius: 8px;
+            font: inherit;
+        }
+        .campo-h textarea { min-height: 220px; resize: vertical; }
+        .contador { align-self: flex-end; font-size: .8rem; color: #5b6b7b; }
+
+        /* Lectura */
+        #leerTexto {
+            max-height: 60vh;
+            overflow-y: auto;
+            margin: 0;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+        }
+
+        /* Panel de alumnos */
+        #buscadorAlumnos {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            border: 1px solid #c9d1e0;
+            border-radius: 50px;
+            font: inherit;
+        }
+
+        #listaUsuarios {
+            max-height: 50vh;
+            overflow-y: auto;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .usuario {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 4px;
+            border-bottom: 1px solid #e3e9f0;
+        }
+
+        .usuario-datos { min-width: 0; }
+        .usuario-nombre { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+        .usuario-email  { margin: 0; font-size: .8rem; color: #5b6b7b; overflow-wrap: anywhere; }
+
+        .usuario-rol {
+            display: inline-block;
+            margin-left: 6px;
+            padding: .1rem .6rem;
+            border-radius: 50px;
+            font-size: .7rem;
+            font-weight: 800;
+            vertical-align: middle;
+        }
+        .rol-alumno { background: #d8f3e3; color: #1e8a4c; }
+        .rol-admin  { background: #fff0c2; color: #8a6100; }
+
+        .usuario button { flex-shrink: 0; padding: .4rem 1rem; font-size: .85rem; }
+        

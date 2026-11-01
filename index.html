@@ -240,18 +240,12 @@
     </div>
   </section>
 
-
   <!--Apartado para los jovenes de la asociación-->
   <section id="jovenes" class="py-5 seccion-clara">
     <div class="container">
-      <div class="text-center mb-5">
-        <h2 class="titulos">Jóvenes de la asociación</h2>
-        <p class="text-secondary" class="texto-pequeño">En este apartado los jovenes contaran sus historia y experiencia
-          en la asociación.</p>
-      </div>
-      <div class="row g-4">
+               <div class="row g-4">
         <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="1">
             <img src="https://placehold.co/150x150/8fc4ea/0c3b66?text=Joven+1" alt="Joven 1"
               class="rounded-circle mb-3">
             <h6>Asociación persona</h6>
@@ -260,7 +254,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="2">
             <img src="https://placehold.co/150x150/ffc94d/0c3b66?text=Joven+2" alt="Joven 2"
               class="rounded-circle mb-3">
             <h6>Asociación persona</h6>
@@ -269,7 +263,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="3">
             <img src="https://placehold.co/150x150/ff8b6b/ffffff?text=Joven+3" alt="Joven 3"
               class="rounded-circle mb-3">
             <h6>Asociación persona</h6>
@@ -279,10 +273,46 @@
           </div>
         </div>
       </div>
+
+  <!--Modal editar jovenes-->
+  <div class="modal fade" id="modalJoven" tabindex="-1" aria-labelledby="modalJovenLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form id="formJoven" novalidate>
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalJovenLabel">Editar joven</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="jovenNombre" class="form-label fw-bold">Nombre</label>
+              <input type="text" class="form-control" id="jovenNombre" maxlength="60">
+            </div>
+            <div class="mb-3">
+              <label for="jovenDescripcion" class="form-label fw-bold">Descripción</label>
+              <textarea class="form-control" id="jovenDescripcion" rows="4" maxlength="300"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="jovenFoto" class="form-label fw-bold">Foto <span class="fw-normal text-secondary">(si no elegís una, queda la actual)</span></label>
+              <input type="file" class="form-control" id="jovenFoto" accept="image/*">
+              <img id="jovenPreview" class="rounded-circle mt-2 d-none" alt="Vista previa"
+                style="width:120px;height:120px;object-fit:cover">
+            </div>
+            <p id="jovenMensaje" class="text-danger small mb-0"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id="jovenGuardar">Guardar</button>
+          </div>
+        </form>
+      </div>
     </div>
-    </div>
+  </div>
+</div>
+</section>
+
     <div class="text-center mt-5">
-      <a href="public/historiaAlumnos.html" class="btn btn-outline-primary px-4">Mas estudiantes</a>
+      <a href="public/historias.html" class="btn btn-outline-primary px-4">Sobre los Jovenes</a>
     </div>
   </section>
 
@@ -348,7 +378,6 @@
       </div>
     </div>
   </section>
-
 
   <!-- FOOTER -->
   <footer class="py-5 mt-4">
@@ -567,11 +596,210 @@
         await clienteSupabase.auth.signOut();
         window.location.href = "/public/login.html";
       });
+          // ===== JÓVENES DE LA ASOCIACIÓN (el administrador los edita) =====
+
+    const BUCKET_FOTOS = "Fotos";
+    const modalJoven = new bootstrap.Modal(document.getElementById("modalJoven"));
+    const formJoven = document.getElementById("formJoven");
+    const jovenNombre = document.getElementById("jovenNombre");
+    const jovenDescripcion = document.getElementById("jovenDescripcion");
+    const jovenFoto = document.getElementById("jovenFoto");
+    const jovenPreview = document.getElementById("jovenPreview");
+    const jovenMensaje = document.getElementById("jovenMensaje");
+    const jovenGuardar = document.getElementById("jovenGuardar");
+
+    let jovenes = [];
+    let jovenEnEdicion = null;
+    let urlTemporalJoven = null;
+
+    function urlFotoJoven(nombreArchivo) {
+      return clienteSupabase.storage.from(BUCKET_FOTOS).getPublicUrl(nombreArchivo).data.publicUrl;
+    }
+
+    function mostrarJovenes() {
+      jovenes.forEach((j) => {
+        const tarjeta = document.querySelector(`.card-joven[data-joven="${j.id}"]`);
+        if (!tarjeta) return;
+
+        const img = tarjeta.querySelector("img");
+        if (j.foto) {
+          img.src = urlFotoJoven(j.foto);
+          img.style.width = "150px";
+          img.style.height = "150px";
+          img.style.objectFit = "cover";
+        }
+        img.alt = j.nombre;
+
+        tarjeta.querySelector("h6").textContent = j.nombre;
+        tarjeta.querySelector("p").textContent = j.descripcion;
+
+        // Botón de editar arriba del círculo (solo administrador)
+        tarjeta.querySelector(".btn-editar-joven")?.remove();
+
+        if (esAdmin) {
+          const editar = document.createElement("button");
+          editar.type = "button";
+          editar.className = "btn btn-outline-primary btn-sm mb-3 btn-editar-joven";
+          editar.textContent = "Editar";
+          editar.addEventListener("click", () => abrirModalJoven(j.id));
+          tarjeta.prepend(editar);
+        }
+      });
+    }
+
+    async function cargarJovenes() {
+      const { data, error } = await clienteSupabase
+        .from("destacados")
+        .select("id, nombre, descripcion, foto")
+        .order("id", { ascending: true });
+
+      if (error) {
+        console.error("Error al cargar los jóvenes:", error);
+        return; // se queda el contenido que ya tiene el HTML
+      }
+
+      jovenes = data || [];
+      mostrarJovenes();
+    }
+
+    function limpiarUrlTemporalJoven() {
+      if (urlTemporalJoven) {
+        URL.revokeObjectURL(urlTemporalJoven);
+        urlTemporalJoven = null;
+      }
+    }
+
+    function abrirModalJoven(id) {
+      const j = jovenes.find(x => x.id === id);
+      if (!j) return;
+
+      jovenEnEdicion = id;
+      formJoven.reset();
+      limpiarUrlTemporalJoven();
+      jovenMensaje.textContent = "";
+
+      jovenNombre.value = j.nombre;
+      jovenDescripcion.value = j.descripcion;
+
+      if (j.foto) {
+        jovenPreview.src = urlFotoJoven(j.foto);
+        jovenPreview.classList.remove("d-none");
+      } else {
+        jovenPreview.removeAttribute("src");
+        jovenPreview.classList.add("d-none");
+      }
+
+      modalJoven.show();
+    }
+
+    jovenFoto.addEventListener("change", () => {
+      limpiarUrlTemporalJoven();
+      const archivo = jovenFoto.files[0];
+      if (!archivo) return;
+
+      urlTemporalJoven = URL.createObjectURL(archivo);
+      jovenPreview.src = urlTemporalJoven;
+      jovenPreview.classList.remove("d-none");
+    });
+
+    document.getElementById("modalJoven").addEventListener("hidden.bs.modal", limpiarUrlTemporalJoven);
+
+    // Convierte la foto a WebP (máx. 800 px) para que pese poco
+    function convertirAWebP(archivo) {
+      return new Promise((resolver, rechazar) => {
+        const url = URL.createObjectURL(archivo);
+        const img = new Image();
+
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          const escala = Math.min(1, 800 / Math.max(img.width, img.height));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(img.width * escala);
+          canvas.height = Math.round(img.height * escala);
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob((blob) => blob ? resolver(blob) : rechazar(new Error("No se pudo convertir")), "image/webp", 0.85);
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          rechazar(new Error("El archivo no es una imagen válida."));
+        };
+
+        img.src = url;
+      });
+    }
+
+    // La misma imagen siempre da el mismo nombre (no se duplica en el bucket)
+    async function hashBlob(blob) {
+      const buffer = await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
+      return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
+    }
+
+    async function subirImagenJoven(blob) {
+      const nombreArchivo = (await hashBlob(blob)) + ".webp";
+
+      const { error } = await clienteSupabase.storage
+        .from(BUCKET_FOTOS)
+        .upload(nombreArchivo, blob, { contentType: "image/webp", upsert: false });
+
+      const yaExiste = error && (String(error.message).includes("already exists") || String(error.statusCode) === "409");
+
+      if (error && !yaExiste) {
+        console.error("Error al subir la imagen:", error);
+        throw new Error("No se pudo subir la imagen.");
+      }
+
+      return nombreArchivo;
+    }
+
+    formJoven.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+
+      jovenMensaje.textContent = "";
+      jovenGuardar.disabled = true;
+      jovenGuardar.textContent = "Guardando...";
+
+      try {
+        const nombre = jovenNombre.value.trim();
+        const descripcion = jovenDescripcion.value.trim();
+
+        if (!nombre) throw new Error("Escribí un nombre.");
+
+        const actual = jovenes.find(x => x.id === jovenEnEdicion);
+        let foto = actual ? actual.foto : null;
+
+        const archivo = jovenFoto.files[0];
+        if (archivo) {
+          foto = await subirImagenJoven(await convertirAWebP(archivo));
+        }
+
+        const { data, error } = await clienteSupabase
+          .from("destacados")
+          .update({ nombre, descripcion, foto })
+          .eq("id", jovenEnEdicion)
+          .select();
+
+        if (error || !data || data.length === 0) {
+          console.error("Error al guardar:", error);
+          throw new Error("No se pudo guardar. Revisá que tengas permiso de administrador.");
+        }
+
+        modalJoven.hide();
+        await cargarJovenes();
+
+      } catch (e) {
+        jovenMensaje.textContent = e.message || "Ocurrió un error. Intentá de nuevo.";
+      } finally {
+        jovenGuardar.disabled = false;
+        jovenGuardar.textContent = "Guardar";
+      }
+    });
 
       aplicarVistaSesion();
       await comprobarAdmin();
       await cargarNoticias();
       aplicarVistaAdmin();
+      await cargarJovenes();
 
   </script>
 </body>
