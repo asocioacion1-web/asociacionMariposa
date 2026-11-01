@@ -203,6 +203,8 @@ async function aplicarVistaSesion() {
       document.getElementById("linkMiSesion")?.classList.toggle("d-none", !logueado);
       document.getElementById("btnSalirMenu")?.classList.toggle("d-none", !logueado);
       document.getElementById("btnIniciarSesion")?.classList.toggle("d-none", logueado);
+      document.getElementById("btnGaleria").classList.toggle("d-none", !logueado);
+      document.getElementById("btnProducto").classList.toggle("d-none", !logueado);
     }
 
     aplicarVistaSesion();

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva contraseña - Fundación Mariposa Azul</title>
+    <link rel="icon" type="image/png" href="/assets/imagenes/FundacionLogo.png">
+
+    <link rel="stylesheet" href="/assets/css/loginStyle.css">
+
+    <style>
+        .card h2 { margin-bottom: 8px; }
+
+        .texto-ayuda {
+            margin: 0 0 18px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .aviso-pagina {
+            min-height: 1.2em;
+            margin: 0 0 14px;
+            text-align: center;
+            font-size: 12.5px;
+            color: #ffb4b4;
+        }
+        .aviso-pagina.ok { color: #b6f0c8; }
+
+        .volver-login {
+            display: block;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 12px;
+            font-style: italic;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .volver-login:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<form class="card" id="formNueva" novalidate>
+    <div class="avatar">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 8h3l2-2h6l2 2h3v11H4z"/>
+            <circle cx="12" cy="13" r="3.2"/>
+            <img src="/assets/imagenes/FundacionLogo.webp" alt="Logo de la Fundación Mariposa Azul" class="logo">
+        </svg>
+    </div>
+
+    <h2>Nueva contraseña</h2>
+
+    <!-- Se muestra mientras se comprueba el enlace -->
+    <p class="texto-ayuda" id="estado">Comprobando el enlace...</p>
+
+    <!-- Se muestra solo si el enlace es válido -->
+    <div id="campos" hidden>
+        <p class="texto-ayuda">Elegí una contraseña nueva (mínimo 8 caracteres).</p>
+
+        <div class="field">
+            <div class="pass-wrap">
+                <input type="password" placeholder="Contraseña nueva" id="nueva" autocomplete="new-password">
+                <button type="button" class="ver-password" aria-label="Mostrar contraseña" aria-pressed="false">
+                    <svg class="ojo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg class="ojo-tachado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="pass-wrap">
+                <input type="password" placeholder="Repetí la contraseña" id="repetir" autocomplete="new-password">
+                <button type="button" class="ver-password" aria-label="Mostrar contraseña" aria-pressed="false">
+                    <svg class="ojo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg class="ojo-tachado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <p class="aviso-pagina" id="aviso"></p>
+
+        <button type="submit" id="guardar">GUARDAR CONTRASEÑA</button>
+    </div>
+
+    <a class="volver-login" href="/public/login.html">Volver al inicio de sesión</a>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // Ojito para ver la contraseña
+    document.querySelectorAll(".ver-password").forEach((boton) => {
+        boton.addEventListener("click", () => {
+            const campo = boton.parentElement.querySelector("input");
+            const mostrar = campo.type === "password";
+
+            campo.type = mostrar ? "text" : "password";
+            boton.classList.toggle("activo", mostrar);
+            boton.setAttribute("aria-pressed", mostrar);
+            boton.setAttribute("aria-label", mostrar ? "Ocultar contraseña" : "Mostrar contraseña");
+        });
+    });
+</script>
+
+<script type="module">
+
+    const estado = document.getElementById("estado");
+    const campos = document.getElementById("campos");
+    const aviso = document.getElementById("aviso");
+    const formulario = document.getElementById("formNueva");
+    const botonGuardar = document.getElementById("guardar");
+
+    function decir(texto, ok = false) {
+        aviso.textContent = texto;
+        aviso.classList.toggle("ok", ok);
+    }
+
+    // Debe ser IGUAL a la función del login, si no la contraseña no coincide
+    async function hashContrasena(email, password) {
+        const texto = `${email.trim().toLowerCase()}:${password}:mariposa-azul`;
+        const datos = new TextEncoder().encode(texto);
+        const buffer = await crypto.subtle.digest("SHA-256", datos);
+        return [...new Uint8Array(buffer)]
+            .map(b => b.toString(16).padStart(2, "0"))
+            .join("");
+    }
+
+    let config;
+    try {
+        config = await (await fetch("/api/config")).json();
+    } catch (e) {
+        console.error("No se pudo conectar con el servidor:", e);
+        estado.textContent = "No se pudo conectar con el servidor.";
+        throw e;
+    }
+
+    const clienteSupabase = supabase.createClient(config.url, config.anonKey);
+
+    let emailUsuario = null;
+    let enlaceValido = false;
+
+    function mostrarFormulario(email) {
+        emailUsuario = email;
+        enlaceValido = true;
+        estado.hidden = true;
+        campos.hidden = false;
+    }
+
+    function enlaceInvalido() {
+        if (enlaceValido) return;
+        estado.textContent = "El enlace no es válido o ya venció. Pedí uno nuevo desde el inicio de sesión.";
+    }
+
+    // Si el enlace venció, Supabase lo avisa en la dirección
+    if (location.hash.includes("error=")) {
+        enlaceInvalido();
+    }
+
+    // Supabase lee el enlace del correo y avisa con este evento
+    clienteSupabase.auth.onAuthStateChange((evento, sesion) => {
+        if (evento === "PASSWORD_RECOVERY" && sesion?.user?.email) {
+            mostrarFormulario(sesion.user.email);
+        }
+    });
+
+    // Si en unos segundos no llegó el evento, el enlace no sirve
+    setTimeout(enlaceInvalido, 4000);
+
+    formulario.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!enlaceValido) return;
+
+        const nueva = document.getElementById("nueva").value;
+        const repetir = document.getElementById("repetir").value;
+
+        if (nueva.length < 8) return decir("La contraseña debe tener al menos 8 caracteres.");
+        if (nueva !== repetir) return decir("Las contraseñas no coinciden.");
+
+        botonGuardar.disabled = true;
+        decir("");
+
+        const passwordHash = await hashContrasena(emailUsuario, nueva);
+
+        const { error } = await clienteSupabase.auth.updateUser({ password: passwordHash });
+
+        if (error) {
+            console.error("Error al cambiar la contraseña:", error);
+            botonGuardar.disabled = false;
+
+            if (String(error.message).toLowerCase().includes("different from the old")) {
+                return decir("La contraseña nueva tiene que ser distinta de la anterior.");
+            }
+            return decir("No se pudo cambiar la contraseña. Pedí un enlace nuevo e intentá de nuevo.");
+        }
+
+        decir("¡Listo! Contraseña actualizada. Te llevamos al inicio de sesión...", true);
+
+        await clienteSupabase.auth.signOut();
+        setTimeout(() => { window.location.replace("/public/login.html"); }, 2000);
+    });
+
+</script>
+
+</body>
+</html>

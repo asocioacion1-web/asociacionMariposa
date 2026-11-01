@@ -311,7 +311,7 @@
 </div>
 </section>
 
-    <div class="text-center mt-5">
+    <div class="text-center mt-5" id="bloqueSobreJovenes">
       <a href="public/historias.html" class="btn btn-outline-primary px-4">Sobre los Jovenes</a>
     </div>
   </section>
@@ -452,6 +452,9 @@
       document.getElementById("linkMiSesion")?.classList.toggle("d-none", !logueado);
       document.getElementById("btnSalirMenu")?.classList.toggle("d-none", !logueado);
       document.getElementById("btnIniciarSesion")?.classList.toggle("d-none", logueado);
+      document.getElementById("btnGaleria")?.classList.toggle("d-none", !logueado);
+      document.getElementById("btnProducto")?.classList.toggle("d-none", !logueado);
+      document.getElementById("bloqueSobreJovenes")?.classList.toggle("d-none", !logueado);
     }
 
     function aplicarVistaAdmin() {
@@ -596,7 +599,8 @@
         await clienteSupabase.auth.signOut();
         window.location.href = "/public/login.html";
       });
-          // ===== JÓVENES DE LA ASOCIACIÓN (el administrador los edita) =====
+
+    // JÓVENES DE LA ASOCIACIÓN (el administrador los edita)
 
     const BUCKET_FOTOS = "Fotos";
     const modalJoven = new bootstrap.Modal(document.getElementById("modalJoven"));
