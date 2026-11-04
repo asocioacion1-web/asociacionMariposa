@@ -473,7 +473,7 @@
         let idsAdmins = new Set();
 
         // Para buscar sin importar mayúsculas ni tildes
-        const normalizar = (t) => (t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+        const normalizar = (t) => (t || "").normalize("NFD").replace(/[̀-ͯ ]/g, "").toLowerCase();
 
         function mostrarUsuarios() {
             listaUsuarios.replaceChildren();
