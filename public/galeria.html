@@ -159,6 +159,40 @@
         </form>
 
     </dialog>
+    <!-- VISOR DE FOTOGRAFÍAS -->
+<dialog class="visor-foto" id="visorFoto">
+
+    <div class="visor-contenido">
+
+        <button type="button" class="visor-cerrar"
+                id="cerrarVisor" aria-label="Cerrar">
+            &times;
+        </button>
+
+        <button type="button" class="visor-flecha"
+                id="fotoAnterior" aria-label="Foto anterior">
+            &#10094;
+        </button>
+
+        <div class="visor-media">
+            <img id="visorImagen" alt="">
+        </div>
+
+        <button type="button" class="visor-flecha"
+                id="fotoSiguiente" aria-label="Foto siguiente">
+            &#10095;
+        </button>
+
+        <div class="visor-info">
+            <h2 id="visorTitulo"></h2>
+            <p id="visorDescripcion"></p>
+            <p id="visorFirma"></p>
+            <span id="visorContador"></span>
+        </div>
+
+    </div>
+
+</dialog>
 
     <!-- PIE DE PÁGINA -->
     <footer class="final">
@@ -222,6 +256,80 @@ const botonGuardar = document.getElementById("guardarFoto");
 const botonAgregar = document.getElementById("abrirNuevo");
 const botonCerrar = document.getElementById("cerrarModal");
 const botonCancelar = document.getElementById("cancelarModal");
+// ===== VISOR DE FOTOGRAFÍAS =====
+
+const visor = document.getElementById("visorFoto");
+const visorImagen = document.getElementById("visorImagen");
+const visorTitulo = document.getElementById("visorTitulo");
+const visorDescripcion = document.getElementById("visorDescripcion");
+const visorFirma = document.getElementById("visorFirma");
+const visorContador = document.getElementById("visorContador");
+
+let indiceFotoActual = 0;
+
+function abrirVisor(posicion) {
+    indiceFotoActual = posicion;
+    actualizarVisor();
+    visor.showModal();
+}
+
+function actualizarVisor() {
+
+    const foto = fotos[indiceFotoActual];
+
+    if (!foto) return;
+
+    visorImagen.src = foto.imagen;
+    visorImagen.alt = foto.titulo || "Fotografía de la comunidad";
+
+    visorTitulo.textContent = foto.titulo;
+    visorDescripcion.textContent = foto.descripcion;
+    visorFirma.textContent = foto.firma;
+
+    visorContador.textContent =
+        (indiceFotoActual + 1) + " / " + fotos.length;
+}
+
+function cambiarFoto(direccion) {
+
+    indiceFotoActual += direccion;
+
+    if (indiceFotoActual >= fotos.length) {
+        indiceFotoActual = 0;
+    }
+
+    if (indiceFotoActual < 0) {
+        indiceFotoActual = fotos.length - 1;
+    }
+
+    actualizarVisor();
+}
+
+document.getElementById("cerrarVisor")
+    .addEventListener("click", () => visor.close());
+
+document.getElementById("fotoAnterior")
+    .addEventListener("click", () => cambiarFoto(-1));
+
+document.getElementById("fotoSiguiente")
+    .addEventListener("click", () => cambiarFoto(1));
+
+visor.addEventListener("click", (evento) => {
+    if (evento.target === visor) {
+        visor.close();
+    }
+});
+
+visor.addEventListener("keydown", (evento) => {
+
+    if (evento.key === "ArrowRight") {
+        cambiarFoto(1);
+    }
+
+    if (evento.key === "ArrowLeft") {
+        cambiarFoto(-1);
+    }
+});
 
 // ===== ALMACENAMIENTO =====
 
@@ -285,6 +393,9 @@ function mostrarFotos() {
         imagen.src = foto.imagen;
         imagen.alt = foto.titulo || "Foto de la comunidad";
         imagen.loading = "lazy";
+        imagen.addEventListener("click", () => {
+    abrirVisor(posicion);
+});
 
         marco.appendChild(imagen);
 

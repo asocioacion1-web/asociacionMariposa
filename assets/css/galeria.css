@@ -203,23 +203,21 @@ body {
   clip-path: polygon(0 8%, 4% 0, 8% 10%, 12% 0, 16% 10%, 20% 0, 80% 0, 84% 10%, 88% 0, 92% 10%, 96% 0, 100% 8%, 100% 92%, 96% 100%, 92% 90%, 88% 100%, 84% 90%, 80% 100%, 20% 100%, 16% 90%, 12% 100%, 8% 90%, 4% 100%, 0 92%);
 }
 
+/* MARCO DE LA FOTOGRAFÍA */
 .foto {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: var(--petroleo-oscuro);
-  /* borde interior sutil, como el de una foto revelada */
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.22), inset 0 0 28px rgb(0 0 0 / 0.22);
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    border-radius: 5px;
 }
 
-.foto svg,
+/* IMAGEN */
 .foto img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
-
 .peso {
   position: absolute;
   right: 10px;
@@ -574,60 +572,62 @@ body {
 }
 
 /* ===================================
-   BOTONES INFERIORES
-   =================================== */
-
-.modal-acciones {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-
-    margin-top: 28px;
-    padding-top: 20px;
-
-    border-top: 1px solid #eee6eb;
-}
+   BOTONES MODERNOS DEL MODAL
+=================================== */
 
 .modal-acciones button {
-    padding: 13px 20px;
+    padding: 13px 24px;
 
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
 
-    font-family: 'Figtree', sans-serif;
+    font-family: var(--font-texto);
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
 
     cursor: pointer;
-    transition: 0.25s ease;
+    transition: all 0.3s ease;
 }
 
-/* Cancelar */
+/* CANCELAR */
+
 .btn-cancelar {
-    background: #f1edf0;
-    color: #695c65;
+    background: #edf3f2;
+    color: #54666a;
 }
 
 .btn-cancelar:hover {
-    background: #e7dfe5;
-}
-
-/* Guardar */
-.btn-guardar {
-    background: #9e6b97;
-    color: #ffffff;
-
-    box-shadow: 0 4px 12px rgba(158, 107, 151, 0.25);
-}
-
-.btn-guardar:hover {
-    background: #84547d;
+    background: #dce9e7;
     transform: translateY(-2px);
 }
 
+/* GUARDAR */
+
+.btn-guardar {
+    background: linear-gradient(135deg, #07ad9f, #087f85);
+    color: white;
+
+    box-shadow: 0 5px 15px rgba(7, 173, 159, 0.25);
+}
+
+.btn-guardar:hover {
+    background: linear-gradient(135deg, #07998e, #066b73);
+    transform: translateY(-3px);
+
+    box-shadow: 0 9px 20px rgba(7, 173, 159, 0.35);
+}
+
+/* CLIC */
+
+.modal-acciones button:active {
+    transform: scale(0.96);
+}
+
+/* DESHABILITADO */
+
 .btn-guardar:disabled {
-    opacity: 0.6;
-    cursor: wait;
+    opacity: 0.55;
+    cursor: not-allowed;
     transform: none;
 }
 
@@ -679,5 +679,191 @@ body {
     .previsualizacion,
     .modal-acciones button {
         transition: none;
+    }
+}
+/* BOTONES DE CADA FOTOGRAFÍA */
+.acciones-foto {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.acciones-foto button {
+    padding: 9px 20px;
+    border: none;
+    border-radius: 30px;
+    font-family: var(--font-texto);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* EDITAR */
+.acciones-foto .btn-editar {
+    background: #07ad9f;
+    color: white;
+    box-shadow: 0 4px 10px rgba(7, 173, 159, 0.2);
+}
+
+.acciones-foto .btn-editar:hover {
+    background: #07045f;
+    transform: translateY(-3px);
+}
+
+/* ELIMINAR */
+.acciones-foto .btn-eliminar {
+    background: #fff0ed;
+    color: #c94b3c;
+    border: 1px solid #f3c5bd;
+}
+
+.acciones-foto .btn-eliminar:hover {
+    background: #c94b3c;
+    color: white;
+    transform: translateY(-3px);
+}/* BOTÓN AGREGAR FOTOGRAFÍA */
+.btn-agregar {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 50px;
+    background: #07045f;
+    color: white;
+    font-family: var(--font-texto);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(7, 4, 95, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-agregar:hover {
+    background: #07ad9f;
+    transform: translateY(-3px);
+    box-shadow: 0 9px 20px rgba(7, 173, 159, 0.3);
+}
+
+.btn-agregar:active {
+    transform: scale(0.97);
+}/* ===== VISOR DE FOTOGRAFÍAS ===== */
+
+.visor-foto {
+    width: min(1000px, calc(100% - 30px));
+    max-height: calc(100vh - 30px);
+    padding: 0;
+    border: none;
+    border-radius: 22px;
+    background: transparent;
+    overflow: visible;
+}
+
+.visor-foto::backdrop {
+    background: rgba(5, 10, 25, 0.88);
+    backdrop-filter: blur(7px);
+}
+
+.visor-contenido {
+    position: relative;
+    display: grid;
+    grid-template-columns: 50px minmax(0, 1fr) 50px;
+    align-items: center;
+    gap: 12px;
+    padding: 25px;
+    background: #fbfaf4;
+    border-radius: 22px;
+}
+
+.visor-media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: min(65vh, 650px);
+    min-width: 0;
+}
+
+.visor-media img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.visor-cerrar {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    z-index: 2;
+    border: none;
+    background: #07045f;
+    color: white;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.visor-flecha {
+    border: none;
+    background: #07ad9f;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.visor-flecha:hover {
+    background: #07045f;
+    transform: scale(1.1);
+}
+
+.visor-info {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding-top: 12px;
+    color: #1d2a2c;
+}
+
+.visor-info h2 {
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: #07045f;
+    margin-bottom: 8px;
+}
+
+.visor-info p {
+    font-family: "Figtree", sans-serif;
+    margin: 5px 0;
+}
+
+#visorContador {
+    display: inline-block;
+    margin-top: 10px;
+    color: #07ad9f;
+    font-weight: 700;
+}
+
+.foto img {
+    cursor: zoom-in;
+}
+
+@media (max-width: 600px) {
+    .visor-contenido {
+        grid-template-columns: 35px minmax(0, 1fr) 35px;
+        gap: 6px;
+        padding: 15px;
+    }
+
+    .visor-media {
+        height: 55vh;
+    }
+
+    .visor-flecha {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
     }
 }
