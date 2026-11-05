@@ -22,5 +22,7 @@
   "bugs": {
     "url": "https://github.com/asocioacion1-web/asociacionMariposa/issues"
   },
-  "homepage": "https://github.com/asocioacion1-web/asociacionMariposa#readme"
+  "homepage": "https://github.com/asocioacion1-web/asociacionMariposa#readme",
+  "author": "",
+  "devDependencies": {}
 }
