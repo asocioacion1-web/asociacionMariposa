@@ -445,16 +445,13 @@
       esAdmin = !!data;
     }
     
-    async function aplicarVistaSesion() {
+    async function aplicarVista() {
       const { data: { session } } = await clienteSupabase.auth.getSession();
       const logueado = !!session;
 
       document.getElementById("linkMiSesion")?.classList.toggle("d-none", !logueado);
       document.getElementById("btnSalirMenu")?.classList.toggle("d-none", !logueado);
       document.getElementById("btnIniciarSesion")?.classList.toggle("d-none", logueado);
-      document.getElementById("btnGaleria")?.classList.toggle("d-none", !logueado);
-      document.getElementById("btnProducto")?.classList.toggle("d-none", !logueado);
-      document.getElementById("bloqueSobreJovenes")?.classList.toggle("d-none", !logueado);
     }
 
     function aplicarVistaAdmin() {
@@ -799,7 +796,7 @@
       }
     });
 
-      aplicarVistaSesion();
+      aplicarVista();
       await comprobarAdmin();
       await cargarNoticias();
       aplicarVistaAdmin();

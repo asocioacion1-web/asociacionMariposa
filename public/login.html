@@ -142,23 +142,23 @@ let config;
     return null;
   }
 
-  function validarPassword(password) {
+  function validarContrasenia(contra) {
     const errores = [];
-    if (password.length < 8) errores.push("La contraseña debe tener al menos 8 caracteres.");
-    if (!/[A-ZÁÉÍÓÚÑÜ]/.test(password)) errores.push("La contraseña debe tener al menos una mayúscula.");
-    if (!/\d/.test(password)) errores.push("La contraseña debe tener al menos un número.");
-    if (!/[^\p{L}\p{N}\s]/u.test(password)) errores.push("La contraseña debe tener al menos un carácter especial (por ejemplo ! @ # $ %).");
+    if (contra.length < 8) errores.push("La contraseña debe tener al menos 8 caracteres.");
+    if (!/[A-ZÁÉÍÓÚÑÜ]/.test(contra)) errores.push("La contraseña debe tener al menos una mayúscula.");
+    if (!/\d/.test(contra)) errores.push("La contraseña debe tener al menos un número.");
+    if (!/[^\p{L}\p{N}\s]/u.test(contra)) errores.push("La contraseña debe tener al menos un carácter especial (por ejemplo ! @ # $ %).");
     return errores;
   }
 
   // Validaciones del inicio de sesión: devuelve la lista de errores (vacía si todo está bien)
-  function validarLogin({ email, password }) {
+  function validarLogin({ email, contra }) {
     const errores = [];
 
     if (email === "") errores.push("Ingresá tu email.");
     else if (!REGEX_EMAIL.test(email)) errores.push("El email no es válido (sin espacios, con @ y un dominio).");
 
-    errores.push(...validarPassword(password));
+    errores.push(...validarContrasenia(contra));
 
     return errores;
   }
@@ -184,7 +184,7 @@ let config;
     const email = document.getElementById("user").value;
     const password = document.getElementById("contra").value;
 
-    const errores = validarLogin({ email, password });
+    const errores = validarLogin({ email, contra: password });
 
     if (errores.length) return avisar(errores);
 
@@ -211,7 +211,6 @@ let config;
   document.getElementById("olvidoPassword").addEventListener("click", (e) => {
     e.preventDefault();
     document.getElementById("recuperarForm").reset();
-    // Si ya escribió el email en el login, se lo dejamos puesto
     document.getElementById("recEmail").value = document.getElementById("user").value.trim();
     modalRecuperar.showModal();
   });
@@ -241,8 +240,7 @@ let config;
         : "No se pudo enviar el correo. Intentá de nuevo.");
     }
 
-    modalRecuperar.close(); // primero se cierra, así el aviso sale en la página
-    // Siempre el mismo mensaje, exista o no el email (así no se revela quién está registrado)
+    modalRecuperar.close(); 
     avisar("Si el email está registrado, te enviamos un enlace para cambiar la contraseña.", "success");
   });
 
@@ -255,7 +253,7 @@ let config;
     modalRegistro.showModal();
   });
 
-  function validarRegistro({ nombre, apellido, nacimiento, telefono, email, password }) {
+  function validarRegistro({ nombre, apellido, nacimiento, telefono, email, contra }) {
     const errores = [];
 
     const errorNombre = validarNombre(nombre, "nombre");
@@ -283,7 +281,7 @@ let config;
     if (email === "") errores.push("Ingresá tu email.");
     else if (!REGEX_EMAIL.test(email)) errores.push("El email no es válido (sin espacios, con @ y un dominio).");
 
-    errores.push(...validarPassword(password));
+    errores.push(...validarContrasenia(contra));
 
     return errores;
   }
@@ -298,16 +296,16 @@ let config;
     const nacimiento = document.getElementById("regNacimiento").value;
     const telefono = document.getElementById("regTelefono").value;
     const email = document.getElementById("regEmail").value;
-    const password = document.getElementById("regPassword").value;
+    const contra = document.getElementById("regContra").value;
 
-    const errores = validarRegistro({ nombre, apellido, nacimiento, telefono, email, password });
+    const errores = validarRegistro({ nombre, apellido, nacimiento, telefono, email, contra });
 
     if (errores.length) return avisar(errores);
 
     const boton = document.getElementById("enviarRegistro");
     boton.disabled = true;
 
-    const passwordHash = await hashContrasena(email, password);
+    const passwordHash = await hashContrasena(email, contra);
 
     const { data, error } = await clienteSupabase.auth.signUp({
       email,
@@ -326,7 +324,7 @@ let config;
         : "No se pudo crear la cuenta. Revisá los datos.");
     }
 
-    modalRegistro.close(); // primero se cierra, así el aviso sale en la página
+    modalRegistro.close();
     if (data.session) {
       avisar("¡Cuenta creada! Entrando...", "success");
       setTimeout(() => { window.location.href = "/index.html"; }, 1200);
