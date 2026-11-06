@@ -124,7 +124,7 @@
             problema al desarrollar su vida diaria en la sociedad, pero luego se dirigió directamente a ayudar a
             personas con
             trastorno del espectro autista. Actualmente hacemos eventos y actividades donde integramos a las personas y
-            adquiren las ganancias para la asocación. Principalmente orientados a ayudarlos con su educación y futuro
+            adquieren las ganancias para la asocación. Principalmente orientados a ayudarlos con su educación y futuro
             laboral.
           </p>
           <a href="#historia-logo" class="btn btn-amarillo px-4 mt-3" id="btn-amarillo">Historia del Logo</a>
@@ -376,6 +376,17 @@
       </div>
     </div>
   </section>
+
+
+<!-- MODAL PARA AMPLIAR IMÁGENES -->
+<div id="modalImagen" class="modal-imagen">
+  <button id="cerrarImagen" class="cerrar-imagen" aria-label="Cerrar">
+    &times;
+  </button>
+
+  <img id="imagenAmpliada" src="" alt="Imagen ampliada">
+</div>
+
 
   <!-- FOOTER -->
   <footer class="py-5 mt-4">
@@ -799,6 +810,52 @@
       await cargarNoticias();
       aplicarVistaAdmin();
       await cargarJovenes();
+
+// AMPLIAR IMÁGENES
+
+const modalImagen = document.getElementById("modalImagen");
+const imagenAmpliada = document.getElementById("imagenAmpliada");
+const cerrarImagen = document.getElementById("cerrarImagen");
+
+// Abrir imagen al hacer clic
+document.addEventListener("click", function(e) {
+
+    const imagen = e.target.closest("img");
+
+    if (!imagen || imagen.id === "imagenAmpliada") return;
+
+    imagenAmpliada.src = imagen.src;
+    imagenAmpliada.alt = imagen.alt;
+
+    modalImagen.style.display = "flex";
+});
+
+// Cerrar con la X
+cerrarImagen.addEventListener("click", function() {
+    modalImagen.style.display = "none";
+    imagenAmpliada.src = "";
+});
+
+// Cerrar al hacer clic fuera de la imagen
+modalImagen.addEventListener("click", function(e) {
+
+    if (e.target === modalImagen) {
+        modalImagen.style.display = "none";
+        imagenAmpliada.src = "";
+    }
+
+});
+
+// Cerrar con Escape
+document.addEventListener("keydown", function(e) {
+
+    if (e.key === "Escape") {
+        modalImagen.style.display = "none";
+        imagenAmpliada.src = "";
+    }
+
+});
+  
 
   </script>
 </body>
