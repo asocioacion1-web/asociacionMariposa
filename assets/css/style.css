@@ -365,3 +365,110 @@
   padding: 0 40px;
   }
 }
+/* MODAL PARA AMPLIAR IMÁGENES :) */
+
+.modal-imagen {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.90);
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    backdrop-filter: blur(5px);
+}
+
+.modal-imagen img {
+    max-width: 90%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.cerrar-imagen {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 45px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+body:has(.modal-imagen[style*="display: flex"]) {
+    overflow: hidden;
+}
+
+/* Indicar que las imágenes se pueden ampliar */
+body img:not(#imagenAmpliada) {
+    cursor: zoom-in;
+}
+/* VISOR DE GALERÍA */
+.modal-imagen {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.93);
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.modal-imagen img {
+    max-width: 85%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.cerrar-imagen {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 45px;
+    cursor: pointer;
+}
+
+.flecha-imagen {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 25px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.flecha-imagen:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.flecha-imagen.anterior {
+    left: 25px;
+}
+
+.flecha-imagen.siguiente {
+    right: 25px;
+}
+
+body img:not(#imagenAmpliada) {
+    cursor: zoom-in;
+}
+
+body:has(.modal-imagen[style*="display: flex"]) {
+    overflow: hidden;
+}
