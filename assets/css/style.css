@@ -365,6 +365,101 @@
   padding: 0 40px;
   }
 }
+
+
+/* ======================================
+   ASOCIACIÓN MARIPOSAS - SMART TV
+
+:root {
+  --tv-font: clamp(18px, 1.15vw, 32px);
+  --tv-focus: #00b7ff;
+  --tv-gap: clamp(20px, 2vw, 48px);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-size: var(--tv-font);
+}
+
+/* Pantallas grandes */
+@media (min-width: 1200px) and (min-height: 650px) {
+
+  body {
+    line-height: 1.6;
+  }
+
+  main,
+  section {
+    scroll-margin-top: 6vh;
+  }
+
+  .container,
+  .contenedor {
+    width: 90%;
+    max-width: 2200px;
+    margin-inline: auto;
+  }
+
+  .grid,
+  .noticias-grid,
+  .cards-container {
+    gap: var(--tv-gap);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  button,
+  .btn,
+  a {
+    min-height: 48px;
+  }
+}
+
+/* Selección mediante control remoto */
+:focus-visible {
+  outline: 4px solid var(--tv-focus);
+  outline-offset: 7px;
+  border-radius: 8px;
+}
+
+/* Evitar animaciones excesivas */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Modo TV activado */
+html.tv-mode {
+  font-size: clamp(20px, 1.4vw, 34px);
+}
+
+html.tv-mode body {
+  padding: 3vh 3vw;
+}
+
+html.tv-mode button,
+html.tv-mode a,
+html.tv-mode [tabindex="0"] {
+  min-height: 56px;
+  min-width: 56px;
+}
+
+html.tv-mode :focus-visible {
+  outline-width: 5px;
+  transform: scale(1.04);
+  z-index: 5;
+}
 /* MODAL PARA AMPLIAR IMÁGENES :) */
 
 .modal-imagen {
