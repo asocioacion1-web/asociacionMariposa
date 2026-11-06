@@ -53,67 +53,6 @@ body {
   outline-offset: 4px;
 }
 
-/* ---------- Encabezado ---------- */
-
-.cabecera {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 28px 20px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.marca {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font: 800 26px/1 var(--font-titulo);
-  letter-spacing: -0.02em;
-  color: var(--texto);
-  text-decoration: none;
-}
-
-  #navbar .nav-logo {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-
-    display: flex;
-    align-items: center;
-
-    background-color: rgb(248, 244, 244);
-    padding: 0 20px;
-
-    z-index: 1000;
-  }
-
-.menu {
-  display: flex;
-  gap: 6px;
-}
-
-.menu a {
-  padding: 8px 14px;
-  border-radius: 99px;
-  color: var(--texto-suave);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.menu a:hover {
-  color: var(--texto);
-}
-
-.menu a[aria-current="page"] {
-  background: var(--dorado);
-  color: var(--tinta);
-  font-weight: 600;
-}
-
 /* ---------- Introducción ---------- */
 
 .intro {
@@ -667,6 +606,76 @@ body {
     .modal-acciones button {
         width: 100%;
     }
+}
+/* Modal borrar */
+.modal-eliminar {
+    width: min(90vw, 360px);
+    padding: 24px;
+    border: 0;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
+}
+
+.modal-eliminar::backdrop {
+    background: rgba(0, 0, 0, .55);
+}
+
+.modal-eliminar h2 {
+    margin: 0 0 14px;
+    font-size: 1.2rem;
+    color: #0c3b66;
+}
+
+.modal-eliminar img {
+    display: block;
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: #f1f4f8;
+}
+
+.modal-eliminar #eliminarTitulo {
+    margin: 10px 0 0;
+    font-weight: 700;
+}
+
+.mensaje-eliminar {
+    min-height: 1.2em;
+    margin: 8px 0 0;
+    color: #b00020;
+    font-size: .9rem;
+}
+
+.acciones-eliminar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.acciones-eliminar button {
+    padding: .6rem 1.4rem;
+    border: 0;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-cancelar-eliminar {
+    background: #e9eef4;
+    color: #0c3b66;
+}
+
+.btn-confirmar-eliminar {
+    background: #d93025;
+    color: #fff;
+}
+
+.btn-confirmar-eliminar:disabled {
+    opacity: .6;
+    cursor: wait;
 }
 
 /* Accesibilidad */

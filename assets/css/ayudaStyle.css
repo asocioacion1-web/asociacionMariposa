@@ -74,3 +74,56 @@
         .nav-simple a:hover, .nav-simple a.active {
             color: #0284c7;
         }
+/* BOTÓN MÁS INFORMACIÓN */
+.btn-mas-info {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.btn-mas-info:hover {
+    background: #0369a1;
+    transform: translateY(-2px);
+}
+
+/* MODAL */
+.modal-ayuda {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.modal-ayuda .modal-header {
+    background: #e0f2fe;
+    border-bottom: 1px solid #bae6fd;
+    padding: 20px;
+}
+
+.modal-ayuda .modal-title {
+    color: #0369a1;
+    font-weight: 700;
+}
+
+.modal-ayuda .modal-body {
+    padding: 25px;
+    color: #475569;
+    line-height: 1.7;
+}
+
+.btn-cerrar {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 9px;
+}
+
+.btn-cerrar:hover {
+    background: #0369a1;
+}
