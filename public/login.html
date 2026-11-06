@@ -42,7 +42,7 @@
 
   <button type="button" id="abrirRegistro">REGISTRARSE</button><br><br>
   
-  <button type="button" onclick="window.location.href='/index.html'">INVITADO</button>
+  <button type="button" onclick="window.location.href='/index.html'">VISITANTE</button>
 
 </form>
 
@@ -118,8 +118,7 @@
   <script src="/assets/js/mensajes.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module">
-
-  let config;
+let config;
   try {
     config = await (await fetch("/api/config")).json();
   } catch (e) {
@@ -130,6 +129,39 @@
   const clienteSupabase = supabase.createClient(config.url, config.anonKey);
   const modalRegistro = document.getElementById("modalRegistro");
   const modalRecuperar = document.getElementById("modalRecuperar");
+
+  // Const para validaciones
+  const LETRAS = "A-Za-zÁÉÍÓÚáéíóúÑñÜü";
+    const REGEX_NOMBRE = new RegExp(`^[${LETRAS}]+(?: [${LETRAS}]+)*$`);
+    const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
+
+  function validarNombre(valor, etiqueta) {
+    if (valor === "") return `Ingresá tu ${etiqueta}.`;
+    if (valor !== valor.trim()) return `El ${etiqueta} no puede empezar ni terminar con espacios.`;
+    if (!REGEX_NOMBRE.test(valor)) return `El ${etiqueta} solo puede tener letras (con tildes, ñ o ü), sin números ni símbolos.`;
+    return null;
+  }
+
+  function validarContrasenia(contra) {
+    const errores = [];
+    if (contra.length < 8) errores.push("La contraseña debe tener al menos 8 caracteres.");
+    if (!/[A-ZÁÉÍÓÚÑÜ]/.test(contra)) errores.push("La contraseña debe tener al menos una mayúscula.");
+    if (!/\d/.test(contra)) errores.push("La contraseña debe tener al menos un número.");
+    if (!/[^\p{L}\p{N}\s]/u.test(contra)) errores.push("La contraseña debe tener al menos un carácter especial (por ejemplo ! @ # $ %).");
+    return errores;
+  }
+
+  // Validaciones del inicio de sesión: devuelve la lista de errores (vacía si todo está bien)
+  function validarLogin({ email, contra }) {
+    const errores = [];
+
+    if (email === "") errores.push("Ingresá tu email.");
+    else if (!REGEX_EMAIL.test(email)) errores.push("El email no es válido (sin espacios, con @ y un dominio).");
+
+    errores.push(...validarContrasenia(contra));
+
+    return errores;
+  }
 
   // Muestra un aviso; si el modal está abierto, lo pone adentro para que se vea
   function avisar(mensajes, tipo = "danger") {
@@ -151,6 +183,10 @@
   async function enviar() {
     const email = document.getElementById("user").value;
     const password = document.getElementById("contra").value;
+
+    const errores = validarLogin({ email, contra: password });
+
+    if (errores.length) return avisar(errores);
 
     const passwordHash = await hashContrasena(email, password);
 
@@ -175,7 +211,6 @@
   document.getElementById("olvidoPassword").addEventListener("click", (e) => {
     e.preventDefault();
     document.getElementById("recuperarForm").reset();
-    // Si ya escribió el email en el login, se lo dejamos puesto
     document.getElementById("recEmail").value = document.getElementById("user").value.trim();
     modalRecuperar.showModal();
   });
@@ -187,7 +222,7 @@
 
     const email = document.getElementById("recEmail").value.trim().toLowerCase();
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return avisar("El email no es válido.");
+    if (!REGEX_EMAIL.test(email)) return avisar("El email no es válido.");
 
     const boton = document.getElementById("enviarRecuperar");
     boton.disabled = true;
@@ -205,12 +240,11 @@
         : "No se pudo enviar el correo. Intentá de nuevo.");
     }
 
-    modalRecuperar.close(); // primero se cierra, así el aviso sale en la página
-    // Siempre el mismo mensaje, exista o no el email (así no se revela quién está registrado)
+    modalRecuperar.close(); 
     avisar("Si el email está registrado, te enviamos un enlace para cambiar la contraseña.", "success");
   });
 
-  // ===== Registro =====
+  //Registro
   const hoy = () => new Date().toLocaleDateString("sv-SE"); // AAAA-MM-DD
 
   document.getElementById("abrirRegistro").addEventListener("click", () => {
@@ -219,33 +253,59 @@
     modalRegistro.showModal();
   });
 
+  function validarRegistro({ nombre, apellido, nacimiento, telefono, email, contra }) {
+    const errores = [];
+
+    const errorNombre = validarNombre(nombre, "nombre");
+    if (errorNombre) errores.push(errorNombre);
+
+    const errorApellido = validarNombre(apellido, "apellido");
+    if (errorApellido) errores.push(errorApellido);
+
+    if (!/^\d{8,15}$/.test(telefono)) {
+      errores.push("El teléfono debe tener entre 8 y 15 números, sin espacios ni símbolos.");
+    }
+
+    if (!nacimiento) {
+      errores.push("Ingresá tu fecha de nacimiento.");
+    } else {
+      const fecha = new Date(nacimiento + "T00:00:00");
+      // Se comprueba que la fecha exista de verdad (ej: no existe el 31/02)
+      const existe = !isNaN(fecha) && fecha.toLocaleDateString("sv-SE") === nacimiento;
+
+      if (!existe) errores.push("La fecha de nacimiento no es válida.");
+      else if (nacimiento > hoy()) errores.push("La fecha de nacimiento no puede ser futura.");
+      else if (nacimiento < "1900-01-01") errores.push("La fecha de nacimiento no puede ser anterior al 01/01/1900.");
+    }
+
+    if (email === "") errores.push("Ingresá tu email.");
+    else if (!REGEX_EMAIL.test(email)) errores.push("El email no es válido (sin espacios, con @ y un dominio).");
+
+    errores.push(...validarContrasenia(contra));
+
+    return errores;
+  }
+
   document.getElementById("cerrarRegistro").addEventListener("click", () => modalRegistro.close());
 
   document.getElementById("registroForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombre = document.getElementById("regNombre").value.trim();
-    const apellido = document.getElementById("regApellido").value.trim();
+    const nombre = document.getElementById("regNombre").value;
+    const apellido = document.getElementById("regApellido").value;
     const nacimiento = document.getElementById("regNacimiento").value;
-    const telefono = document.getElementById("regTelefono").value.trim();
-    const email = document.getElementById("regEmail").value.trim();
-    const password = document.getElementById("regPassword").value;
+    const telefono = document.getElementById("regTelefono").value;
+    const email = document.getElementById("regEmail").value;
+    const contra = document.getElementById("regContra").value;
 
-    const errores = [];
-    if (nombre.length < 2) errores.push("Ingresá tu nombre.");
-    if (apellido.length < 2) errores.push("Ingresá tu apellido.");
-    if (!nacimiento) errores.push("Ingresá tu fecha de nacimiento.");
-    else if (nacimiento > hoy() || nacimiento < "1900-01-01") errores.push("La fecha de nacimiento no es válida.");
-    if (!/^\+?[0-9\s-]{8,15}$/.test(telefono)) errores.push("El teléfono no es válido.");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errores.push("El email no es válido.");
-    if (password.length < 8) errores.push("La contraseña debe tener al menos 8 caracteres.");
+    const errores = validarRegistro({ nombre, apellido, nacimiento, telefono, email, contra });
 
     if (errores.length) return avisar(errores);
 
     const boton = document.getElementById("enviarRegistro");
     boton.disabled = true;
 
-    const passwordHash = await hashContrasena(email, password);
+    const passwordHash = await hashContrasena(email, contra);
 
     const { data, error } = await clienteSupabase.auth.signUp({
       email,
@@ -264,7 +324,7 @@
         : "No se pudo crear la cuenta. Revisá los datos.");
     }
 
-    modalRegistro.close(); // primero se cierra, así el aviso sale en la página
+    modalRegistro.close();
     if (data.session) {
       avisar("¡Cuenta creada! Entrando...", "success");
       setTimeout(() => { window.location.href = "/index.html"; }, 1200);

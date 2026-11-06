@@ -56,7 +56,7 @@
     <main class="historias-main">
 
         <header class="historias-encabezado">
-            <h1>📖 Historias de nuestros alumnos</h1>
+            <h1>📖 Mural de la asociación</h1>
             <p>Cuentos, poemas, canciones y relatos escritos por quienes forman parte de la asociación.</p>
         </header>
 
@@ -196,7 +196,7 @@
         let esAlumno = false;
         let historiaParaBorrar = null;
 
-        // ===== SUPABASE =====
+        //Supabase
 
         let config;
         try {
@@ -216,7 +216,7 @@
             return el;
         }
 
-        // ===== SESIÓN Y ROLES =====
+        //Secion y roles
 
         async function cargarSesion() {
             const { data } = await clienteSupabase.auth.getUser();
@@ -225,8 +225,6 @@
             $("linkMiSesion")?.classList.toggle("d-none", !usuario);
             $("btnSalirMenu")?.classList.toggle("d-none", !usuario);
             $("btnIniciarSesion")?.classList.toggle("d-none", !!usuario);
-            $("btnGaleria")?.classList.toggle("d-none", !logueado);
-            $("btnProducto")?.classList.toggle("d-none", !logueado);
 
             if (!usuario) return;
 
@@ -263,7 +261,7 @@
             window.location.href = "/public/login.html";
         });
 
-        // ===== FILTROS =====
+        //Filtros
 
         function dibujarFiltros() {
             filtros.replaceChildren();
@@ -283,7 +281,7 @@
             });
         }
 
-        // ===== MOSTRAR HISTORIAS =====
+        //Mostrar historias
 
         function formatearFecha(texto) {
             if (!texto) return "";
@@ -348,7 +346,7 @@
             mostrarHistorias();
         }
 
-        // ===== LEER =====
+        //Leer
 
         function abrirLectura(h) {
             $("leerTitulo").textContent = h.titulo;
@@ -359,7 +357,7 @@
 
         $("cerrarLeer").addEventListener("click", () => modalLeer.close());
 
-        // ===== ESCRIBIR =====
+        //Escribir
 
         TIPOS.forEach((t) => {
             const op = document.createElement("option");
@@ -423,7 +421,7 @@
             }
         });
 
-        // ===== ELIMINAR =====
+        //Eliminar
 
         function abrirBorrar(h) {
             historiaParaBorrar = h.id;
@@ -462,7 +460,7 @@
             await cargarHistorias();
         });
 
-        // ===== PANEL: GESTIONAR ALUMNOS =====
+        //Panel de alumnos (solo administrador)
 
         const buscador = $("buscadorAlumnos");
         const listaUsuarios = $("listaUsuarios");
@@ -530,8 +528,8 @@
                 clienteSupabase.from("admin").select("user_id")
             ]);
 
-            if (perfilesRes.error || alumnosRes.error) {
-                console.error("Error al cargar usuarios:", perfilesRes.error, alumnosRes.error);
+            if (perfilesRes.error || alumnosRes.error || adminsRes.error) {
+                console.error("Error al cargar usuarios:", perfilesRes.error, alumnosRes.error, adminsRes.error);
                 listaUsuarios.replaceChildren(crear("li", "usuario", "No se pudo cargar la lista de usuarios."));
                 return;
             }
@@ -580,8 +578,6 @@
         [modalEscribir, modalLeer, modalBorrar, modalAlumnos].forEach((m) => {
             m.addEventListener("click", (e) => { if (e.target === m) m.close(); });
         });
-
-        // ===== INICIO =====
 
         dibujarFiltros();
         await cargarSesion();

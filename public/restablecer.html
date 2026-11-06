@@ -52,10 +52,8 @@
 
     <h2>Nueva contraseña</h2>
 
-    <!-- Se muestra mientras se comprueba el enlace -->
     <p class="texto-ayuda" id="estado">Comprobando el enlace...</p>
 
-    <!-- Se muestra solo si el enlace es válido -->
     <div id="campos" hidden>
         <p class="texto-ayuda">Elegí una contraseña nueva (mínimo 8 caracteres).</p>
 
@@ -106,7 +104,7 @@
 
 <script type="module">
 
-    const estado = document.getElementById("estado");
+const estado = document.getElementById("estado");
     const campos = document.getElementById("campos");
     const aviso = document.getElementById("aviso");
     const formulario = document.getElementById("formNueva");
@@ -116,6 +114,15 @@
         aviso.textContent = texto;
         aviso.classList.toggle("ok", ok);
     }
+    //Validar contraseña
+    function validarContrasenia(contra) {
+    const errores = [];
+    if (contra.length < 8) errores.push("La contraseña debe tener al menos 8 caracteres.");
+    if (!/[A-ZÁÉÍÓÚÑÜ]/.test(contra)) errores.push("La contraseña debe tener al menos una mayúscula.");
+    if (!/\d/.test(contra)) errores.push("La contraseña debe tener al menos un número.");
+    if (!/[^\p{L}\p{N}\s]/u.test(contra)) errores.push("La contraseña debe tener al menos un carácter especial (por ejemplo ! @ # $ %).");
+    return errores;
+  }
 
     // Debe ser IGUAL a la función del login, si no la contraseña no coincide
     async function hashContrasena(email, password) {
@@ -175,7 +182,10 @@
         const nueva = document.getElementById("nueva").value;
         const repetir = document.getElementById("repetir").value;
 
-        if (nueva.length < 8) return decir("La contraseña debe tener al menos 8 caracteres.");
+        const errores = validarContrasenia(nueva);
+        if (errores.length > 0) {
+            return decir(errores.join(" "));
+        }
         if (nueva !== repetir) return decir("Las contraseñas no coinciden.");
 
         botonGuardar.disabled = true;
@@ -200,7 +210,6 @@
         await clienteSupabase.auth.signOut();
         setTimeout(() => { window.location.replace("/public/login.html"); }, 2000);
     });
-
 </script>
 
 </body>

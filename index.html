@@ -124,7 +124,7 @@
             problema al desarrollar su vida diaria en la sociedad, pero luego se dirigió directamente a ayudar a
             personas con
             trastorno del espectro autista. Actualmente hacemos eventos y actividades donde integramos a las personas y
-            adquiren las ganancias para la asocación. Principalmente orientados a ayudarlos con su educación y futuro
+            adquieren las ganancias para la asocación. Principalmente orientados a ayudarlos con su educación y futuro
             laboral.
           </p>
           <a href="#historia-logo" class="btn btn-amarillo px-4 mt-3" id="btn-amarillo">Historia del Logo</a>
@@ -148,9 +148,7 @@
       </div>
 
       <div class="text-center mb-4">
-        <button href="/public/noticia.html" id="btnCrearNoticia" class="button-56" role="button">
-          Crear noticia
-        </button>
+        <button onclick="window.location.href='/public/noticia.html'" id="btnCrearNoticia" class="button-56" role="button">Crear noticia</button>
       </div>
 
       <div class="row g-4">
@@ -312,7 +310,7 @@
 </section>
 
     <div class="text-center mt-5" id="bloqueSobreJovenes">
-      <a href="public/historias.html" class="btn btn-outline-primary px-4">Sobre los Jovenes</a>
+      <button onclick="window.location.href='/public/mural.html'" class="button-56" id="btnMural">Mural de Asociación</button>
     </div>
   </section>
 
@@ -378,6 +376,16 @@
       </div>
     </div>
   </section>
+
+<!-- MODAL PARA AMPLIAR IMÁGENES -->
+<div id="modalImagen" class="modal-imagen">
+  <button id="cerrarImagen" class="cerrar-imagen" aria-label="Cerrar">
+    &times;
+  </button>
+
+  <img id="imagenAmpliada" src="" alt="Imagen ampliada">
+</div>
+
 
   <!-- FOOTER -->
   <footer class="py-5 mt-4">
@@ -445,16 +453,13 @@
       esAdmin = !!data;
     }
     
-    async function aplicarVistaSesion() {
+    async function aplicarVista() {
       const { data: { session } } = await clienteSupabase.auth.getSession();
       const logueado = !!session;
 
       document.getElementById("linkMiSesion")?.classList.toggle("d-none", !logueado);
       document.getElementById("btnSalirMenu")?.classList.toggle("d-none", !logueado);
       document.getElementById("btnIniciarSesion")?.classList.toggle("d-none", logueado);
-      document.getElementById("btnGaleria")?.classList.toggle("d-none", !logueado);
-      document.getElementById("btnProducto")?.classList.toggle("d-none", !logueado);
-      document.getElementById("bloqueSobreJovenes")?.classList.toggle("d-none", !logueado);
     }
 
     function aplicarVistaAdmin() {
@@ -799,11 +804,57 @@
       }
     });
 
-      aplicarVistaSesion();
+      aplicarVista();
       await comprobarAdmin();
       await cargarNoticias();
       aplicarVistaAdmin();
       await cargarJovenes();
+
+// AMPLIAR IMÁGENES
+
+const modalImagen = document.getElementById("modalImagen");
+const imagenAmpliada = document.getElementById("imagenAmpliada");
+const cerrarImagen = document.getElementById("cerrarImagen");
+
+// Abrir imagen al hacer clic
+document.addEventListener("click", function(e) {
+
+    const imagen = e.target.closest("img");
+
+    if (!imagen || imagen.id === "imagenAmpliada") return;
+
+    imagenAmpliada.src = imagen.src;
+    imagenAmpliada.alt = imagen.alt;
+
+    modalImagen.style.display = "flex";
+});
+
+// Cerrar con la X
+cerrarImagen.addEventListener("click", function() {
+    modalImagen.style.display = "none";
+    imagenAmpliada.src = "";
+});
+
+// Cerrar al hacer clic fuera de la imagen
+modalImagen.addEventListener("click", function(e) {
+
+    if (e.target === modalImagen) {
+        modalImagen.style.display = "none";
+        imagenAmpliada.src = "";
+    }
+
+});
+
+// Cerrar con Escape
+document.addEventListener("keydown", function(e) {
+
+    if (e.key === "Escape") {
+        modalImagen.style.display = "none";
+        imagenAmpliada.src = "";
+    }
+
+});
+  
 
   </script>
 </body>

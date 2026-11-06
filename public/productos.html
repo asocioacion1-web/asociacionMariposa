@@ -1,30 +1,803 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Cargando...</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productos de Mariposa</title>
+  <link rel="icon" type="image/png" href="/assets/imagenes/FundacionLogo.png">
+ 
+  <link rel="stylesheet" href="/assets/css/navbar.css">
+  <link rel="stylesheet" href="/assets/css/productosStyle.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+ 
 <body>
-  <script type="module">
-    const config = await (await fetch("/api/config")).json();
-    const cliente = supabase.createClient(config.url, config.anonKey);
-    const { data: { session } } = await cliente.auth.getSession();
+ 
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg sticky-top py-3" id="navbar">
+    <div class="container">
+      <div class="nav-logo">
+        <img src="/assets/imagenes/FundacionLogo.webp" alt="Logo de la Asociación Mariposa Azul" class="logo">
+        <a class="navbar-brand fs-4" href="/index.html">Asociacion Civil Mariposas</a>
+        <div class="collapse navbar-collapse justify-content-end" id="menuNav">
+ 
+ 
+          <ul class="navbar-nav gap-lg-3 align-items-center">
+            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuLateral" aria-controls="menuLateral">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+              </svg>
+            </button>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- MENU LATERAL -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="menuLateralLabel">Menú</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="d-flex flex-column gap-2">
+        <a href="/public/sesion.html" class="btn btn-outline-primary text-start">Mi sesión</a>
+        <a href="/public/galeria.html" class="btn btn-outline-primary text-start">Galería</a>
+        <a href="/public/productos.html" class="btn btn-outline-primary text-start">Productos</a>
+        <a href="/public/ayuda.html" class="btn btn-outline-primary text-start">Ayuda</a>
+        <button id="btnSalirMenu" class="btn btn-outline-danger text-start">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+ 
+  <main>
+    <section class="encabezado-productos">
+      <span class="etiqueta">Nuestra comunidad</span>
+      <h1>Productos de Mariposas</h1>
+      <p class="descripcion">
+        Conocé los productos de nuestra asociación.
+        Si alguno te interesa, podés acercarte a nuestra
+        sede o contactarnos por las redes sociales.
+      </p>
+    </section>
+ 
+    <div class="separador"></div>
+ 
+    <section class="administracion-productos" style="display: none;">
+      <button id="abrirModal" class="btn-agregar" type="button">
+        + Agregar producto
+      </button>
+    </section>
+    <p id="avisoProductos" class="aviso-productos" role="status" aria-live="polite" hidden></p>
+    <section class="galeria-productos">
+ 
+      <div class="galeria-encabezado">
+        <h2>Productos publicados</h2>
+        <p>Explorá los artículos de nuestra asociación.</p>
+      </div>
+ 
+      <div id="productosContainer"></div>
+ 
+      <p id="sinProductos" class="sin-productos">
+        Todavía no hay productos publicados.
+      </p>
+ 
+    </section>
+ 
+  </main>
+ 
+ 
+  <!-- MODAL PARA AGREGAR PRODUCTOS -->
+  <div id="modalProducto"class="modal-producto" role="dialog" aria-modal="true"aria-labelledby="tituloModal" hidden>
+ 
+    <div class="modal-contenido">
+ 
+      <div class="modal-producto-header">
+        <div>
+          <h2 id="tituloModal">Nuevo producto</h2>
+          <p>Sumá un artículo a nuestra tienda</p>
+        </div>
+ 
+        <button id="cerrarModal" class="cerrar" type="button" aria-label="Cerrar modal">
+          &times;
+        </button>
+      </div>
+ 
 
-    const respuesta = session
-      ? await fetch("/api/usuario/productos", {
-          headers: { Authorization: `Bearer ${session.access_token}` },
-        })
-      : null;
+      <form id="formProducto" novalidate>
+ 
+        <div class="campo">
+ 
+          <label for="foto">Fotografía del producto</label>
+ 
+          <label class="zona-imagen" for="foto">
+            <span class="icono-imagen">📷</span>
+            <strong>Seleccionar fotografía</strong>
+            <small>JPG, PNG o WebP · Máximo 5 MB</small>
+            <img id="vistaPrevia" alt="Vista previa" hidden>
+          </label>
+ 
+          <input type="file" id="foto" accept="image/jpeg,image/png,image/webp" hidden>
+        </div>
 
-    if (!respuesta || !respuesta.ok) {
-      window.location.replace("/public/login.html");
-    } else {
-      const html = await respuesta.text();
-      document.open();
-      document.write(html);
-      document.close();
+        <div class="campo">
+          <label for="nombre">Nombre del producto</label>
+          <input type="text" id="nombre" maxlength="100" placeholder="Ej: Taza artesanal">
+        </div>
+ 
+        <div class="campos-fila">
+ 
+          <div class="campo">
+            <label for="precio">Precio ($ UYU)</label>
+            <input type="number" id="precio" min="0" step="0.01" placeholder="350">
+          </div>
+ 
+          <div class="campo">
+            <label for="stock">Stock disponible</label>
+            <input type="number" id="stock" min="0" step="1" placeholder="10">
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="categoria">Categoría</label>
+ 
+          <select id="categoria">
+            <option value="">Seleccionar categoría</option>
+            <option value="Artesanías">Artesanías</option>
+            <option value="Ropa">Ropa</option>
+            <option value="Accesorios">Accesorios</option>
+            <option value="Decoración">Decoración</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+ 
+        <div class="campo">
+          <label for="info">Descripción del producto</label>
+          <textarea id="info" rows="4" maxlength="500" placeholder="Contanos sobre este producto..."></textarea>
+        </div>
+ 
+        <p id="mensajeProducto" role="status" aria-live="polite"></p>
+ 
+        <div class="modal-producto-footer">
+          <button id="cancelar" type="button" class="btn-cancelar">
+            Cancelar
+          </button>
+ 
+          <button id="publicarProducto" type="submit" class="btn-publicar">
+            Publicar producto
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+    <!-- MODAL PARA ELIMINAR UN PRODUCTO -->
+  <div id="modalBorrarProducto" class="modal-producto" role="dialog" aria-modal="true" aria-labelledby="tituloBorrar" hidden>
+
+    <div class="modal-contenido modal-borrar">
+      <h2 id="tituloBorrar">¿Eliminar este producto?</h2>
+
+      <img id="borrarImagen" alt="">
+      <p id="borrarNombre" class="borrar-nombre"></p>
+      <p class="borrar-aviso">Esta acción no se puede deshacer.</p>
+
+      <p id="borrarMensaje" role="status" aria-live="polite"></p>
+
+      <div class="modal-producto-footer">
+        <button id="cancelarBorrar" type="button" class="btn-cancelar">Cancelar</button>
+        <button id="confirmarBorrar" type="button" class="btn-eliminar-producto">Eliminar</button>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="modal fade" id="modalVerProducto" tabindex="-1" aria-labelledby="modalVerProductoTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+ 
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalVerProductoTitulo"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+ 
+        <div class="modal-body">
+          <img id="modalVerProductoImagen" class="mb-3" alt="">
+ 
+          <p class="producto-categoria mb-1" id="modalVerProductoCategoria"></p>
+          <p class="modal-producto-precio" id="modalVerProductoPrecio"></p>
+          <p class="producto-stock mb-3" id="modalVerProductoStock"></p>
+ 
+          <p id="modalVerProductoInfo" style="white-space: pre-line"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+ 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module">
+ 
+    // ===== Elementos =====
+    const formulario = document.getElementById("formProducto");
+    const productosContainer = document.getElementById("productosContainer");
+    const sinProductos = document.getElementById("sinProductos");
+    const avisoProductos = document.getElementById("avisoProductos");
+ 
+    const inputNombre = document.getElementById("nombre");
+    const inputPrecio = document.getElementById("precio");
+    const inputStock = document.getElementById("stock");
+    const inputCategoria = document.getElementById("categoria");
+    const inputInfo = document.getElementById("info");
+    const inputFoto = document.getElementById("foto");
+    const vistaPrevia = document.getElementById("vistaPrevia");
+    const mensaje = document.getElementById("mensajeProducto");
+    const botonPublicar = document.getElementById("publicarProducto");
+ 
+    const modal = document.getElementById("modalProducto");
+    const tituloModal = document.getElementById("tituloModal");
+    const subtituloModal = document.querySelector("#tituloModal + p");
+    const abrirModal = document.getElementById("abrirModal");
+    const cerrar = document.getElementById("cerrarModal");
+    const cancelar = document.getElementById("cancelar");
+ 
+    const modalBorrar = document.getElementById("modalBorrarProducto");
+    const borrarImagen = document.getElementById("borrarImagen");
+    const borrarNombre = document.getElementById("borrarNombre");
+    const borrarMensaje = document.getElementById("borrarMensaje");
+    const botonConfirmarBorrar = document.getElementById("confirmarBorrar");
+    const botonCancelarBorrar = document.getElementById("cancelarBorrar");
+ 
+    const TAMANO_MAXIMO = 5 * 1024 * 1024; // 5 MB
+ 
+    let productos = [];
+    let urlPrevia = null;
+    let esAdmin = false;
+    let productoEnEdicion = null; // null = se está agregando un producto nuevo
+    let productoParaBorrar = null;
+    let temporizadorAviso = null;
+ 
+    class ErrorProducto extends Error {}
+ 
+    // ===== Conexión con Supabase =====
+    let config;
+    try {
+      config = await (await fetch("/api/config")).json();
+    } catch (e) {
+      sinProductos.textContent = "No se pudo conectar con el servidor.";
+      sinProductos.hidden = false;
+      throw e;
     }
+ 
+    const clienteSupabase = supabase.createClient(config.url, config.anonKey);
+ 
+    async function comprobarAdmin() {
+      const { data: { user } } = await clienteSupabase.auth.getUser();
+      if (!user) return;
+ 
+      const { data, error } = await clienteSupabase
+        .from("admin").select("id").eq("user_id", user.id).maybeSingle();
+ 
+      if (error) return console.error("Error comprobando administrador:", error);
+      esAdmin = !!data;
+    }
+ 
+    function aplicarVistaAdmin() {
+      document.querySelector(".administracion-productos").style.display = esAdmin ? "" : "none";
+    }
+ 
+    // Aviso general de la página (publicado, modificado, eliminado, errores)
+    function mostrarAviso(texto, tipo = "ok") {
+      avisoProductos.textContent = texto;
+      avisoProductos.className = `aviso-productos ${tipo}`;
+      avisoProductos.hidden = false;
+ 
+      clearTimeout(temporizadorAviso);
+      temporizadorAviso = setTimeout(() => { avisoProductos.hidden = true; }, 6000);
+    }
+ 
+    // ===== Vista previa de la imagen =====
+    function limpiarVistaPrevia() {
+      if (urlPrevia) {
+        URL.revokeObjectURL(urlPrevia);
+        urlPrevia = null;
+      }
+      vistaPrevia.hidden = true;
+      vistaPrevia.removeAttribute("src");
+    }
+ 
+    // ===== Validación de la imagen =====
+    // Se mira el contenido real del archivo (no solo el nombre ni lo que dice el navegador)
+    async function detectarFormato(archivo) {
+      const b = new Uint8Array(await archivo.slice(0, 12).arrayBuffer());
+      const igual = (pos, bytes) => bytes.every((v, i) => b[pos + i] === v);
+ 
+      if (igual(0, [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])) return "png";
+      if (igual(0, [0xFF, 0xD8, 0xFF])) return "jpeg";
+      if (igual(0, [0x52, 0x49, 0x46, 0x46]) && igual(8, [0x57, 0x45, 0x42, 0x50])) return "webp";
+      return null;
+    }
+ 
+    async function validarImagen(archivo) {
+      if (archivo.size > TAMANO_MAXIMO) return "La imagen no puede superar los 5 MB.";
+      if (!(await detectarFormato(archivo))) return "La imagen debe ser un archivo PNG, JPG, JPEG o WebP válido.";
+      return null;
+    }
+ 
+    inputFoto.addEventListener("change", async () => {
+      const archivo = inputFoto.files[0];
+ 
+      limpiarVistaPrevia();
+ 
+      if (!archivo) {
+        // Si estaba editando y quita la selección, vuelve a mostrar la imagen actual
+        if (productoEnEdicion) {
+          vistaPrevia.src = productoEnEdicion.imagen;
+          vistaPrevia.hidden = false;
+        }
+        return;
+      }
+ 
+      const error = await validarImagen(archivo);
+ 
+      if (error) {
+        mensaje.textContent = error;
+        inputFoto.value = "";
+        return;
+      }
+ 
+      mensaje.textContent = "";
+      urlPrevia = URL.createObjectURL(archivo);
+      vistaPrevia.src = urlPrevia;
+      vistaPrevia.hidden = false;
+    });
+ 
+    // ===== Validación de todos los campos (RF-010 y RF-011) =====
+    async function validarProducto() {
+      const errores = [];
+ 
+      // Nombre: obligatorio, 3 a 100 caracteres, no solo espacios
+      const nombre = inputNombre.value;
+      if (nombre === "") errores.push("El nombre es obligatorio.");
+      else if (nombre.trim() === "") errores.push("El nombre no puede estar formado solo por espacios.");
+      else if (nombre.trim().length < 3) errores.push("El nombre debe tener al menos 3 caracteres.");
+      else if (nombre.trim().length > 100) errores.push("El nombre no puede superar los 100 caracteres.");
+ 
+      // Descripción: obligatoria, 10 a 500 caracteres, no solo espacios
+      const info = inputInfo.value;
+      if (info === "") errores.push("La descripción es obligatoria.");
+      else if (info.trim() === "") errores.push("La descripción no puede estar formada solo por espacios.");
+      else if (info.trim().length < 10) errores.push("La descripción debe tener al menos 10 caracteres.");
+      else if (info.trim().length > 500) errores.push("La descripción no puede superar los 500 caracteres.");
+ 
+      // Precio: obligatorio, número >= 0 con hasta 2 decimales
+      if (inputPrecio.validity.badInput) errores.push("El precio solo puede contener números.");
+      else if (inputPrecio.value === "") errores.push("El precio es obligatorio.");
+      else if (!/^(?:\d+|\d*\.\d{1,2})$/.test(inputPrecio.value)) {
+        errores.push("El precio debe ser un número mayor o igual a 0, con hasta 2 decimales.");
+      }
+ 
+      // Cantidad: obligatoria, entero >= 0
+      if (inputStock.validity.badInput) errores.push("La cantidad solo puede contener números enteros.");
+      else if (inputStock.value === "") errores.push("La cantidad es obligatoria.");
+      else if (!/^\d+$/.test(inputStock.value)) {
+        errores.push("La cantidad debe ser un número entero mayor o igual a 0 (sin decimales ni negativos).");
+      }
+ 
+      // Categoría (ya la tenías en el formulario)
+      if (!inputCategoria.value) errores.push("Seleccioná una categoría.");
+ 
+      // Imagen: obligatoria al publicar; al editar se conserva la actual si no se elige otra
+      const foto = inputFoto.files[0];
+      if (foto) {
+        const errorImagen = await validarImagen(foto);
+        if (errorImagen) errores.push(errorImagen);
+      } else if (!productoEnEdicion) {
+        errores.push("La imagen es obligatoria.");
+      }
+ 
+      return errores;
+    }
+ 
+    // ===== Abrir y cerrar el formulario (sirve para agregar y para editar) =====
+    function abrirFormulario() {
+      mensaje.textContent = "";
+      modal.hidden = false;
+      inputNombre.focus();
+    }
+ 
+    abrirModal.addEventListener("click", () => {
+      productoEnEdicion = null;
+      formulario.reset();
+      limpiarVistaPrevia();
+ 
+      tituloModal.textContent = "Nuevo producto";
+      subtituloModal.textContent = "Sumá un artículo a nuestra tienda";
+      botonPublicar.textContent = "Publicar producto";
+ 
+      abrirFormulario();
+    });
+ 
+    async function abrirEdicion(producto) {
+      if (!esAdmin) return;
+ 
+      // Se comprueba que el producto siga existiendo en la base de datos
+      const { data, error } = await clienteSupabase
+        .from("productos").select("*").eq("id", producto.id).maybeSingle();
+ 
+      if (error) {
+        console.error("Error al buscar el producto:", error);
+        return mostrarAviso("No se pudo cargar el producto. Intentá de nuevo.", "error");
+      }
+ 
+      if (!data) {
+        mostrarAviso("Ese producto ya no existe.", "error");
+        return cargarProductos();
+      }
+ 
+      productoEnEdicion = data;
+      formulario.reset();
+      limpiarVistaPrevia();
+ 
+      inputNombre.value = data.nombre;
+      inputPrecio.value = data.precio;
+      inputStock.value = data.stock;
+      inputCategoria.value = data.categoria;
+      inputInfo.value = data.info;
+ 
+      vistaPrevia.src = data.imagen;
+      vistaPrevia.hidden = false;
+ 
+      tituloModal.textContent = "Editar producto";
+      subtituloModal.textContent = "Modificá los datos. Si no elegís otra fotografía, se conserva la actual";
+      botonPublicar.textContent = "Guardar cambios";
+ 
+      abrirFormulario();
+    }
+ 
+    function cerrarModal() {
+      modal.hidden = true;
+    }
+ 
+    cerrar.addEventListener("click", cerrarModal);
+    cancelar.addEventListener("click", cerrarModal);
+ 
+    modal.addEventListener("click", (evento) => {
+      if (evento.target === modal) cerrarModal();
+    });
+ 
+    document.addEventListener("keydown", (evento) => {
+      if (evento.key !== "Escape") return;
+      if (!modal.hidden) cerrarModal();
+      if (!modalBorrar.hidden) cerrarBorrar();
+    });
+ 
+    // ===== Imagen: convertir y subir =====
+    async function convertirAWebP(archivo) {
+      const bitmap = await createImageBitmap(archivo);
+      const MAX = 1200;
+      const escala = Math.min(1, MAX / Math.max(bitmap.width, bitmap.height));
+ 
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(bitmap.width * escala);
+      canvas.height = Math.round(bitmap.height * escala);
+      canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+ 
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(
+          (blob) => blob ? resolve(blob) : reject(new Error("No se pudo convertir la imagen")),
+          "image/webp",
+          0.85
+        );
+      });
+    }
+ 
+    async function hashBlob(blob) {
+      const buffer = await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
+      return [...new Uint8Array(buffer)]
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+    }
+ 
+    async function subirImagen(blob) {
+      const nombreArchivo = `${await hashBlob(blob)}.webp`;
+ 
+      const { error } = await clienteSupabase.storage
+        .from("Productos")
+        .upload(nombreArchivo, blob, { contentType: "image/webp", upsert: false });
+ 
+      const codigo = String(error?.statusCode ?? error?.status ?? "");
+      const yaExiste = error && (codigo === "409" || /already exists|Duplicate/i.test(error.message || ""));
+      if (error && !yaExiste) throw error;
+ 
+      const { data } = clienteSupabase.storage.from("Productos").getPublicUrl(nombreArchivo);
+      return data.publicUrl;
+    }
+ 
+    // ===== Publicar (RF-010) y guardar cambios (RF-011) =====
+    formulario.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+ 
+      if (!esAdmin) {
+        mensaje.textContent = "Solo un administrador puede publicar o modificar productos.";
+        return;
+      }
+ 
+      const errores = await validarProducto();
+ 
+      if (errores.length) {
+        mensaje.textContent = errores.join("\n");
+        return;
+      }
+ 
+      const editando = productoEnEdicion;
+ 
+      const datos = {
+        nombre: inputNombre.value.trim(),
+        precio: Number(inputPrecio.value),
+        stock: Number(inputStock.value),
+        categoria: inputCategoria.value,
+        info: inputInfo.value.trim()
+      };
+ 
+      botonPublicar.disabled = true;
+      mensaje.textContent = editando ? "Guardando cambios..." : "Publicando...";
+ 
+      try {
+        if (editando) {
+          // El producto tiene que seguir existiendo
+          const { data: existe, error: errorExiste } = await clienteSupabase
+            .from("productos").select("id").eq("id", editando.id).maybeSingle();
+ 
+          if (errorExiste) throw errorExiste;
+ 
+          if (!existe) {
+            cerrarModal();
+            mostrarAviso("Ese producto ya no existe, no se pudo modificar.", "error");
+            await cargarProductos();
+            return;
+          }
+ 
+          let imagen = editando.imagen;
+          if (inputFoto.files[0]) {
+            imagen = await subirImagen(await convertirAWebP(inputFoto.files[0]));
+          }
+ 
+          const { data, error } = await clienteSupabase
+            .from("productos")
+            .update({ ...datos, imagen })
+            .eq("id", editando.id)
+            .select();
+ 
+          // Si no se guardó, se informa y la información anterior queda como estaba
+          if (error || !data || data.length === 0) {
+            throw error || new ErrorProducto("No se actualizó ninguna fila");
+          }
+ 
+          cerrarModal();
+          mostrarAviso("El producto se modificó correctamente.");
+ 
+        } else {
+          const imagen = await subirImagen(await convertirAWebP(inputFoto.files[0]));
+ 
+          const { data, error } = await clienteSupabase
+            .from("productos")
+            .insert({ ...datos, imagen })
+            .select();
+ 
+          if (error || !data || data.length === 0) {
+            throw error || new ErrorProducto("No se guardó el producto");
+          }
+ 
+          formulario.reset();
+          limpiarVistaPrevia();
+          cerrarModal();
+          mostrarAviso("El producto se publicó correctamente.");
+        }
+ 
+        await cargarProductos();
+ 
+      } catch (error) {
+        console.error("Error al guardar el producto:", error);
+        mensaje.textContent = editando
+          ? "No se pudieron guardar los cambios. El producto conserva su información anterior."
+          : "No se pudo publicar el producto. Intentá de nuevo.";
+      } finally {
+        botonPublicar.disabled = false;
+      }
+    });
+ 
+    // ===== Eliminar (RF-012) =====
+    async function abrirBorrar(producto) {
+      if (!esAdmin) return;
+ 
+      // Se comprueba que el producto exista antes de pedir la confirmación
+      const { data, error } = await clienteSupabase
+        .from("productos").select("id, nombre, imagen").eq("id", producto.id).maybeSingle();
+ 
+      if (error) {
+        console.error("Error al buscar el producto:", error);
+        return mostrarAviso("No se pudo comprobar el producto. Intentá de nuevo.", "error");
+      }
+ 
+      if (!data) {
+        mostrarAviso("Ese producto ya no existe.", "error");
+        return cargarProductos();
+      }
+ 
+      productoParaBorrar = data;
+ 
+      borrarImagen.src = data.imagen;
+      borrarImagen.alt = `Fotografía de ${data.nombre}`;
+      borrarNombre.textContent = data.nombre;
+      borrarMensaje.textContent = "";
+      botonConfirmarBorrar.disabled = false;
+      botonConfirmarBorrar.textContent = "Eliminar";
+ 
+      modalBorrar.hidden = false;
+    }
+ 
+    function cerrarBorrar() {
+      modalBorrar.hidden = true;
+      productoParaBorrar = null;
+      borrarImagen.removeAttribute("src");
+    }
+ 
+    // Cancelar no cambia nada: el producto sigue publicado
+    botonCancelarBorrar.addEventListener("click", cerrarBorrar);
+ 
+    modalBorrar.addEventListener("click", (evento) => {
+      if (evento.target === modalBorrar) cerrarBorrar();
+    });
+ 
+    botonConfirmarBorrar.addEventListener("click", async () => {
+      if (!productoParaBorrar || !esAdmin) return;
+ 
+      botonConfirmarBorrar.disabled = true;
+      botonConfirmarBorrar.textContent = "Eliminando...";
+      borrarMensaje.textContent = "";
+ 
+      const { data, error } = await clienteSupabase
+        .from("productos")
+        .delete()
+        .eq("id", productoParaBorrar.id)
+        .select();
+ 
+      // Solo se informa éxito si la fila realmente se eliminó
+      if (error || !data || data.length === 0) {
+        console.error("Error al eliminar el producto:", error);
+        borrarMensaje.textContent = "No fue posible eliminar el producto.";
+        botonConfirmarBorrar.disabled = false;
+        botonConfirmarBorrar.textContent = "Eliminar";
+        return;
+      }
+ 
+      cerrarBorrar();
+      mostrarAviso("El producto se eliminó correctamente.");
+      await cargarProductos();
+    });
+ 
+    // ===== Cargar y mostrar productos =====
+    async function cargarProductos() {
+      const { data, error } = await clienteSupabase
+        .from("productos")
+        .select("*")
+        .order("creado_en", { ascending: false });
+ 
+      if (error) {
+        console.error("Error al cargar productos:", error);
+        sinProductos.textContent = "No se pudieron cargar los productos.";
+        sinProductos.hidden = false;
+        return;
+      }
+ 
+      productos = data;
+      mostrarProductos();
+    }
+ 
+    //Ver un producto completo
+    const modalVerProducto = new bootstrap.Modal(document.getElementById("modalVerProducto"));
+ 
+    function formatearPrecio(valor) {
+      return Number(valor).toLocaleString("es-UY", { style: "currency", currency: "UYU" });
+    }
+ 
+    function textoStock(stock) {
+      return stock > 0 ? `Disponibles: ${stock}` : "Sin stock";
+    }
+ 
+    function abrirProducto(producto) {
+      document.getElementById("modalVerProductoTitulo").textContent = producto.nombre;
+      document.getElementById("modalVerProductoCategoria").textContent = producto.categoria;
+      document.getElementById("modalVerProductoPrecio").textContent = formatearPrecio(producto.precio);
+      document.getElementById("modalVerProductoStock").textContent = textoStock(producto.stock);
+      document.getElementById("modalVerProductoInfo").textContent = producto.info;
+ 
+      const img = document.getElementById("modalVerProductoImagen");
+      img.src = producto.imagen;
+      img.alt = `Fotografía de ${producto.nombre}`;
+ 
+      modalVerProducto.show();
+    }
+ 
+    function mostrarProductos() {
+      productosContainer.replaceChildren();
+ 
+      sinProductos.textContent = "Todavía no hay productos publicados.";
+      sinProductos.hidden = productos.length > 0;
+ 
+      productos.forEach((producto) => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "producto";
+ 
+        const imagen = document.createElement("img");
+        imagen.src = producto.imagen;
+        imagen.alt = `Fotografía de ${producto.nombre}`;
+ 
+        const contenido = document.createElement("div");
+        contenido.className = "producto-contenido";
+ 
+        const categoria = document.createElement("p");
+        categoria.className = "producto-categoria";
+        categoria.textContent = producto.categoria;
+ 
+        const nombre = document.createElement("h3");
+        nombre.className = "producto-nombre";
+        nombre.textContent = producto.nombre;
+ 
+        const info = document.createElement("p");
+        info.className = "producto-info";
+        info.textContent = producto.info;
+ 
+        const precio = document.createElement("p");
+        precio.className = "producto-precio";
+        precio.textContent = formatearPrecio(producto.precio);
+ 
+        const stock = document.createElement("p");
+        stock.className = "producto-stock";
+        stock.textContent = textoStock(producto.stock);
+ 
+        const verMas = document.createElement("button");
+        verMas.type = "button";
+        verMas.className = "producto-ver";
+        verMas.textContent = "Ver producto →";
+        verMas.addEventListener("click", () => abrirProducto(producto));
+ 
+        contenido.append(categoria, nombre, info, precio, stock, verMas);
+ 
+        // Botones de editar y eliminar: solo para el administrador
+        if (esAdmin) {
+          const acciones = document.createElement("div");
+          acciones.className = "producto-acciones";
+ 
+          const editar = document.createElement("button");
+          editar.type = "button";
+          editar.className = "btn-editar-producto";
+          editar.textContent = "Editar";
+          editar.addEventListener("click", () => abrirEdicion(producto));
+ 
+          const borrar = document.createElement("button");
+          borrar.type = "button";
+          borrar.className = "btn-borrar-producto";
+          borrar.textContent = "Eliminar";
+          borrar.addEventListener("click", () => abrirBorrar(producto));
+ 
+          acciones.append(editar, borrar);
+          contenido.appendChild(acciones);
+        }
+ 
+        tarjeta.append(imagen, contenido);
+        productosContainer.appendChild(tarjeta);
+      });
+    }
+ 
+    await comprobarAdmin();
+    aplicarVistaAdmin();
+    await cargarProductos();
   </script>
+ 
 </body>
 </html>
