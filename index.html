@@ -14,13 +14,9 @@
 
 <body>
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg sticky-top py-3" id="navbar">
-    <div class="container">
-      <div class="nav-logo">
-        <img src="assets/imagenes/FundacionLogo.webp" alt="Logo de la Asociación Mariposa Azul" class="logo">
-        <a class="navbar-brand fs-4" href="#inicio">Asociacion Civil Mariposas</a>
-        <div class="collapse navbar-collapse justify-content-end" id="menuNav">
+  <div id="navbar-placeholder"></div>
 
+<<<<<<< HEAD
           <ul class="navbar-nav gap-lg-3 align-items-center">
             <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="#noticias">Noticias</a></li>
@@ -56,6 +52,8 @@
       </div>
     </div>
   </div>
+=======
+>>>>>>> c73e3f9 (se agrego el html para el navbar y arregle lo de sobres jovenes)
   <!-- MODAL BORRAR NOTICIA -->
   <div class="modal fade" id="modalBorrar" tabindex="-1" aria-labelledby="modalBorrarLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -313,7 +311,6 @@
     <div class="text-center mt-5" id="bloqueSobreJovenes">
       <button onclick="window.location.href='/public/mural.html'" class="button-56" id="btnMural">Mural de Asociación</button>
     </div>
-  </section>
 
   <!-- CONTACTO -->
   <section id="contacto" class="py-5 seccion-clara">
@@ -393,7 +390,7 @@
     <div class="container">
       <div class="row g-4">
         <div class="col-md-4">
-          <img src="/assets/imagenes/Utu-logo.jpg" alt="logo-UTU" class="logo-utu">
+          <img src="/assets/imagenes/Utu-logo.jpeg" alt="logo-UTU" class="logo-utu">
           <h5>Fundación Mariposa Azul</h5>
           <p class="small">Difundiendo arte, música, deporte y comunidad para niños con el especto autista.</p>
         </div>
@@ -426,6 +423,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/navbar.js"></script>
   <script src="/assets/js/mensajes.js"></script>
   <script type="module">
     const contenedor = document.querySelector("#noticias .row.g-4");
@@ -454,14 +452,6 @@
       esAdmin = !!data;
     }
     
-    async function aplicarVista() {
-      const { data: { session } } = await clienteSupabase.auth.getSession();
-      const logueado = !!session;
-
-      document.getElementById("linkMiSesion")?.classList.toggle("d-none", !logueado);
-      document.getElementById("btnSalirMenu")?.classList.toggle("d-none", !logueado);
-      document.getElementById("btnIniciarSesion")?.classList.toggle("d-none", logueado);
-    }
 
     function aplicarVistaAdmin() {
       document.getElementById("btnCrearNoticia").style.display = esAdmin ? "inline-block" : "none";
@@ -599,12 +589,6 @@
         }
       }
 
-
-    document.getElementById("btnSalirMenu").addEventListener("click", async (e) => {
-        e.preventDefault();
-        await clienteSupabase.auth.signOut();
-        window.location.href = "/public/login.html";
-      });
 
     // JÓVENES DE LA ASOCIACIÓN (el administrador los edita)
 
@@ -804,13 +788,6 @@
         jovenGuardar.textContent = "Guardar";
       }
     });
-
-      aplicarVista();
-      await comprobarAdmin();
-      await cargarNoticias();
-      aplicarVistaAdmin();
-      await cargarJovenes();
-
 // AMPLIAR IMÁGENES
 
 const modalImagen = document.getElementById("modalImagen");
@@ -848,15 +825,16 @@ modalImagen.addEventListener("click", function(e) {
 
 // Cerrar con Escape
 document.addEventListener("keydown", function(e) {
-
     if (e.key === "Escape") {
         modalImagen.style.display = "none";
         imagenAmpliada.src = "";
     }
-
 });
-  
 
+      await comprobarAdmin();
+      await cargarNoticias();
+      aplicarVistaAdmin();
+      await cargarJovenes();
   </script>
 </body>
 
