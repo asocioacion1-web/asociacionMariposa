@@ -14,47 +14,8 @@
 
 <body>
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg sticky-top py-3" id="navbar">
-    <div class="container">
-      <div class="nav-logo">
-        <img src="assets/imagenes/FundacionLogo.webp" alt="Logo de la Asociación Mariposa Azul" class="logo">
-        <a class="navbar-brand fs-4" href="#inicio">Asociacion Civil Mariposas</a>
-        <div class="collapse navbar-collapse justify-content-end" id="menuNav">
+  <div id="navbar-placeholder"></div>
 
-          <ul class="navbar-nav gap-lg-3 align-items-center">
-            <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" href="#noticias">Noticias</a></li>
-            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuLateral"
-              aria-controls="menuLateral">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-              </svg>
-            </button>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <!-- MENU LATERAL -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="menuLateralLabel">Menú</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div class="d-flex flex-column gap-2">
-        <a id="linkMiSesion" href="/public/sesion.html" class="btn btn-outline-primary text-start d-none">Mi sesión</a>
-        <a id="btnIniciarSesion" href="/public/login.html" class="btn text-start d-none" >Iniciar sesión</a>
-        <a id="btnGaleria" href="/public/galeria.html" class="btn btn-outline-primary text-start">Galería</a>
-        <a id="btnProducto" href="/public/productos.html" class="btn btn-outline-primary text-start">Productos</a>
-        <a id="btnAyuda" href="/public/ayuda.html" class="btn btn-outline-primary text-start">Ayuda</a>
-        <button id="btnSalirMenu" class="btn btn-outline-danger text-start d-none">Cerrar sesión</button>
-      </div>
-    </div>
-  </div>
   <!-- MODAL BORRAR NOTICIA -->
   <div class="modal fade" id="modalBorrar" tabindex="-1" aria-labelledby="modalBorrarLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -312,7 +273,6 @@
     <div class="text-center mt-5" id="bloqueSobreJovenes">
       <button onclick="window.location.href='/public/mural.html'" class="button-56" id="btnMural">Mural de Asociación</button>
     </div>
-  </section>
 
   <!-- CONTACTO -->
   <section id="contacto" class="py-5 seccion-clara">
@@ -392,7 +352,7 @@
     <div class="container">
       <div class="row g-4">
         <div class="col-md-4">
-          <img src="/assets/imagenes/Utu-logo.jpg" alt="logo-UTU" class="logo-utu">
+          <img src="/assets/imagenes/Utu-logo.jpeg" alt="logo-UTU" class="logo-utu">
           <h5>Fundación Mariposa Azul</h5>
           <p class="small">Difundiendo arte, música, deporte y comunidad para niños con el especto autista.</p>
         </div>
@@ -425,6 +385,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/navbar.js"></script>
   <script src="/assets/js/mensajes.js"></script>
   <script type="module">
     const contenedor = document.querySelector("#noticias .row.g-4");
@@ -453,14 +414,6 @@
       esAdmin = !!data;
     }
     
-    async function aplicarVista() {
-      const { data: { session } } = await clienteSupabase.auth.getSession();
-      const logueado = !!session;
-
-      document.getElementById("linkMiSesion")?.classList.toggle("d-none", !logueado);
-      document.getElementById("btnSalirMenu")?.classList.toggle("d-none", !logueado);
-      document.getElementById("btnIniciarSesion")?.classList.toggle("d-none", logueado);
-    }
 
     function aplicarVistaAdmin() {
       document.getElementById("btnCrearNoticia").style.display = esAdmin ? "inline-block" : "none";
@@ -598,12 +551,6 @@
         }
       }
 
-
-    document.getElementById("btnSalirMenu").addEventListener("click", async (e) => {
-        e.preventDefault();
-        await clienteSupabase.auth.signOut();
-        window.location.href = "/public/login.html";
-      });
 
     // JÓVENES DE LA ASOCIACIÓN (el administrador los edita)
 
@@ -803,13 +750,6 @@
         jovenGuardar.textContent = "Guardar";
       }
     });
-
-      aplicarVista();
-      await comprobarAdmin();
-      await cargarNoticias();
-      aplicarVistaAdmin();
-      await cargarJovenes();
-
 // AMPLIAR IMÁGENES
 
 const modalImagen = document.getElementById("modalImagen");
@@ -847,15 +787,16 @@ modalImagen.addEventListener("click", function(e) {
 
 // Cerrar con Escape
 document.addEventListener("keydown", function(e) {
-
     if (e.key === "Escape") {
         modalImagen.style.display = "none";
         imagenAmpliada.src = "";
     }
-
 });
-  
 
+      await comprobarAdmin();
+      await cargarNoticias();
+      aplicarVistaAdmin();
+      await cargarJovenes();
   </script>
 </body>
 
