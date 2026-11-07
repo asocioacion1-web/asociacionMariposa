@@ -119,3 +119,21 @@ section {
   border-color: #c70404;
   color: black;
 }
+.btn-persona {
+  color: #9aa0a6;
+  padding: 4px 8px;
+  border: 0;
+  line-height: 1;
+  transition: color .2s;
+}
+ 
+.btn-persona:hover,
+.btn-persona:focus-visible {
+  color: #7d838a;
+}
+ 
+.btn-persona.conectado,
+.btn-persona.conectado:hover,
+.btn-persona.conectado:focus-visible {
+  color: var(--azul-500);
+}

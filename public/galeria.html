@@ -317,21 +317,6 @@ async function comprobarAdmin() {
     esAdmin = !!data;
 }
 
-async function aplicarVista() {
-    const { data: { session } } = await clienteSupabase.auth.getSession();
-    const logueado = !!session;
-
-    document.getElementById("linkMiSesion")?.classList.toggle("d-none", !logueado);
-    document.getElementById("btnSalirMenu")?.classList.toggle("d-none", !logueado);
-    document.getElementById("btnIniciarSesion")?.classList.toggle("d-none", logueado);
-}
-
-document.getElementById("btnSalirMenu").addEventListener("click", async (e) => {
-    e.preventDefault();
-    await clienteSupabase.auth.signOut();
-    window.location.href = "/public/login.html";
-});
-
 // MOSTRAR FOTOGRAFÍAS
 
 function mostrarFotos() {
@@ -767,9 +752,6 @@ botonConfirmarEliminar.addEventListener("click", async () => {
     modalEliminar.close();
     await cargarFotos();
 });
-
-
-aplicarVista();
 
 await comprobarAdmin();
 botonAgregar.style.display = esAdmin ? "" : "none";

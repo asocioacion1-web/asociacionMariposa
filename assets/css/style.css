@@ -85,13 +85,6 @@
     border: 2px solid green;
   }
 
-  /*#btnCrearNoticia {
-    background: var(--amarillo);
-    color: var(--azul-900);
-    font-weight: 700;
-    border: none;
-  }*/
-
   /* Tarjetas de noticias */
 .card-noticia {
     display: flex;
@@ -362,7 +355,9 @@
 
 @media (min-width: 768px) {
   .button-56 {
-  padding: 0 40px;
+  min-width: 150px;
+  width: auto;
+  white-space: nowrap;
   }
 }
 /* MODAL PARA AMPLIAR IMÁGENES :) */
