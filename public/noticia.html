@@ -76,6 +76,19 @@
               Publicar noticia
             </button>
           </form>
+          <!-- NOTICIAS PUBLICADAS -->
+<section id="noticias-publicadas" class="container py-5">
+    <div class="text-center mb-4">
+        <h2>Noticias publicadas</h2>
+        <p class="text-secondary">
+            Todas las novedades de la Asociación Mariposa Azul.
+        </p>
+    </div>
+
+    <div id="contenedor-noticias" class="row g-4">
+        <p class="text-center">Cargando noticias...</p>
+    </div>
+</section>
         </div>
       </div>
 
@@ -119,8 +132,7 @@
   <script type="module">
 import { mostrarMensaje } from "/assets/js/mensajes.js";
     // CONFIGURACIÓN DEL SERVIDOR
-
-    const contenedor = document.querySelector("#noticias .row.g-4");
+const contenedor = document.getElementById("contenedor-noticias");
 
     let config;
     try {
@@ -144,6 +156,133 @@ import { mostrarMensaje } from "/assets/js/mensajes.js";
     const clienteSupabase = supabase.createClient(config.url, config.anonKey);
     const { data: { session }, } = await clienteSupabase.auth.getSession();
 
+    // Verificar si el usuario es administrador
+let esAdmin = false;
+
+async function verificarAdmin() {
+    const { data: { user } } = await clienteSupabase.auth.getUser();
+
+    if (!user) return;
+
+    const { data, error } = await clienteSupabase
+        .from("admin")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+    if (!error && data) {
+        esAdmin = true;
+    }
+}
+
+// Cargar noticias publicadas
+async function cargarNoticias() {
+    const contenedor = document.getElementById("contenedor-noticias");
+
+    contenedor.innerHTML = `
+        <p class="text-center">Cargando noticias...</p>
+    `;
+
+    const { data: noticias, error } = await clienteSupabase
+        .from("noticias")
+        .select("*")
+        .order("fecha", { ascending: false });
+
+    if (error) {
+        contenedor.innerHTML = `
+            <p class="text-center text-danger">
+                No se pudieron cargar las noticias.
+            </p>
+        `;
+        console.error(error);
+        return;
+    }
+
+    contenedor.innerHTML = "";
+
+    if (!noticias || noticias.length === 0) {
+        contenedor.innerHTML = `
+            <p class="text-center">
+                Todavía no hay noticias publicadas.
+            </p>
+        `;
+        return;
+    }
+
+    noticias.forEach(noticia => {
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "col-md-6 col-lg-4";
+
+        const imagen = noticia.imagen
+            ? `<img src="${noticia.imagen}" class="card-img-top" alt="Imagen de la noticia">`
+            : "";
+
+        tarjeta.innerHTML = `
+            <div class="card h-100 shadow-sm">
+                ${imagen}
+
+                <div class="card-body">
+                    <small class="text-secondary">
+                        ${noticia.fecha || ""}
+                    </small>
+
+                    <h5 class="card-title mt-2">
+                        ${noticia.titulo || ""}
+                    </h5>
+
+                    <h6 class="text-secondary">
+                        ${noticia.subtitulo || ""}
+                    </h6>
+
+                    <p class="card-text">
+                        ${noticia.parrafo || ""}
+                    </p>
+
+                    ${esAdmin ? `
+                        <div class="d-flex gap-2">
+                            <a href="/public/editarNoticia.html?id=${noticia.id}"
+                               class="btn btn-primary btn-sm">
+                                Editar
+                            </a>
+
+                            <button class="btn btn-danger btn-sm btn-eliminar">
+                                Eliminar
+                            </button>
+                        </div>
+                    ` : ""}
+                </div>
+            </div>
+        `;
+
+        if (esAdmin) {
+            tarjeta.querySelector(".btn-eliminar")
+                .addEventListener("click", async () => {
+                    if (!confirm("¿Seguro que querés eliminar esta noticia?")) {
+                        return;
+                    }
+
+                    const { error } = await clienteSupabase
+                        .from("noticias")
+                        .delete()
+                        .eq("id", noticia.id);
+
+                    if (error) {
+                        alert("No se pudo eliminar la noticia.");
+                        console.error(error);
+                        return;
+                    }
+
+                    cargarNoticias();
+                });
+        }
+
+        contenedor.appendChild(tarjeta);
+    });
+}
+
+// Iniciar la sección
+await verificarAdmin();
+await cargarNoticias();
     // ELEMENTOS DEL HTML
 
     const inputImagen = document.getElementById("campo-imagen");
