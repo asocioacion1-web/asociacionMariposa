@@ -1,4 +1,4 @@
-export function mostrarMensaje(mensajes, tipo = "danger") {
+function mostrarMensaje(mensajes, tipo = "danger") {
   const lista = Array.isArray(mensajes) ? mensajes : [mensajes];
 
   // Crea el contenedor la primera vez, no hace falta tocar el HTML
@@ -39,3 +39,5 @@ export function mostrarMensaje(mensajes, tipo = "danger") {
   toast.addEventListener("hidden.bs.toast", () => toast.remove());
   new bootstrap.Toast(toast, { delay: tipo === "danger" ? 6000 : 3500 }).show();
 }
+
+window.mostrarMensaje = mostrarMensaje;

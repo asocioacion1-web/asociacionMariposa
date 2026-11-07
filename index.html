@@ -5,55 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asociacion Mariposa</title>
+  <link rel="icon" type="image/png" href="/assets/imagenes/FundacionLogo.png">
 
   <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/navbar.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg sticky-top py-3" id="navbar">
-    <div class="container">
-      <div class="nav-logo">
-        <img src="assets/imagenes/FundacionLogo.webp" alt="Logo de la Asociación Mariposa Azul" class="logo">
-        <a class="navbar-brand fs-4" href="#inicio">Asociacion Civil Mariposas</a>
-        <div class="collapse navbar-collapse justify-content-end" id="menuNav">
+  <div id="navbar-placeholder"></div>
 
-
-          <ul class="navbar-nav gap-lg-3 align-items-center">
-            <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sobre-la-fundación">Sobre la asociación</a></li>
-            <li class="nav-item"><a class="nav-link" href="#noticias">Noticias</a></li>
-            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuLateral"
-              aria-controls="menuLateral">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-              </svg>
-            </button>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <!-- MENU LATERAL -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="menuLateralLabel">Menú</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div class="d-flex flex-column gap-2">
-        <a href="/public/sesion.html" class="btn btn-outline-primary text-start">👤 Mi sesión</a>
-        <a href="/public/galeria.html" class="btn btn-outline-primary text-start">🖼️ Galería</a>
-        <a href="/public/productos.html" class="btn btn-outline-primary text-start">🛍️ Productos</a>
-        <a href="/public/ayuda.html" class="btn btn-outline-primary text-start">❓ Ayuda</a>
-        <button id="btnSalirMenu" class="btn btn-outline-danger text-start">🚪 Cerrar sesión</button>
-      </div>
-    </div>
-  </div>
   <!-- MODAL BORRAR NOTICIA -->
   <div class="modal fade" id="modalBorrar" tabindex="-1" aria-labelledby="modalBorrarLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -97,7 +59,7 @@
       <div class="row align-items-center g-5">
         <div class="col-lg-7">
           <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill">Asociación sin fines de lucro</span>
-          <h1 class="display-5 mb-3">Asociacion Civil Mariposas Azul</h1>
+          <h1 class="display-5 mb-3">Asociacion Civil Mariposas</h1>
           <p class="lead">Nosotros contamos con actividades que fomentan la participación activa de los ciudadanos, como
             talleres educativos y eventos culturales, buscando mejorar la calidad de vida y la cohesión social.</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
@@ -119,7 +81,7 @@
         <div class="col-lg-6">
           <h2 id="titulos">Asociacion Civil Mariposas</h2>
           <p class="texto-normal">
-            La Asociación Civil Mariposa azul nació para buscar la ayudar a personas con algún
+            La Asociación Civil Mariposas nació para buscar ayudar a personas con algún
             problema al desarrollar su vida diaria en la sociedad, pero luego se dirigió directamente a ayudar a
             personas con
             trastorno del espectro autista. Actualmente hacemos eventos y actividades donde integramos a las personas y
@@ -130,7 +92,7 @@
         </div>
         <div class="col-lg-6">
           <img src="/assets/imagenes/Asociacion.jpeg"
-            alt="Asociación Mariposas Azul" class="img-fluid rounded-4 shadow-sm">
+            alt="Asociación Mariposas" class="img-fluid rounded-4 shadow-sm">
         </div>
       </div>
     </div>
@@ -147,9 +109,7 @@
       </div>
 
       <div class="text-center mb-4">
-        <a href="/public/noticia.html" id="btnCrearNoticia" class="btn btn-outline-primary px-4" style="display:none">
-          Crear noticia
-        </a>
+        <button onclick="window.location.href='/public/noticia.html'" id="btnCrearNoticia" class="button-56" role="button">Crear noticia</button>
       </div>
 
       <div class="row g-4">
@@ -232,25 +192,19 @@
       </div>
 
       <div class="text-center mt-5">
-        <a href="public/verNoticias.html" class="btn btn-outline-primary px-4">
+        <a href="public/verNoticias.html" id="btnVerNoticias" class="button-56" role="button">
           Ver todas las noticias
         </a>
       </div>
     </div>
   </section>
 
-
   <!--Apartado para los jovenes de la asociación-->
   <section id="jovenes" class="py-5 seccion-clara">
     <div class="container">
-      <div class="text-center mb-5">
-        <h2 class="titulos">Jóvenes de la asociación</h2>
-        <p class="text-secondary" class="texto-pequeño">En este apartado los jovenes contaran sus historia y experiencia
-          en la asociación.</p>
-      </div>
-      <div class="row g-4">
+               <div class="row g-4">
         <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="1">
             <img src="https://placehold.co/150x150/8fc4ea/0c3b66?text=Joven+1" alt="Joven 1"
               class="rounded-circle mb-3">
             <h6>Asociación persona</h6>
@@ -259,7 +213,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="2">
             <img src="https://placehold.co/150x150/ffc94d/0c3b66?text=Joven+2" alt="Joven 2"
               class="rounded-circle mb-3">
             <h6>Asociación persona</h6>
@@ -268,7 +222,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center">
+          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="3">
             <img src="https://placehold.co/150x150/ff8b6b/ffffff?text=Joven+3" alt="Joven 3"
               class="rounded-circle mb-3">
             <h6>Asociación persona</h6>
@@ -278,12 +232,48 @@
           </div>
         </div>
       </div>
+
+  <!--Modal editar jovenes-->
+  <div class="modal fade" id="modalJoven" tabindex="-1" aria-labelledby="modalJovenLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form id="formJoven" novalidate>
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalJovenLabel">Editar joven</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="jovenNombre" class="form-label fw-bold">Nombre</label>
+              <input type="text" class="form-control" id="jovenNombre" maxlength="60">
+            </div>
+            <div class="mb-3">
+              <label for="jovenDescripcion" class="form-label fw-bold">Descripción</label>
+              <textarea class="form-control" id="jovenDescripcion" rows="4" maxlength="300"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="jovenFoto" class="form-label fw-bold">Foto <span class="fw-normal text-secondary">(si no elegís una, queda la actual)</span></label>
+              <input type="file" class="form-control" id="jovenFoto" accept="image/*">
+              <img id="jovenPreview" class="rounded-circle mt-2 d-none" alt="Vista previa"
+                style="width:120px;height:120px;object-fit:cover">
+            </div>
+            <p id="jovenMensaje" class="text-danger small mb-0"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id="jovenGuardar">Guardar</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
+</div>
+
+    <div class="text-center mt-5" id="bloqueSobreJovenes">
+      <button onclick="window.location.href='/public/mural.html'" class="button-56" id="btnMural">Mural de Asociación</button>
     </div>
-    <div class="text-center mt-5">
-      <a href="public/historiaAlumnos.html" class="btn btn-outline-primary px-4">Mas estudiantes</a>
-    </div>
-  </section>
+
+</section>
 
   <!-- CONTACTO -->
   <section id="contacto" class="py-5 seccion-clara">
@@ -348,7 +338,6 @@
     </div>
   </section>
 
-
 <!-- MODAL PARA AMPLIAR IMÁGENES -->
 <div id="modalImagen" class="modal-imagen">
   <button id="cerrarImagen" class="cerrar-imagen" aria-label="Cerrar">
@@ -364,6 +353,7 @@
     <div class="container">
       <div class="row g-4">
         <div class="col-md-4">
+          <img src="/assets/imagenes/Utu-logo.jpeg" alt="logo-UTU" class="logo-utu">
           <h5>Fundación Mariposa Azul</h5>
           <p class="small">Difundiendo arte, música, deporte y comunidad para niños con el especto autista.</p>
         </div>
@@ -396,8 +386,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/navbar.js"></script>
+  <script src="/assets/js/mensajes.js"></script>
   <script type="module">
-    import { mostrarMensaje } from "/assets/js/mensajes.js";
     const contenedor = document.querySelector("#noticias .row.g-4");
 
     let config;
@@ -423,12 +414,13 @@
       if (error) return console.error("Error comprobando administrador:", error);
       esAdmin = !!data;
     }
-
+    
 
     function aplicarVistaAdmin() {
       document.getElementById("btnCrearNoticia").style.display = esAdmin ? "inline-block" : "none";
       document.querySelectorAll(".pie-noticia").forEach((p) => { p.style.display = esAdmin ? "block" : "none"; });
       document.querySelectorAll(".btn-editar").forEach(btn => { btn.style.display = esAdmin ? "inline-block" : "none";
+      
         
       btn.addEventListener("click", (e) => {
           e.preventDefault();
@@ -453,7 +445,7 @@
     btnConfirmarBorrar.addEventListener("click", async () => {
       if (!idPorBorrar) return;
 
-      btnConfirmarBorrar.disabled = true; // evita doble clic
+      btnConfirmarBorrar.disabled = true; 
 
       try {
         const { data: { session } } = await clienteSupabase.auth.getSession();
@@ -550,11 +542,9 @@
               return el.scrollHeight - el.clientHeight > 1;
             });
 
-            if (cortado) {
               const btn = tarjeta.querySelector(".ver-mas");
               btn.classList.remove("d-none");
               btn.addEventListener("click", () => abrirNoticia(data[i]));
-            }
           });
         } catch (error) {
           console.error("Error al cargar noticias:", error);
@@ -563,16 +553,204 @@
       }
 
 
-    document.getElementById("btnSalirMenu").addEventListener("click", async (e) => {
-        e.preventDefault();
-        await clienteSupabase.auth.signOut();
-        window.location.href = "/public/login.html";
+    // JÓVENES DE LA ASOCIACIÓN (el administrador los edita)
+
+    const BUCKET_FOTOS = "Fotos";
+    const modalJoven = new bootstrap.Modal(document.getElementById("modalJoven"));
+    const formJoven = document.getElementById("formJoven");
+    const jovenNombre = document.getElementById("jovenNombre");
+    const jovenDescripcion = document.getElementById("jovenDescripcion");
+    const jovenFoto = document.getElementById("jovenFoto");
+    const jovenPreview = document.getElementById("jovenPreview");
+    const jovenMensaje = document.getElementById("jovenMensaje");
+    const jovenGuardar = document.getElementById("jovenGuardar");
+
+    let jovenes = [];
+    let jovenEnEdicion = null;
+    let urlTemporalJoven = null;
+
+    function urlFotoJoven(nombreArchivo) {
+      return clienteSupabase.storage.from(BUCKET_FOTOS).getPublicUrl(nombreArchivo).data.publicUrl;
+    }
+
+    function mostrarJovenes() {
+      jovenes.forEach((j) => {
+        const tarjeta = document.querySelector(`.card-joven[data-joven="${j.id}"]`);
+        if (!tarjeta) return;
+
+        const img = tarjeta.querySelector("img");
+        if (j.foto) {
+          img.src = urlFotoJoven(j.foto);
+          img.style.width = "150px";
+          img.style.height = "150px";
+          img.style.objectFit = "cover";
+        }
+        img.alt = j.nombre;
+
+        tarjeta.querySelector("h6").textContent = j.nombre;
+        tarjeta.querySelector("p").textContent = j.descripcion;
+
+        // Botón de editar arriba del círculo (solo administrador)
+        tarjeta.querySelector(".btn-editar-joven")?.remove();
+
+        if (esAdmin) {
+          const editar = document.createElement("button");
+          editar.type = "button";
+          editar.className = "btn btn-outline-primary btn-sm mb-3 btn-editar-joven";
+          editar.textContent = "Editar";
+          editar.addEventListener("click", () => abrirModalJoven(j.id));
+          tarjeta.prepend(editar);
+        }
       });
+    }
 
-      await comprobarAdmin();
-      await cargarNoticias();
-      aplicarVistaAdmin();
+    async function cargarJovenes() {
+      const { data, error } = await clienteSupabase
+        .from("destacados")
+        .select("id, nombre, descripcion, foto")
+        .order("id", { ascending: true });
 
+      if (error) {
+        console.error("Error al cargar los jóvenes:", error);
+        return; // se queda el contenido que ya tiene el HTML
+      }
+
+      jovenes = data || [];
+      mostrarJovenes();
+    }
+
+    function limpiarUrlTemporalJoven() {
+      if (urlTemporalJoven) {
+        URL.revokeObjectURL(urlTemporalJoven);
+        urlTemporalJoven = null;
+      }
+    }
+
+    function abrirModalJoven(id) {
+      const j = jovenes.find(x => x.id === id);
+      if (!j) return;
+
+      jovenEnEdicion = id;
+      formJoven.reset();
+      limpiarUrlTemporalJoven();
+      jovenMensaje.textContent = "";
+
+      jovenNombre.value = j.nombre;
+      jovenDescripcion.value = j.descripcion;
+
+      if (j.foto) {
+        jovenPreview.src = urlFotoJoven(j.foto);
+        jovenPreview.classList.remove("d-none");
+      } else {
+        jovenPreview.removeAttribute("src");
+        jovenPreview.classList.add("d-none");
+      }
+
+      modalJoven.show();
+    }
+
+    jovenFoto.addEventListener("change", () => {
+      limpiarUrlTemporalJoven();
+      const archivo = jovenFoto.files[0];
+      if (!archivo) return;
+
+      urlTemporalJoven = URL.createObjectURL(archivo);
+      jovenPreview.src = urlTemporalJoven;
+      jovenPreview.classList.remove("d-none");
+    });
+
+    document.getElementById("modalJoven").addEventListener("hidden.bs.modal", limpiarUrlTemporalJoven);
+
+    // Convierte la foto a WebP (máx. 800 px) para que pese poco
+    function convertirAWebP(archivo) {
+      return new Promise((resolver, rechazar) => {
+        const url = URL.createObjectURL(archivo);
+        const img = new Image();
+
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          const escala = Math.min(1, 800 / Math.max(img.width, img.height));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(img.width * escala);
+          canvas.height = Math.round(img.height * escala);
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob((blob) => blob ? resolver(blob) : rechazar(new Error("No se pudo convertir")), "image/webp", 0.85);
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          rechazar(new Error("El archivo no es una imagen válida."));
+        };
+
+        img.src = url;
+      });
+    }
+
+    // La misma imagen siempre da el mismo nombre (no se duplica en el bucket)
+    async function hashBlob(blob) {
+      const buffer = await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
+      return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
+    }
+
+    async function subirImagenJoven(blob) {
+      const nombreArchivo = (await hashBlob(blob)) + ".webp";
+
+      const { error } = await clienteSupabase.storage
+        .from(BUCKET_FOTOS)
+        .upload(nombreArchivo, blob, { contentType: "image/webp", upsert: false });
+
+      const yaExiste = error && (String(error.message).includes("already exists") || String(error.statusCode) === "409");
+
+      if (error && !yaExiste) {
+        console.error("Error al subir la imagen:", error);
+        throw new Error("No se pudo subir la imagen.");
+      }
+
+      return nombreArchivo;
+    }
+
+    formJoven.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+
+      jovenMensaje.textContent = "";
+      jovenGuardar.disabled = true;
+      jovenGuardar.textContent = "Guardando...";
+
+      try {
+        const nombre = jovenNombre.value.trim();
+        const descripcion = jovenDescripcion.value.trim();
+
+        if (!nombre) throw new Error("Escribí un nombre.");
+
+        const actual = jovenes.find(x => x.id === jovenEnEdicion);
+        let foto = actual ? actual.foto : null;
+
+        const archivo = jovenFoto.files[0];
+        if (archivo) {
+          foto = await subirImagenJoven(await convertirAWebP(archivo));
+        }
+
+        const { data, error } = await clienteSupabase
+          .from("destacados")
+          .update({ nombre, descripcion, foto })
+          .eq("id", jovenEnEdicion)
+          .select();
+
+        if (error || !data || data.length === 0) {
+          console.error("Error al guardar:", error);
+          throw new Error("No se pudo guardar. Revisá que tengas permiso de administrador.");
+        }
+
+        modalJoven.hide();
+        await cargarJovenes();
+
+      } catch (e) {
+        jovenMensaje.textContent = e.message || "Ocurrió un error. Intentá de nuevo.";
+      } finally {
+        jovenGuardar.disabled = false;
+        jovenGuardar.textContent = "Guardar";
+      }
+    });
 // AMPLIAR IMÁGENES
 
 const modalImagen = document.getElementById("modalImagen");
@@ -610,15 +788,16 @@ modalImagen.addEventListener("click", function(e) {
 
 // Cerrar con Escape
 document.addEventListener("keydown", function(e) {
-
     if (e.key === "Escape") {
         modalImagen.style.display = "none";
         imagenAmpliada.src = "";
     }
-
 });
-  
 
+      await comprobarAdmin();
+      await cargarNoticias();
+      aplicarVistaAdmin();
+      await cargarJovenes();
   </script>
 </body>
 

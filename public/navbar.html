@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg sticky-top py-3" id="navbar">
+  <div class="container">
+    <div class="nav-logo">
+      <img src="/assets/imagenes/FundacionLogo.webp" alt="Logo de la Asociación Mariposa Azul" class="logo">
+      <a class="navbar-brand fs-4" href="/index.html">Asociacion Civil Mariposas</a>
+      <div class="collapse navbar-collapse justify-content-end" id="menuNav">
+        <ul class="navbar-nav gap-lg-3 align-items-center">
+          <li class="nav-item d-none" id="btnCrearNoticiaNav"><a class="nav-link" href="/public/noticia.html">Crear noticia</a></li>
+          <li class="nav-item" id="btnInicio"><a class="nav-link" href="/index.html">Inicio</a></li>
+          <li class="nav-item" id="btnGaleria"><a class="nav-link" href="/public/galeria.html">Galería</a></li>
+          <li class="nav-item" id="btnProducto"><a class="nav-link" href="/public/productos.html">Productos</a></li>
+          <li class="nav-item" id="btnAyuda"><a class="nav-link" href="/public/ayuda.html">Ayuda</a></li>
+        </ul>
+      </div>
+      <button class="btn btn-persona ms-auto ms-lg-0" id="btnPersona" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#menuLateral" aria-controls="menuLateral" aria-label="Cuenta">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+ 
+<div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="menuLateralLabel">Mi cuenta</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="d-flex flex-column gap-2">
+      <a id="linkMiSesion" href="/public/sesion.html" class="btn btn-outline-primary text-start d-none">Mi sesión</a>
+      <a id="btnIniciarSesion" href="/public/login.html" class="btn text-start d-none">Iniciar sesión</a>
+      <button id="btnSalirMenu" class="btn btn-outline-danger text-start d-none">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
