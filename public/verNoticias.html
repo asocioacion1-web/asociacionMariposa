@@ -11,23 +11,6 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/navbar.css">
 
-    <style>
-        /* Tarjetas de igual alto con el botón siempre abajo y alineado */
-        #noticias .card-noticia {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        #noticias .card-noticia img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-        }
-        #noticias .card-noticia .btn-leer-mas {
-            margin-top: auto;
-            align-self: flex-start;
-        }
-    </style>
 </head>
 
 <body>
@@ -68,12 +51,7 @@
 
 
     <!-- FOOTER -->
-    <footer class="py-4">
-        <div class="container text-center">
-            <p class="mb-1">© 2026 - Noticias</p>
-            <a href="../Index.html">Volver al inicio</a>
-        </div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <!-- MODAL NOTICIA -->
     <div class="modal fade" id="modalNoticia" tabindex="-1" aria-hidden="true">
@@ -93,11 +71,24 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/footer.js"></script>
     <script src="/assets/js/navbar.js"></script>
     <script>
-        const ApiURL = "https://rmnnjxletaweppdvipgs.supabase.co/rest/v1/noticias?select=*&order=fecha.desc";
-        const ApiKey = "sb_publishable_P7FSsXDyYBMEvZzkjVm7nA_E0vo-qNH";
+        let ApiURL = "";
+        let ApiKey = "";
+
+        // Pide la URL y la key al servidor (en vez de dejarlas escritas en el JS)
+        async function cargarConfig() {
+            const respuesta = await fetch("/api/config");
+            if (!respuesta.ok) {
+                throw new Error(`No se pudo leer /api/config (HTTP ${respuesta.status})`);
+            }
+            const config = await respuesta.json();
+            ApiKey = config.anonKey;
+            ApiURL = `${config.url}/rest/v1/noticias?select=*&order=fecha.desc`;
+        }
 
         // Evita que texto de la base de datos se interprete como HTML
         function escapeHtml(texto) {
@@ -164,6 +155,8 @@
             const contenedorNoticias = document.querySelector("#noticias .row.g-4");
 
             try {
+                await cargarConfig();
+
                 const respuesta = await fetch(ApiURL, {
                     method: "GET",
                     headers: {
