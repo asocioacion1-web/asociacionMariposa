@@ -119,3 +119,27 @@ section {
   border-color: #c70404;
   color: black;
 }
+
+/*LOGO EN MOVILES*/
+@media (max-width: 575.98px) {
+  #navbar .nav-logo {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+
+  #navbar .logo {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  #navbar .navbar-brand {
+    font-size: clamp(.8rem, 4vw, 1rem) !important;
+    line-height: 1.1;
+  }
+
+  #navbar .nav-logo > .btn {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+}
