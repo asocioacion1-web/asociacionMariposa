@@ -447,6 +447,51 @@ footer {
     font-size: 12px;
 }
 
+.historia-pie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.historia-acciones-autor {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+.error-campo {
+    display: block;
+    margin-top: .25rem;
+    color: #b3261e;
+    font-size: .875rem;
+    font-weight: 600;
+}
+.error-campo:empty { display: none; }
+    [aria-invalid="true"] {
+    border-color: #b3261e !important;
+    outline-color: #b3261e;
+}
+
+.aviso {
+    position: fixed;
+    inset: auto auto 1.5rem 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    max-width: min(92vw, 32rem);
+    padding: .75rem 1.25rem;
+    border: 0;
+    border-radius: .75rem;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+}
+.aviso[hidden] { display: none; }
+.aviso-exito { background: #1e7a46; }
+.aviso-advertencia { background: #8a5a00; }
+.aviso-error { background: #b3261e; }
 
 /* ================================
    RESPONSIVE
@@ -511,4 +556,4 @@ footer {
     }
 
 }
-```
+

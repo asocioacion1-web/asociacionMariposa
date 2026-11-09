@@ -119,6 +119,11 @@ section {
   border-color: #c70404;
   color: black;
 }
+/* Icono de persona: cambia cuando hay sesión iniciada */
+#btnPersona.conectado,
+#btnPersona.conectado * {
+  color: var(--azul-500);
+}
 
 /*LOGO EN MOVILES*/
 @media (max-width: 575.98px) {

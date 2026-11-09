@@ -9,6 +9,38 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/navbar.css">
     <link rel="stylesheet" href="/assets/css/historias.css">
+
+    <!-- Estilos de lo nuevo (errores por campo y botón Editar).
+         Van acá y no en historias.css para no tocar tu archivo de estilos. -->
+    <style>
+        .historia-pie {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .historia-acciones-autor {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-left: auto;
+        }
+
+        /* Error debajo de cada campo */
+        .error-campo {
+            display: block;
+            margin-top: .25rem;
+            color: #b3261e;
+            font-size: .875rem;
+            font-weight: 600;
+        }
+        .error-campo:empty { display: none; }
+        [aria-invalid="true"] {
+            border-color: #b3261e !important;
+            outline-color: #b3261e;
+        }
+    </style>
 </head>
 
 <body>
@@ -46,18 +78,24 @@
         <form id="formHistoria" novalidate>
             <div class="campo-h">
                 <label for="historiaTipo">¿Qué vas a publicar?</label>
-                <select id="historiaTipo"></select>
+                <select id="historiaTipo" aria-describedby="historiaTipoError" required></select>
+                <span class="error-campo" id="historiaTipoError"></span>
             </div>
 
             <div class="campo-h">
                 <label for="historiaTitulo">Título</label>
-                <input type="text" id="historiaTitulo" maxlength="100" placeholder="El título de tu texto">
+                <input type="text" id="historiaTitulo" maxlength="100" placeholder="El título de tu texto"
+                    aria-describedby="historiaTituloError" required>
+                <span class="contador" id="contadorTitulo">0 / 100</span>
+                <span class="error-campo" id="historiaTituloError"></span>
             </div>
 
             <div class="campo-h">
                 <label for="historiaTexto">Texto</label>
-                <textarea id="historiaTexto" maxlength="20000" placeholder="Escribí acá..."></textarea>
+                <textarea id="historiaTexto" maxlength="20000" placeholder="Escribí acá..."
+                    aria-describedby="historiaTextoError" required></textarea>
                 <span class="contador" id="contadorTexto">0 / 20000</span>
+                <span class="error-campo" id="historiaTextoError"></span>
             </div>
 
             <p class="mensaje-error" id="mensajeEscribir"></p>
@@ -65,6 +103,48 @@
             <div class="ventana-acciones">
                 <button type="button" class="h-btn h-btn-gris" id="cancelarEscribir">Cancelar</button>
                 <button type="submit" class="h-btn h-btn-principal" id="publicarHistoria">Publicar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- VENTANA: EDITAR -->
+    <dialog id="modalEditar" class="ventana" aria-labelledby="editarVentanaTitulo">
+        <div class="ventana-cabecera">
+            <div>
+                <h2 id="editarVentanaTitulo">Editar publicación</h2>
+                <p id="editarInfo"></p>
+            </div>
+            <button type="button" class="ventana-cerrar" id="cerrarEditar" aria-label="Cerrar">&times;</button>
+        </div>
+
+        <form id="formEditar" novalidate>
+            <div class="campo-h">
+                <label for="editarTipo">Tipo</label>
+                <select id="editarTipo" aria-describedby="editarTipoError" required></select>
+                <span class="error-campo" id="editarTipoError"></span>
+            </div>
+
+            <div class="campo-h">
+                <label for="editarTitulo">Título</label>
+                <input type="text" id="editarTitulo" maxlength="100" placeholder="El título de tu texto"
+                    aria-describedby="editarTituloError" required>
+                <span class="contador" id="contadorEditarTitulo">0 / 100</span>
+                <span class="error-campo" id="editarTituloError"></span>
+            </div>
+
+            <div class="campo-h">
+                <label for="editarTexto">Texto</label>
+                <textarea id="editarTexto" maxlength="20000" placeholder="Escribí acá..."
+                    aria-describedby="editarTextoError" required></textarea>
+                <span class="contador" id="contadorEditarTexto">0 / 20000</span>
+                <span class="error-campo" id="editarTextoError"></span>
+            </div>
+
+            <p class="mensaje-error" id="mensajeEditar"></p>
+
+            <div class="ventana-acciones">
+                <button type="button" class="h-btn h-btn-gris" id="cancelarEditar">Cancelar</button>
+                <button type="submit" class="h-btn h-btn-principal" id="guardarEdicion">Guardar cambios</button>
             </div>
         </form>
     </dialog>
@@ -113,10 +193,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Define window.mostrarMensaje (los avisos de tu proyecto). Cambiá la ruta si tu archivo se llama distinto -->
+    <script src="/assets/js/mensajes.js"></script>
     <script src="/assets/js/navbar.js"></script>
     <script type="module">
 
-        // ELEMENTOS 
+        // ELEMENTOS
 
         const $ = (id) => document.getElementById(id);
 
@@ -131,9 +213,20 @@
         const campoTipo = $("historiaTipo");
         const campoTitulo = $("historiaTitulo");
         const campoTexto = $("historiaTexto");
+        const contadorTitulo = $("contadorTitulo");
         const contadorTexto = $("contadorTexto");
         const mensajeEscribir = $("mensajeEscribir");
         const btnPublicar = $("publicarHistoria");
+
+        const modalEditar = $("modalEditar");
+        const formEditar = $("formEditar");
+        const editarTipo = $("editarTipo");
+        const editarTitulo = $("editarTitulo");
+        const editarTexto = $("editarTexto");
+        const contadorEditarTitulo = $("contadorEditarTitulo");
+        const contadorEditarTexto = $("contadorEditarTexto");
+        const mensajeEditar = $("mensajeEditar");
+        const btnGuardarEdicion = $("guardarEdicion");
 
         const modalLeer = $("modalLeer");
         const modalBorrar = $("modalBorrar");
@@ -151,6 +244,12 @@
 
         const etiquetaTipo = (valor) => (TIPOS.find(t => t.valor === valor) || { etiqueta: "Otro" }).etiqueta;
 
+        // Límites del SRS (RF-014 y RF-015)
+        const MAX_TITULO = 100;
+        const MAX_TEXTO = 20000;
+
+        const COLUMNAS = "id, tipo, titulo, contenido, autor_id, autor_nombre, creado_en";
+
         class ErrorFormulario extends Error {}
 
         let historias = [];
@@ -159,6 +258,7 @@
         let esAdmin = false;
         let esAlumno = false;
         let historiaParaBorrar = null;
+        let historiaEnEdicion = null;
 
         //Supabase
 
@@ -180,9 +280,27 @@
             return el;
         }
 
+        //Avisos (IU-04: éxito, advertencia y error)
+        // Usan tu función mostrarMensaje(mensajes, tipo) con los tipos de Bootstrap.
+
+        const TIPO_AVISO = { exito: "success", advertencia: "warning", error: "danger" };
+
+        function mostrarAviso(texto, tipo = "exito") {
+            if (typeof window.mostrarMensaje !== "function") {
+                console.error("Falta cargar el JS que define mostrarMensaje (revisá la ruta del <script>).");
+                return;
+            }
+            window.mostrarMensaje(texto, TIPO_AVISO[tipo] || "info");
+        }
+
         //Secion y roles
 
         async function cargarSesion() {
+            // Se vuelve a empezar de cero para no arrastrar roles de una sesión que ya no existe
+            usuario = null;
+            esAdmin = false;
+            esAlumno = false;
+
             const { data } = await clienteSupabase.auth.getUser();
             usuario = data?.user || null;
 
@@ -219,11 +337,151 @@
             }
         }
 
+        // Quién puede qué (RF-014, RF-015 y RF-016)
+        //  - Editar: el administrador cualquiera; el alumno solo las suyas.
+        //  - Eliminar: el administrador cualquiera; el autor las suyas.
+        const puedeEditar = (h) => !!usuario && (esAdmin || (esAlumno && h.autor_id === usuario.id));
+        const puedeEliminar = (h) => !!usuario && (esAdmin || h.autor_id === usuario.id);
+
+        // Vuelve a comprobar sesión y rol justo antes de publicar (RF-014: autenticación y permisos)
+        async function verificarPuedePublicar() {
+            await cargarSesion();
+            aplicarRoles();
+
+            if (!usuario) return "Tu sesión no está iniciada. Iniciá sesión para publicar.";
+            if (!esAdmin && !esAlumno) return "Tu usuario no tiene el rol de alumno. Pedíselo a la administración.";
+            return null;
+        }
+
         $("btnSalirMenu").addEventListener("click", async (e) => {
             e.preventDefault();
             await clienteSupabase.auth.signOut();
             window.location.href = "/public/login.html";
         });
+
+        //Validaciones de publicaciones (RF-014 y RF-015)
+
+        // Vacío, solo espacios o solo caracteres invisibles
+        const soloEspacios = (texto) => /^[\s​-‍⁠﻿ㅤ]*$/.test(texto);
+
+        function validarPublicacion({ tipo, titulo, contenido }) {
+            const errores = {};
+
+            if (!tipo) {
+                errores.tipo = "Elegí qué tipo de texto vas a publicar.";
+            } else if (!TIPOS.some(t => t.valor === tipo)) {
+                errores.tipo = "Elegí una de las opciones de la lista.";
+            }
+
+            const t = (titulo ?? "").trim();
+            if (soloEspacios(t)) {
+                errores.titulo = "Escribí un título.";
+            } else if (t.length > MAX_TITULO) {
+                errores.titulo = `El título no puede superar los ${MAX_TITULO} caracteres (tiene ${t.length}).`;
+            }
+
+            const c = (contenido ?? "").trim();
+            if (soloEspacios(c)) {
+                errores.contenido = "Escribí el texto.";
+            } else if (c.length > MAX_TEXTO) {
+                errores.contenido = `El texto no puede superar los ${MAX_TEXTO} caracteres (tiene ${c.length}).`;
+            }
+
+            return errores;
+        }
+
+        const camposEscribir = { tipo: campoTipo, titulo: campoTitulo, contenido: campoTexto };
+        const camposEditar = { tipo: editarTipo, titulo: editarTitulo, contenido: editarTexto };
+
+        const leerCampos = (campos) => ({
+            tipo: campos.tipo.value,
+            titulo: campos.titulo.value,
+            contenido: campos.contenido.value
+        });
+
+        function pintarErrorCampo(el, mensaje) {
+            const span = $(`${el.id}Error`);
+            if (span) span.textContent = mensaje || "";
+            if (mensaje) el.setAttribute("aria-invalid", "true");
+            else el.removeAttribute("aria-invalid");
+        }
+
+        function pintarErrores(campos, errores) {
+            Object.entries(campos).forEach(([nombre, el]) => pintarErrorCampo(el, errores[nombre]));
+        }
+
+        function enfocarPrimerError(campos, errores) {
+            const primero = Object.keys(campos).find(nombre => errores[nombre]);
+            if (primero) campos[primero].focus();
+        }
+
+        function actualizarContador(campo, span, limite) {
+            span.textContent = `${campo.value.length} / ${limite}`;
+        }
+
+        // Validación en tiempo real (3.3.1): se revisa cada campo mientras se escribe
+        function activarValidacionEnVivo(campos, contadores) {
+            const revisar = (nombre) => {
+                const errores = validarPublicacion(leerCampos(campos));
+                pintarErrorCampo(campos[nombre], errores[nombre]);
+            };
+
+            campos.titulo.addEventListener("input", () => {
+                actualizarContador(campos.titulo, contadores.titulo, MAX_TITULO);
+                revisar("titulo");
+            });
+            campos.contenido.addEventListener("input", () => {
+                actualizarContador(campos.contenido, contadores.contenido, MAX_TEXTO);
+                revisar("contenido");
+            });
+            campos.tipo.addEventListener("change", () => revisar("tipo"));
+            campos.titulo.addEventListener("blur", () => revisar("titulo"));
+            campos.contenido.addEventListener("blur", () => revisar("contenido"));
+        }
+
+        activarValidacionEnVivo(camposEscribir, { titulo: contadorTitulo, contenido: contadorTexto });
+        activarValidacionEnVivo(camposEditar, { titulo: contadorEditarTitulo, contenido: contadorEditarTexto });
+
+        // Trae la publicación tal como está AHORA en la base de datos (para comprobar que existe)
+        async function obtenerPublicacion(id) {
+            const { data, error } = await clienteSupabase
+                .from("historias")
+                .select(COLUMNAS)
+                .eq("id", id)
+                .maybeSingle();
+            return { fila: data || null, error };
+        }
+
+        // Pasos previos a editar o eliminar: sesión iniciada, la publicación existe y hay permiso
+        async function prepararAccion(historia, accion) {
+            await cargarSesion();
+            aplicarRoles();
+
+            if (!usuario) {
+                mostrarHistorias();
+                return { error: `Tu sesión no está iniciada. Iniciá sesión para ${accion} publicaciones.` };
+            }
+
+            const { fila, error } = await obtenerPublicacion(historia.id);
+
+            if (error) {
+                console.error("Error al comprobar la publicación:", error);
+                return { error: "No se pudo comprobar la publicación. Intentá de nuevo." };
+            }
+
+            if (!fila) {
+                await cargarHistorias();
+                return { error: "Esa publicación ya no existe.", noExiste: true };
+            }
+
+            const permitido = accion === "editar" ? puedeEditar(fila) : puedeEliminar(fila);
+            if (!permitido) {
+                mostrarHistorias();
+                return { error: `No tenés permiso para ${accion} esta publicación.` };
+            }
+
+            return { fila };
+        }
 
         //Filtros
 
@@ -260,7 +518,10 @@
             const visibles = historias.filter(h => filtroActual === "todos" || h.tipo === filtroActual);
 
             if (visibles.length === 0) {
-                lista.appendChild(crear("li", "aviso-lista", "Todavía no hay textos en esta categoría."));
+                const mensaje = filtroActual === "todos"
+                    ? "Todavía no hay textos disponibles."
+                    : "Todavía no hay textos disponibles en esta categoría.";
+                lista.appendChild(crear("li", "aviso-lista", mensaje));
                 return;
             }
 
@@ -271,16 +532,28 @@
 
                 const leer = crear("button", "link-leer", "Leer completo →");
                 leer.type = "button";
-                leer.addEventListener("click", () => abrirLectura(h));
+                leer.addEventListener("click", () => abrirLectura(h, leer));
                 pie.appendChild(leer);
 
+                const acciones = crear("div", "historia-acciones-autor");
+
+                // Editar: el alumno solo las suyas, el administrador todas
+                if (puedeEditar(h)) {
+                    const editar = crear("button", "link-leer", "Editar");
+                    editar.type = "button";
+                    editar.addEventListener("click", () => abrirEditar(h, editar));
+                    acciones.appendChild(editar);
+                }
+
                 // Borrar: el autor o el administrador
-                if (usuario && (esAdmin || h.autor_id === usuario.id)) {
+                if (puedeEliminar(h)) {
                     const borrar = crear("button", "link-borrar", "Eliminar");
                     borrar.type = "button";
-                    borrar.addEventListener("click", () => abrirBorrar(h));
-                    pie.appendChild(borrar);
+                    borrar.addEventListener("click", () => abrirBorrar(h, borrar));
+                    acciones.appendChild(borrar);
                 }
+
+                if (acciones.children.length > 0) pie.appendChild(acciones);
 
                 li.append(
                     crear("span", "historia-tipo", etiquetaTipo(h.tipo)),
@@ -297,7 +570,7 @@
         async function cargarHistorias() {
             const { data, error } = await clienteSupabase
                 .from("historias")
-                .select("id, tipo, titulo, contenido, autor_id, autor_nombre, creado_en")
+                .select(COLUMNAS)
                 .order("creado_en", { ascending: false });
 
             if (error) {
@@ -310,33 +583,74 @@
             mostrarHistorias();
         }
 
-        //Leer
+        //Leer (RF-013)
 
-        function abrirLectura(h) {
-            $("leerTitulo").textContent = h.titulo;
-            $("leerAutor").textContent = `${etiquetaTipo(h.tipo)} · por ${h.autor_nombre || "Anónimo"} · ${formatearFecha(h.creado_en)}`;
-            $("leerTexto").textContent = h.contenido;
-            modalLeer.showModal();
+        async function abrirLectura(h, boton) {
+            if (boton) boton.disabled = true;
+
+            try {
+                // Se comprueba que la publicación exista antes de mostrarla
+                const { fila, error } = await obtenerPublicacion(h.id);
+
+                if (error) {
+                    console.error("Error al abrir la publicación:", error);
+                    mostrarAviso("No se pudo abrir el texto. Intentá de nuevo.", "error");
+                    return;
+                }
+
+                if (!fila) {
+                    mostrarAviso("Esa publicación ya no existe.", "error");
+                    await cargarHistorias();
+                    return;
+                }
+
+                $("leerTitulo").textContent = fila.titulo;
+                $("leerAutor").textContent = `${etiquetaTipo(fila.tipo)} · por ${fila.autor_nombre || "Anónimo"} · ${formatearFecha(fila.creado_en)}`;
+                $("leerTexto").textContent = fila.contenido;
+                modalLeer.showModal();
+            } finally {
+                if (boton) boton.disabled = false;
+            }
         }
 
         $("cerrarLeer").addEventListener("click", () => modalLeer.close());
 
-        //Escribir
+        //Escribir (RF-014)
 
-        TIPOS.forEach((t) => {
-            const op = document.createElement("option");
-            op.value = t.valor;
-            op.textContent = t.etiqueta;
-            campoTipo.appendChild(op);
-        });
+        function llenarTipos(select, conPlaceholder) {
+            if (conPlaceholder) {
+                const vacio = document.createElement("option");
+                vacio.value = "";
+                vacio.textContent = "Elegí una opción...";
+                vacio.disabled = true;
+                vacio.hidden = true;
+                vacio.setAttribute("selected", "");
+                select.appendChild(vacio);
+            }
 
-        campoTexto.addEventListener("input", () => {
-            contadorTexto.textContent = `${campoTexto.value.length} / 10000`;
-        });
+            TIPOS.forEach((t) => {
+                const op = document.createElement("option");
+                op.value = t.valor;
+                op.textContent = t.etiqueta;
+                select.appendChild(op);
+            });
+        }
 
-        btnEscribir.addEventListener("click", () => {
+        llenarTipos(campoTipo, true);
+        llenarTipos(editarTipo, false);
+
+        btnEscribir.addEventListener("click", async () => {
+            // Sesión y rol se comprueban de nuevo antes de abrir el formulario
+            const motivo = await verificarPuedePublicar();
+            if (motivo) {
+                mostrarAviso(motivo, "advertencia");
+                return;
+            }
+
             formHistoria.reset();
-            contadorTexto.textContent = "0 / 10000";
+            actualizarContador(campoTitulo, contadorTitulo, MAX_TITULO);
+            actualizarContador(campoTexto, contadorTexto, MAX_TEXTO);
+            pintarErrores(camposEscribir, {});
             mensajeEscribir.textContent = "";
             modalEscribir.showModal();
         });
@@ -348,28 +662,46 @@
             evento.preventDefault();
 
             mensajeEscribir.textContent = "";
+
+            // 1) Validación de los campos
+            const valores = leerCampos(camposEscribir);
+            const errores = validarPublicacion(valores);
+            pintarErrores(camposEscribir, errores);
+
+            if (Object.keys(errores).length > 0) {
+                mensajeEscribir.textContent = "Revisá los campos marcados en rojo.";
+                enfocarPrimerError(camposEscribir, errores);
+                return;
+            }
+
             btnPublicar.disabled = true;
             btnPublicar.textContent = "Publicando...";
 
             try {
-                const titulo = campoTitulo.value.trim();
-                const contenido = campoTexto.value.trim();
+                // 2) Sesión iniciada y rol de alumno o administrador
+                const motivo = await verificarPuedePublicar();
+                if (motivo) throw new ErrorFormulario(motivo);
 
-                if (!titulo) throw new ErrorFormulario("Escribí un título.");
-                if (!contenido) throw new ErrorFormulario("Escribí el texto.");
+                // 3) Guardar. No se envía autor ni fecha: los asigna la base de datos
+                //    al usuario autenticado, así nadie puede publicar a nombre de otro.
+                const { data, error } = await clienteSupabase
+                    .from("historias")
+                    .insert({
+                        tipo: valores.tipo,
+                        titulo: valores.titulo.trim(),
+                        contenido: valores.contenido.trim()
+                    })
+                    .select("id")
+                    .single();
 
-                const { error } = await clienteSupabase.from("historias").insert({
-                    tipo: campoTipo.value,
-                    titulo,
-                    contenido
-                });
-
-                if (error) {
+                // 4) Comprobar que quedó registrada
+                if (error || !data) {
                     console.error("Error al publicar:", error);
-                    throw new ErrorFormulario("No se pudo publicar. Revisá que tengas el rol de alumno.");
+                    throw new ErrorFormulario("No se pudo publicar. Revisá tu conexión y que tengas el rol de alumno.");
                 }
 
                 modalEscribir.close();
+                mostrarAviso("Tu texto se publicó correctamente.");
                 await cargarHistorias();
 
             } catch (e) {
@@ -385,46 +717,196 @@
             }
         });
 
-        //Eliminar
+        //Editar (RF-015)
 
-        function abrirBorrar(h) {
-            historiaParaBorrar = h.id;
-            $("borrarTitulo").textContent = h.titulo;
-            $("mensajeBorrar").textContent = "";
-            $("confirmarBorrar").disabled = false;
-            $("confirmarBorrar").textContent = "Eliminar";
-            modalBorrar.showModal();
+        async function abrirEditar(h, boton) {
+            if (boton) boton.disabled = true;
+
+            try {
+                // Sesión, existencia y permiso (pasos 2, 3 y 5 del RF-015)
+                const previa = await prepararAccion(h, "editar");
+                if (previa.error) {
+                    mostrarAviso(previa.error, "error");
+                    return;
+                }
+
+                const fila = previa.fila;
+                historiaEnEdicion = fila;
+
+                editarTipo.value = TIPOS.some(t => t.valor === fila.tipo) ? fila.tipo : "otro";
+                editarTitulo.value = fila.titulo ?? "";
+                editarTexto.value = fila.contenido ?? "";
+                actualizarContador(editarTitulo, contadorEditarTitulo, MAX_TITULO);
+                actualizarContador(editarTexto, contadorEditarTexto, MAX_TEXTO);
+                pintarErrores(camposEditar, {});
+                mensajeEditar.textContent = "";
+
+                // El autor y la fecha originales se muestran pero no se pueden cambiar
+                $("editarInfo").textContent =
+                    `Autor: ${fila.autor_nombre || "Anónimo"} · Publicado el ${formatearFecha(fila.creado_en)} (no se pueden modificar)`;
+
+                modalEditar.showModal();
+            } finally {
+                if (boton) boton.disabled = false;
+            }
+        }
+
+        $("cerrarEditar").addEventListener("click", () => modalEditar.close());
+        $("cancelarEditar").addEventListener("click", () => modalEditar.close());
+        modalEditar.addEventListener("close", () => { historiaEnEdicion = null; });
+
+        formEditar.addEventListener("submit", async (evento) => {
+            evento.preventDefault();
+
+            mensajeEditar.textContent = "";
+            const original = historiaEnEdicion;
+            if (!original) return;
+
+            // 1) Validación de los campos
+            const valores = leerCampos(camposEditar);
+            const errores = validarPublicacion(valores);
+            pintarErrores(camposEditar, errores);
+
+            if (Object.keys(errores).length > 0) {
+                mensajeEditar.textContent = "Revisá los campos marcados en rojo.";
+                enfocarPrimerError(camposEditar, errores);
+                return;
+            }
+
+            btnGuardarEdicion.disabled = true;
+            btnGuardarEdicion.textContent = "Guardando...";
+
+            try {
+                // 2) Sesión, existencia y permiso otra vez, con los datos de ahora
+                const previa = await prepararAccion(original, "editar");
+                if (previa.error) {
+                    if (previa.noExiste) {
+                        modalEditar.close();
+                        mostrarAviso(previa.error, "error");
+                        return;
+                    }
+                    throw new ErrorFormulario(previa.error);
+                }
+
+                const cambios = {
+                    tipo: valores.tipo,
+                    titulo: valores.titulo.trim(),
+                    contenido: valores.contenido.trim()
+                };
+
+                const actual = previa.fila;
+                if (cambios.tipo === actual.tipo && cambios.titulo === actual.titulo && cambios.contenido === actual.contenido) {
+                    throw new ErrorFormulario("No hiciste ningún cambio.");
+                }
+
+                // 3) Solo se envían tipo, título y contenido: el autor y la fecha no se tocan
+                const { data, error } = await clienteSupabase
+                    .from("historias")
+                    .update(cambios)
+                    .eq("id", actual.id)
+                    .select(COLUMNAS)
+                    .maybeSingle();
+
+                // 4) Comprobar que los cambios se guardaron
+                if (error || !data) {
+                    console.error("Error al guardar los cambios:", error);
+                    throw new ErrorFormulario("No se pudieron guardar los cambios. Intentá de nuevo.");
+                }
+
+                if (data.tipo !== cambios.tipo || data.titulo !== cambios.titulo || data.contenido !== cambios.contenido) {
+                    console.error("La base de datos devolvió datos distintos a los enviados:", data);
+                    throw new ErrorFormulario("Los cambios no se guardaron correctamente. Intentá de nuevo.");
+                }
+
+                modalEditar.close();
+                mostrarAviso("La publicación se modificó correctamente.");
+                await cargarHistorias();
+
+            } catch (e) {
+                if (e instanceof ErrorFormulario) {
+                    mensajeEditar.textContent = e.message;
+                } else {
+                    console.error(e);
+                    mensajeEditar.textContent = "Ocurrió un error. Intentá de nuevo.";
+                }
+            } finally {
+                btnGuardarEdicion.disabled = false;
+                btnGuardarEdicion.textContent = "Guardar cambios";
+            }
+        });
+
+        //Eliminar (RF-016)
+
+        async function abrirBorrar(h, boton) {
+            if (boton) boton.disabled = true;
+
+            try {
+                // Sesión, existencia y permiso ANTES de mostrar la confirmación
+                const previa = await prepararAccion(h, "eliminar");
+                if (previa.error) {
+                    mostrarAviso(previa.error, "error");
+                    return;
+                }
+
+                historiaParaBorrar = previa.fila.id;
+                $("borrarTitulo").textContent = previa.fila.titulo;
+                $("mensajeBorrar").textContent = "";
+                $("confirmarBorrar").disabled = false;
+                $("confirmarBorrar").textContent = "Eliminar";
+                modalBorrar.showModal();
+            } finally {
+                if (boton) boton.disabled = false;
+            }
         }
 
         $("cancelarBorrar").addEventListener("click", () => modalBorrar.close());
         modalBorrar.addEventListener("close", () => { historiaParaBorrar = null; });
 
         $("confirmarBorrar").addEventListener("click", async () => {
-            if (historiaParaBorrar === null) return;
+            const id = historiaParaBorrar;
+            if (id === null) return;
 
-            $("confirmarBorrar").disabled = true;
-            $("confirmarBorrar").textContent = "Eliminando...";
+            const boton = $("confirmarBorrar");
+            boton.disabled = true;
+            boton.textContent = "Eliminando...";
             $("mensajeBorrar").textContent = "";
 
-            const { data, error } = await clienteSupabase
-                .from("historias")
-                .delete()
-                .eq("id", historiaParaBorrar)
-                .select();
+            try {
+                // Se vuelve a comprobar todo justo antes de borrar
+                const previa = await prepararAccion({ id }, "eliminar");
+                if (previa.error) {
+                    if (previa.noExiste) {
+                        modalBorrar.close();
+                        mostrarAviso(previa.error, "error");
+                    } else {
+                        $("mensajeBorrar").textContent = previa.error;
+                    }
+                    return;
+                }
 
-            if (error || !data || data.length === 0) {
-                console.error("Error al eliminar:", error);
-                $("mensajeBorrar").textContent = "No se pudo eliminar. Intentá de nuevo.";
-                $("confirmarBorrar").disabled = false;
-                $("confirmarBorrar").textContent = "Eliminar";
-                return;
+                const { data, error } = await clienteSupabase
+                    .from("historias")
+                    .delete()
+                    .eq("id", id)
+                    .select("id");
+
+                // Comprobar que realmente se borró
+                if (error || !data || data.length === 0) {
+                    console.error("Error al eliminar:", error);
+                    $("mensajeBorrar").textContent = "No se pudo eliminar. Intentá de nuevo.";
+                    return;
+                }
+
+                modalBorrar.close();
+                mostrarAviso("La publicación se eliminó correctamente.");
+                await cargarHistorias();
+            } finally {
+                boton.disabled = false;
+                boton.textContent = "Eliminar";
             }
-
-            modalBorrar.close();
-            await cargarHistorias();
         });
 
-        //Panel de alumnos (solo administrador)
+        //Panel de alumnos (solo administrador) (RF-017)
 
         const buscador = $("buscadorAlumnos");
         const listaUsuarios = $("listaUsuarios");
@@ -435,7 +917,7 @@
         let idsAdmins = new Set();
 
         // Para buscar sin importar mayúsculas ni tildes
-        const normalizar = (t) => (t || "").normalize("NFD").replace(/[̀-ͯ ]/g, "").toLowerCase();
+        const normalizar = (t) => (t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
         function mostrarUsuarios() {
             listaUsuarios.replaceChildren();
@@ -509,26 +991,94 @@
             mensajeAlumnos.textContent = "";
             boton.disabled = true;
 
-            const consulta = darRol
-                ? clienteSupabase.from("alumno").insert({ user_id: idUsuario }).select()
-                : clienteSupabase.from("alumno").delete().eq("user_id", idUsuario).select();
+            try {
+                // Permisos: se comprueba de nuevo que quien actúa sigue siendo administrador
+                await cargarSesion();
+                aplicarRoles();
+                if (!esAdmin) {
+                    modalAlumnos.close();
+                    mostrarAviso("Ya no tenés permisos de administrador para gestionar alumnos.", "error");
+                    mostrarHistorias();
+                    return;
+                }
 
-            const { data, error } = await consulta;
+                // Existencia: el usuario tiene que seguir existiendo
+                const perfilRes = await clienteSupabase.from("perfiles").select("id").eq("id", idUsuario).maybeSingle();
+                if (perfilRes.error) throw perfilRes.error;
+                if (!perfilRes.data) {
+                    mensajeAlumnos.textContent = "Ese usuario ya no existe.";
+                    await cargarUsuarios();
+                    return;
+                }
 
-            if (error || !data || data.length === 0) {
-                console.error("Error al cambiar el rol:", error);
-                mensajeAlumnos.textContent = "No se pudo cambiar el rol. Intentá de nuevo.";
+                // Estado actual, tal como está en la base de datos ahora
+                const [adminRes, alumnoRes] = await Promise.all([
+                    clienteSupabase.from("admin").select("user_id").eq("user_id", idUsuario).maybeSingle(),
+                    clienteSupabase.from("alumno").select("user_id").eq("user_id", idUsuario).maybeSingle()
+                ]);
+                if (adminRes.error) throw adminRes.error;
+                if (alumnoRes.error) throw alumnoRes.error;
+
+                // Administradores: no se les cambia el rol desde acá
+                if (adminRes.data) {
+                    mensajeAlumnos.textContent = "No se pueden modificar los permisos de un administrador.";
+                    await cargarUsuarios();
+                    return;
+                }
+
+                // Asignación sin duplicar / eliminación solo si lo tiene
+                const yaEsAlumno = !!alumnoRes.data;
+                if (darRol && yaEsAlumno) {
+                    mensajeAlumnos.textContent = "Ese usuario ya es alumno.";
+                    idsAlumnos.add(idUsuario);
+                    mostrarUsuarios();
+                    return;
+                }
+                if (!darRol && !yaEsAlumno) {
+                    mensajeAlumnos.textContent = "Ese usuario no tiene el rol de alumno.";
+                    idsAlumnos.delete(idUsuario);
+                    mostrarUsuarios();
+                    return;
+                }
+
+                const consulta = darRol
+                    ? clienteSupabase.from("alumno").insert({ user_id: idUsuario }).select()
+                    : clienteSupabase.from("alumno").delete().eq("user_id", idUsuario).select();
+
+                const { data, error } = await consulta;
+
+                // Si falla, se informa y quedan los permisos anteriores
+                if (error || !data || data.length === 0) {
+                    console.error("Error al cambiar el rol:", error);
+                    mensajeAlumnos.textContent = "No se pudo cambiar el rol. Los permisos anteriores se mantienen.";
+                    return;
+                }
+
+                if (darRol) idsAlumnos.add(idUsuario);
+                else idsAlumnos.delete(idUsuario);
+
+                // Sin aviso acá: la ventana de alumnos está abierta y el cambio ya se ve en la lista
+                mostrarUsuarios();
+
+            } catch (e) {
+                console.error("Error al cambiar el rol:", e);
+                mensajeAlumnos.textContent = "No se pudo cambiar el rol. Los permisos anteriores se mantienen.";
+            } finally {
+                // Si la lista se volvió a dibujar, este botón ya no está en pantalla
                 boton.disabled = false;
-                return;
             }
-
-            if (darRol) idsAlumnos.add(idUsuario);
-            else idsAlumnos.delete(idUsuario);
-
-            mostrarUsuarios();
         }
 
         btnAlumnos.addEventListener("click", async () => {
+            // Solo un administrador puede abrir el panel (se comprueba de nuevo acá)
+            await cargarSesion();
+            aplicarRoles();
+            if (!esAdmin) {
+                mostrarAviso("Solo un administrador puede gestionar alumnos.", "error");
+                mostrarHistorias();
+                return;
+            }
+
             buscador.value = "";
             modalAlumnos.showModal();
             await cargarUsuarios();
@@ -538,7 +1088,6 @@
         buscador.addEventListener("input", mostrarUsuarios);
         $("cerrarAlumnos").addEventListener("click", () => modalAlumnos.close());
 
-        // Clic en el fondo oscuro cierra las ventanas
         [modalEscribir, modalLeer, modalBorrar, modalAlumnos].forEach((m) => {
             m.addEventListener("click", (e) => { if (e.target === m) m.close(); });
         });
