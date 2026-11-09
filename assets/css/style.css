@@ -562,3 +562,35 @@ body img:not(#imagenAmpliada) {
 body:has(.modal-imagen[style*="display: flex"]) {
     overflow: hidden;
 }
+
+/*MOVILES*/
+@media (max-width: 767.98px) {
+  .hero {
+    padding: 3rem 0;
+    border-radius: 0 0 24px 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+
+  #contacto {
+    padding: 1.25rem;
+  }
+
+  .logo-utu {
+    width: 56px;
+  }
+
+  .modal-imagen {
+    padding: 16px;
+  }
+
+  .flecha-imagen.anterior {
+    left: 8px;
+  }
+
+  .flecha-imagen.siguiente {
+    right: 8px;
+  }
+}
