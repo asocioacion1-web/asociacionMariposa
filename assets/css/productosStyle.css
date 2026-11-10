@@ -524,9 +524,6 @@ main {
   font-weight: 800;
   color: var(--azul-700);
 }
-<<<<<<< HEAD
-
-=======
 /* ===== Avisos de la página ===== */
 .aviso-productos {
   max-width: 560px;
@@ -596,4 +593,3 @@ main {
   cursor: pointer;
 }
 .btn-eliminar-producto:disabled { opacity: .6; cursor: wait; }
->>>>>>> origin/main
