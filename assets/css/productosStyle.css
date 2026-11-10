@@ -10,8 +10,19 @@
 
 body {
   font-family: 'Nunito', sans-serif;
-  color: #1f2d3a;
-  background: #ffffff;
+  color: #eaf3f3;
+  margin: 0;
+  min-height: 100vh;
+  background-color: #07ad9f;
+  background-image:
+    radial-gradient(circle at 15% 0%, #0a879a 0, transparent 45%),
+    radial-gradient(circle at 100% 100%, #07045f 0, transparent 50%),
+    repeating-linear-gradient(
+      135deg,
+      rgb(255 255 255 / 0.015) 0 2px,
+      transparent 2px 14px
+    );
+  background-attachment: fixed;
 }
 
 h1, h2, h3, h4 {
@@ -21,7 +32,7 @@ h1, h2, h3, h4 {
 
 .hero {
   background: linear-gradient(135deg, var(--azul-900) 0%, var(--azul-500) 100%);
-  color: #fff;
+  color: #ffffff;
   padding: 4.5rem 0 5rem;
   border-radius: 0 0 40px 40px;
 }

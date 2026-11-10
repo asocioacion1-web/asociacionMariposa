@@ -1,9 +1,22 @@
 /* ===== Página de historias ===== */
-        body {
-            font-family: 'Nunito', sans-serif;
-            color: #1f2d3a;
-            background: #f4f8fc;
-        }
+body {
+    font-family: 'Nunito', sans-serif;
+    color: #1f2d3a;
+    background: #f4f8fc;
+        
+  margin: 0;
+  min-height: 100vh;
+  background-color: #07ad9f;
+  background-image:
+    radial-gradient(circle at 15% 0%, #0a879a 0, transparent 45%),
+    radial-gradient(circle at 100% 100%, #07045f 0, transparent 50%),
+    repeating-linear-gradient(
+      135deg,
+      rgb(255 255 255 / 0.015) 0 2px,
+      transparent 2px 14px
+    );
+  background-attachment: fixed;
+}
 
         .historias-main {
             max-width: 1000px;
