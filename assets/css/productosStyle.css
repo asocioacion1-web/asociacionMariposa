@@ -8,6 +8,7 @@
   --coral: #ff8b6b;
 }
 
+
 body {
   font-family: 'Nunito', sans-serif;
   color: #eaf3f3;
@@ -268,6 +269,30 @@ main {
 }
 
 .encabezado-productos h1 {
+  color: #ffffff !important;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.encabezado-productos .descripcion {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  color: #ffffff;
+}
+
+.etiqueta {
+  display: inline-block;
+  padding: .4rem 1rem;
+  margin-bottom: 12px;
+  border-radius: 50px;
+  background: var(--azul-100);
+  color: var(--azul-700);
+  font-weight: 700;
+  font-size: .85rem;
+}
+
+.encabezado-productos h1 {
   color: var(--azul-700);
   margin-bottom: 12px;
 }
@@ -317,9 +342,9 @@ main {
   margin-bottom: 24px;
 }
 
-.galeria-encabezado h2 { color: var(--azul-700); }
-.galeria-encabezado p  { color: #5b6b7b; }
-.sin-productos         { text-align: center; color: #5b6b7b; }
+.galeria-encabezado h2 { color: #ffffff; }
+.galeria-encabezado p  { color: #ffffff; }
+.sin-productos         { text-align: center; color: #ffffff; }
 
 /* Tarjetas de productos */
 #productosContainer {
@@ -604,3 +629,26 @@ main {
   cursor: pointer;
 }
 .btn-eliminar-producto:disabled { opacity: .6; cursor: wait; }
+
+.seccion-contacto {
+  text-align: center;
+  margin: 48px auto 0;
+  max-width: 800px;
+  padding: 0 16px;
+}
+
+.enlace-contacto {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.enlace-contacto:hover {
+  color: #ffc94d;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

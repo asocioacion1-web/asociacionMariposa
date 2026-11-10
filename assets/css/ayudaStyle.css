@@ -25,7 +25,8 @@ body {
 }
 
 .header-ayuda .lead {
-    color: #a9c4c7 !important;   /* pisa el text-muted de Bootstrap */
+    color: #000000 !important;
+    font-weight: 500;
 }
 
 .tarjeta-guia {
