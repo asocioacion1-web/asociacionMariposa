@@ -1,41 +1,6 @@
 
 <!DOCTYPE html>
 <html lang="es">
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Productos | Asociación Civil Mariposas</title>
-
-    <link rel="stylesheet" href="../assets/css/productosStyle.css">
-</head>
-
-<body>
-
-    <!-- MENÚ SUPERIOR -->
-    <header class="menu-superior">
-        <nav class="nav-simple">
-
-            <a href="/index.html" class="logo">
-                🦋 Asociación Civil Mariposas
-            </a>
-
-            <div class="nav-links">
-                <a href="/index.html">Inicio</a>
-            </div>
-
-        </nav>
-    </header>
-
-
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="container">
-=======
-=======
->>>>>>> origin/main
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,6 +9,7 @@
  
   <link rel="stylesheet" href="/assets/css/navbar.css">
   <link rel="stylesheet" href="/assets/css/productosStyle.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
  
@@ -192,320 +158,6 @@
       </div>
     </div>
   </div>
-<<<<<<< HEAD
-    
-    <div id="form-section" class="form-seccion">
-      <h2>Publicar Producto</h2>
-      <form id="formProducto">
-        <label for="nombre">Nombre del producto:</label>
-        <input type="text" id="nombre" placeholder="Nombre del producto" required />
->>>>>>> origin/main
-
-        <section class="encabezado-productos">
-
-            <span class="etiqueta">Nuestra comunidad</span>
-
-            <h1>Productos de Mariposas</h1>
-
-            <p class="descripcion">
-                Conocé los productos de nuestra asociación.
-                Si alguno te interesa, podés acercarte a nuestra
-                sede o conseguirlo en alguno de nuestros eventos.
-            </p>
-
-        </section>
-
-        <div class="separador"></div>
-
-
-        <!-- ADMINISTRACIÓN -->
-        <section class="administracion-productos">
-
-            <button id="abrirModal"
-                    class="btn-agregar"
-                    type="button">
-
-                + Agregar producto
-
-            </button>
-
-        </section>
-
-
-        <!-- GALERÍA DE PRODUCTOS -->
-        <section class="galeria-productos">
-
-            <div class="galeria-encabezado">
-                <h2>Productos publicados</h2>
-                <p>Explorá los artículos de nuestra asociación.</p>
-            </div>
-
-            <div id="productosContainer"></div>
-
-            <p id="sinProductos" class="sin-productos">
-                Todavía no hay productos publicados.
-            </p>
-
-        </section>
-
-    </main>
-
-
-    <!-- MODAL PARA AGREGAR PRODUCTOS -->
-    <div id="modalProducto"
-         class="modal"
-         role="dialog"
-         aria-modal="true"
-         aria-labelledby="tituloModal"
-         hidden>
-
-        <div class="modal-contenido">
-
-            <!-- CABECERA -->
-            <div class="modal-header">
-
-                <div>
-                    <h2 id="tituloModal">Nuevo producto</h2>
-
-                    <p>
-                        Sumá un artículo a nuestra tienda
-                    </p>
-                </div>
-
-                <button id="cerrarModal"
-                        class="cerrar"
-                        type="button"
-                        aria-label="Cerrar modal">
-
-                    &times;
-
-                </button>
-
-            </div>
-
-
-            <!-- FORMULARIO -->
-            <form id="formProducto">
-
-                <!-- IMAGEN -->
-                <div class="campo">
-
-                    <label for="foto">
-                        Fotografía del producto
-                    </label>
-
-                    <label class="zona-imagen" for="foto">
-
-                        <span class="icono-imagen">📷</span>
-
-                        <strong>Seleccionar fotografía</strong>
-
-                        <small>JPG, PNG o WebP · Máximo 5 MB</small>
-
-                        <img id="vistaPrevia"
-                             alt="Vista previa"
-                             hidden>
-
-                    </label>
-
-                    <input type="file"
-                           id="foto"
-                           accept="image/jpeg,image/png,image/webp"
-                           required
-                           hidden>
-
-                </div>
-
-
-                <!-- NOMBRE -->
-                <div class="campo">
-
-                    <label for="nombre">
-                        Nombre del producto
-                    </label>
-
-                    <input type="text"
-                           id="nombre"
-                           maxlength="100"
-                           placeholder="Ej: Taza artesanal"
-                           required>
-
-                </div>
-
-
-                <!-- PRECIO Y STOCK -->
-                <div class="campos-fila">
-
-                    <div class="campo">
-
-                        <label for="precio">
-                            Precio ($ UYU)
-                        </label>
-
-                        <input type="number"
-                               id="precio"
-                               min="0"
-                               step="0.01"
-                               placeholder="350"
-                               required>
-
-                    </div>
-
-                    <div class="campo">
-
-                        <label for="stock">
-                            Stock disponible
-                        </label>
-
-                        <input type="number"
-                               id="stock"
-                               min="0"
-                               step="1"
-                               placeholder="10"
-                               required>
-
-                    </div>
-
-                </div>
-
-
-                <!-- CATEGORÍA -->
-                <div class="campo">
-
-                    <label for="categoria">
-                        Categoría
-                    </label>
-
-                    <select id="categoria" required>
-
-                        <option value="">
-                            Seleccionar categoría
-                        </option>
-
-                        <option value="Artesanías">Artesanías</option>
-                        <option value="Ropa">Ropa</option>
-                        <option value="Accesorios">Accesorios</option>
-                        <option value="Decoración">Decoración</option>
-                        <option value="Otros">Otros</option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- DESCRIPCIÓN -->
-                <div class="campo">
-
-                    <label for="info">
-                        Descripción del producto
-                    </label>
-
-                    <textarea id="info"
-                              rows="4"
-                              placeholder="Contanos sobre este producto..."
-                              required></textarea>
-
-                </div>
-
-
-                <!-- MENSAJES -->
-                <p id="mensajeProducto"
-                   role="status"
-                   aria-live="polite"></p>
-
-
-                <!-- BOTONES -->
-                <div class="modal-footer">
-
-                    <button id="cancelar"
-                            type="button"
-                            class="btn-cancelar">
-
-                        Cancelar
-
-                    </button>
-
-                    <button id="publicarProducto"
-                            type="submit"
-                            class="btn-publicar">
-
-                        Publicar producto
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-<<<<<<< HEAD
-    <!-- JAVASCRIPT -->
-    <script>
-// =====================================
-// ASOCIACIÓN CIVIL MARIPOSAS
-// PRODUCTOS - DEMOSTRACIÓN LOCAL
-// =====================================
-
-// ELEMENTOS HTML
-const modal = document.getElementById("modalProducto");
-const abrirModal = document.getElementById("abrirModal");
-const cerrar = document.getElementById("cerrarModal");
-const cancelar = document.getElementById("cancelar");
-=======
-    <!-- Sección de tarjetas (Únicas con caja blanca) -->
-    <h2>Productos Publicados</h2>
-    <div id="productosContainer">
-
-    </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module">
-
-    const form = document.getElementById('formProducto');
-    const productosContainer = document.getElementById('productosContainer');
-    let productos = [];
->>>>>>> origin/main
-
-const formulario = document.getElementById("formProducto");
-const productosContainer = document.getElementById("productosContainer");
-const sinProductos = document.getElementById("sinProductos");
-
-const inputFoto = document.getElementById("foto");
-const vistaPrevia = document.getElementById("vistaPrevia");
-const mensaje = document.getElementById("mensajeProducto");
-
-let productos = [];
-let urlPrevia = null;
-
-// =====================================
-// ABRIR MODAL
-// =====================================
-
-abrirModal.addEventListener("click", () => {
-    modal.hidden = false;
-    document.getElementById("nombre").focus();
-});
-
-// =====================================
-// CERRAR MODAL
-// =====================================
-
-function cerrarModal() {
-    modal.hidden = true;
-}
-
-cerrar.addEventListener("click", cerrarModal);
-cancelar.addEventListener("click", cerrarModal);
-
-// Cerrar tocando fuera de la ventana
-modal.addEventListener("click", (evento) => {
-    if (evento.target === modal) {
-        cerrarModal();
-=======
  
   <div class="modal fade" id="modalVerProducto" tabindex="-1" aria-labelledby="modalVerProductoTitulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -528,11 +180,14 @@ modal.addEventListener("click", (evento) => {
       </div>
     </div>
   </div>
+
+  <div id="footer-placeholder"></div>
  
  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/assets/js/navbar.js"></script>
+  <script src="/assets/js/footer.js"></script>
   <script type="module">
  
     // ===== Elementos =====
@@ -584,7 +239,6 @@ modal.addEventListener("click", (evento) => {
       sinProductos.textContent = "No se pudo conectar con el servidor.";
       sinProductos.hidden = false;
       throw e;
->>>>>>> origin/main
     }
  
     const clienteSupabase = supabase.createClient(config.url, config.anonKey);
