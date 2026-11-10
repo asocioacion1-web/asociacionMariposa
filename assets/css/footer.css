@@ -42,3 +42,18 @@ footer {
   section {
     scroll-margin-top: 90px;
   }
+
+.enlace-encuesta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.enlace-encuesta:hover {
+  color: #ffc94d;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
