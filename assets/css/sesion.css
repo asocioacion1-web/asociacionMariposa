@@ -83,3 +83,44 @@ button {
   justify-content: center;
   border: 2px solid var(--azul-500);
 }
+
+.contenedor {
+    overflow-wrap: anywhere;
+}
+
+.contenedor img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 767.98px) {
+    body {
+        background-attachment: scroll;
+    }
+
+    .contenedor {
+        margin: 32px auto;
+        padding: 20px;
+    }
+
+    .info-admin {
+        padding: 16px;
+    }
+
+    .mensaje {
+        padding: 22px 16px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .contenedor {
+        width: calc(100% - 24px);
+        margin: 20px auto;
+        padding: 16px;
+        border-radius: 8px;
+    }
+
+    .contenedor button {
+        width: 100%;
+    }
+}

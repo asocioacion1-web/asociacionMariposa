@@ -427,3 +427,68 @@ dialog.modal-registro input {
   font-size: .85rem;
   color: #1b2a49;
 }
+
+html {
+  display: block;
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  display: flex;
+  width: 100%;
+  height: auto;
+  min-height: 100dvh;
+  padding: 80px 16px 28px;
+  overflow: visible;
+}
+
+.card {
+  margin: auto;
+  width: min(100%, 320px);
+}
+
+dialog.modal-registro {
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+
+@media (max-width: 575.98px) {
+  body {
+    background-attachment: scroll;
+    padding: 76px 14px 24px;
+  }
+
+  .field input,
+  dialog.modal-registro input,
+  .pass-wrap input[type="password"],
+  .pass-wrap input[type="text"] {
+    font-size: 16px;
+  }
+
+  dialog.modal-registro {
+    width: calc(100vw - 24px);
+    padding: 18px;
+  }
+
+  .reg-fila {
+    flex-direction: column;
+  }
+
+  .reg-acciones {
+    flex-direction: column-reverse;
+  }
+
+  #contenedor-toasts {
+    width: 100vw;
+    padding: 12px;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  body {
+    padding-top: 72px;
+  }
+}

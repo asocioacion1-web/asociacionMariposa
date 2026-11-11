@@ -39,6 +39,7 @@
   } catch (e) { console.error("navbar.js: admin:", e); }
   const enIndex = location.pathname === "/" || location.pathname === "/index.html";
   t("btnCrearNoticiaNav", !(esAdmin && enIndex));;
+  t("btnCrearNoticiaMovil", !(esAdmin && enIndex));;
  
   const persona = document.getElementById("btnPersona");
   persona?.classList.toggle("conectado", logueado);

@@ -876,3 +876,98 @@ body {
         font-size: 13px;
     }
 }
+
+.galeria {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+}
+
+.acciones-foto {
+  flex-wrap: wrap;
+}
+
+.modal-foto {
+  max-height: 90dvh;
+}
+
+.visor-foto {
+  max-height: calc(100dvh - 30px);
+}
+
+.visor-contenido {
+  max-height: calc(100dvh - 30px);
+  overflow-y: auto;
+}
+
+@media (max-width: 720px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  .intro {
+    padding: 32px 16px 24px;
+  }
+
+  .intro p {
+    font-size: 16px;
+  }
+
+  .galeria {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .titulo {
+    font-size: 26px;
+  }
+
+  .foto {
+    height: 240px;
+  }
+
+  .btn-agregar {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-acciones {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .acciones-eliminar {
+    flex-direction: column-reverse;
+  }
+
+  .acciones-eliminar button {
+    width: 100%;
+  }
+
+  .modal-eliminar {
+    padding: 18px;
+  }
+
+  .visor-cerrar {
+    top: 8px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    font-size: 22px;
+  }
+
+  .visor-info h2 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .visor-media {
+    height: 50dvh;
+  }
+
+  .modal-foto form {
+    padding: 16px;
+  }
+}

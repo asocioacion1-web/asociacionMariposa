@@ -652,3 +652,72 @@ main {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+
+main {
+  overflow-wrap: anywhere;
+}
+
+img {
+  max-width: 100%;
+}
+
+#productosContainer {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}
+
+.encabezado-productos h1 {
+  font-size: clamp(1.6rem, 5vw + 0.5rem, 2.5rem);
+}
+
+.modal-contenido {
+  max-height: 90dvh;
+}
+
+@media (max-width: 767.98px) {
+  main {
+    padding: 24px 14px 48px;
+  }
+
+  #productosContainer {
+    gap: 16px;
+  }
+
+  .producto-contenido {
+    padding: 14px;
+  }
+
+  .modal-contenido {
+    padding: 18px;
+  }
+
+  .modal-producto-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .seccion-contacto {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  #productosContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .campos-fila {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .modal-producto-footer {
+    flex-direction: column-reverse;
+  }
+
+  .modal-producto-footer button {
+    width: 100%;
+  }
+
+  .producto-acciones {
+    flex-direction: column;
+  }
+}
