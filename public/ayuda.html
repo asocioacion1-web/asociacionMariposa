@@ -108,7 +108,13 @@
                     <strong>Noticias</strong> y <strong>Ayuda</strong>. Haz clic en cualquiera de esas palabras para ir
                     a la sección que necesites en cualquier momento.</p>
             </div>
-
+`               <button class="btn-mas-info"
+    data-bs-toggle="modal"
+    data-bs-target="#modalAyuda"
+    data-titulo="Información básica"
+    data-info="La Asociación Mariposas está enfocada principalmente en las personas con autismo, promoviendo su inclusión, educación y oportunidades laborales.">
+    Más información
+</button>
             <div class="item-pregunta">
                 <h4>¿Cómo publicar noticias?</h4>
                 <p>Solo el usuario de la asociación puede publicar noticias o contenido que es focal de la web. Ellos
@@ -137,9 +143,59 @@
         </div>
     </section>
 
-        <!-- PIE DE PÁGINA SENCILLO -->
-        <div id="footer-placeholder"></div>
+            <!-- PIE DE PÁGINA SENCILLO -->
+            <footer class="py-4 text-center text-muted border-top bg-white fs-7">
+                <div class="container">
+                    <p class="mb-0 small">© 2026 Asociación Civil Mariposas Azul — Trinidad, Uruguay.</p>
+                </div>
+            </footer>
 
+ 
+            <!-- MODAL DE AYUDAS -->
+<div class="modal fade" id="modalAyuda" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-ayuda">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModal">
+                    Información
+                </h5>
+
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <p id="contenidoModal"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cerrar"
+                    data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    const modalAyuda = document.getElementById('modalAyuda');
+
+    modalAyuda.addEventListener('show.bs.modal', function (event) {
+
+        const boton = event.relatedTarget;
+
+        const titulo = boton.getAttribute('data-titulo');
+        const informacion = boton.getAttribute('data-info');
+
+        document.getElementById('tituloModal').textContent = titulo;
+        document.getElementById('contenidoModal').textContent = informacion;
+
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
