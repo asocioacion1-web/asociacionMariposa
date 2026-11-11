@@ -151,6 +151,7 @@ section {
     flex-shrink: 0;
     margin-left: auto;
   }
+<<<<<<< HEAD
 =======
 .btn-persona {
   color: #9aa0a6;
@@ -170,4 +171,49 @@ section {
 .btn-persona.conectado:focus-visible {
   color: var(--azul-500);
 >>>>>>> d5db586 (Ahora se ve una persona en ves de las 3 rallitas)
+=======
+}
+
+#navbar .nav-logo {
+  gap: 10px;
+}
+
+#navbar .navbar-brand {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#navbar .nav-logo > .btn,
+#btnPersona {
+  flex-shrink: 0;
+}
+
+#menuLateral {
+  width: min(85vw, 320px);
+}
+
+.enlaces-movil .btn {
+  border-color: var(--azul-700);
+  color: var(--azul-700);
+}
+
+.enlaces-movil .btn:hover {
+  background: var(--azul-700);
+  color: #fff;
+}
+
+@media (max-width: 767.98px) {
+  #navbar .navbar-brand {
+    font-size: 1.15rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  #navbar .navbar-brand {
+    font-size: clamp(.8rem, 4vw, 1rem) !important;
+    white-space: normal;
+  }
+>>>>>>> be3ef20 (responsib en todas las paginas)
 }

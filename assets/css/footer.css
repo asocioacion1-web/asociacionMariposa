@@ -57,3 +57,59 @@ footer {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+
+footer {
+    overflow-wrap: anywhere;
+}
+
+footer img {
+    max-width: 100%;
+    height: auto;
+}
+
+.enlace-encuesta {
+    flex-wrap: wrap;
+}
+
+@media (max-width: 991.98px) {
+    .logo-utu {
+        width: 64px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    footer {
+        text-align: center;
+    }
+
+    footer .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logo-utu {
+        position: static;
+        display: block;
+        width: 64px;
+        margin: 0 auto 16px;
+    }
+
+    footer .d-flex {
+        justify-content: center;
+    }
+
+    .btn-donar {
+        padding: .55rem 1.3rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .logo-utu {
+        width: 56px;
+    }
+
+    footer .small {
+        font-size: .85rem;
+    }
+}
