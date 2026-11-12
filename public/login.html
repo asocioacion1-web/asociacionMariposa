@@ -355,6 +355,7 @@ let config;
       email,
       password: passwordHash,
       options: {
+        emailRedirectTo: `${window.location.origin}/index.html`,
         data: { nombre, apellido, fecha_nacimiento: nacimiento, telefono }
       }
     });
