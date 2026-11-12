@@ -58,7 +58,7 @@
     <label for="regNacimiento">Fecha de nacimiento</label>
     <input type="date" id="regNacimiento">
 
-    <input type="tel" id="regTelefono" placeholder="Teléfono" maxlength="20">
+    <input type="tel" id="regTelefono" placeholder="Teléfono (ej: 099123456)" maxlength="9" inputmode="numeric">
     <input type="email" id="regEmail" placeholder="Email">
     <div class="pass-wrap">
       <input type="password" id="regPassword" placeholder="Contraseña (mínimo 8 caracteres)">
@@ -265,6 +265,10 @@ let config;
     modalRegistro.showModal();
   });
 
+  document.getElementById("regTelefono").addEventListener("input", (e) => {
+    e.target.value = e.target.value.replace(/\D/g, "");
+  });
+
   function validarRegistro({ nombre, apellido, nacimiento, telefono, email, contra }) {
     const errores = [];
 
@@ -274,8 +278,8 @@ let config;
     const errorApellido = validarNombre(apellido, "apellido");
     if (errorApellido) errores.push(errorApellido);
 
-    if (!/^\d{8,15}$/.test(telefono)) {
-      errores.push("El teléfono debe tener entre 8 y 15 números, sin espacios ni símbolos.");
+    if (!/^09\d{7}$/.test(telefono)) {
+      errores.push("El teléfono debe tener 9 números y empezar con 09 (por ejemplo 099123456), sin espacios ni símbolos.");
     }
 
     if (!nacimiento) {
