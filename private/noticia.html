@@ -395,6 +395,8 @@
         mostrarMensaje("¡Noticia publicada correctamente!", "success");
         document.getElementById("form-noticia").reset();
         previaImagen.src = "https://placehold.co/400x220/e6e6e6/999999?text=Imagen";
+
+        setTimeout(() => {window.location.href = "/index.html";}, 1500);
       } catch (error) {
         console.error("Error:", error);
         mostrarMensaje("Ocurrió un error: " + error.message, "error");

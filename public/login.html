@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<form class="card" id="loginForm">
+<form class="card" id="loginForm" novalidate>
   <div class="avatar">
     <svg viewBox="0 0 24 24">
       <path d="M4 8h3l2-2h6l2 2h3v11H4z"/>
@@ -89,8 +89,20 @@
     </div>
   </form>
 </dialog>
-  
-  <script>
+<dialog id="modalConfirmar" class="modal-registro">
+  <h2>¡Te registraste correctamente!</h2>
+  <p class="texto-recuperar">Entrá a tu email para confirmar tu cuenta.</p>
+  <p class="texto-recuperar"><strong>IMPORTANTE:</strong> si no la confirmás, no vas a poder iniciar sesión.</p>
+
+  <div class="reg-acciones">
+    <button type="button" id="irAlEmail">EMAIL</button>
+    <button type="button" id="aceptarConfirmar">ACEPTAR</button>
+  </div>
+</dialog>
+
+
+<script>
+
   document.querySelectorAll(".ver-password").forEach((boton) => {
     boton.addEventListener("click", () => {
       const campo = boton.parentElement.querySelector("input");
@@ -288,6 +300,34 @@ let config;
 
   document.getElementById("cerrarRegistro").addEventListener("click", () => modalRegistro.close());
 
+    const modalConfirmar = document.getElementById("modalConfirmar");
+  let correoRegistrado = "";
+
+  const BUZONES = {
+    "gmail.com": "https://mail.google.com",
+    "googlemail.com": "https://mail.google.com",
+    "outlook.com": "https://outlook.live.com/mail",
+    "hotmail.com": "https://outlook.live.com/mail",
+    "live.com": "https://outlook.live.com/mail",
+    "yahoo.com": "https://mail.yahoo.com",
+    "icloud.com": "https://www.icloud.com/mail",
+  };
+
+  function mostrarConfirmacion(email) {
+    correoRegistrado = email;
+    modalConfirmar.showModal();
+  }
+
+  document.getElementById("irAlEmail").addEventListener("click", () => {
+    const dominio = correoRegistrado.split("@")[1]?.toLowerCase();
+    const url = BUZONES[dominio] || "https://mail.google.com";
+    window.open(url, "_blank", "noopener");
+  });
+
+  document.getElementById("aceptarConfirmar").addEventListener("click", () => modalConfirmar.close());
+
+  modalConfirmar.addEventListener("cancel", (e) => e.preventDefault());
+
   document.getElementById("registroForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -296,7 +336,7 @@ let config;
     const nacimiento = document.getElementById("regNacimiento").value;
     const telefono = document.getElementById("regTelefono").value;
     const email = document.getElementById("regEmail").value;
-    const contra = document.getElementById("regContra").value;
+    const contra = document.getElementById("regPassword").value;
 
     const errores = validarRegistro({ nombre, apellido, nacimiento, telefono, email, contra });
 
@@ -329,7 +369,7 @@ let config;
       avisar("¡Cuenta creada! Entrando...", "success");
       setTimeout(() => { window.location.href = "/index.html"; }, 1200);
     } else {
-      avisar("Cuenta creada. Revisá tu correo para confirmarla.", "success");
+      mostrarConfirmacion(email);
     }
   });
 </script>
