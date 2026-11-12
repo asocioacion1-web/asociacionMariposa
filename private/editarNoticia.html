@@ -148,10 +148,10 @@
         const parametros = new URLSearchParams(window.location.search);
         const idNoticia = parametros.get("id");
 
-        if (!idNoticia) {
-            mostrarMensaje("Falta el id de la noticia. Redirigiendo a la página principal...", "error");
-            window.location.href = "/index.html";
-            throw new Error("Falta el id de la noticia");
+        if (!idNoticia || !/^[1-9]\d*$/.test(idNoticia)) {
+            mostrarMensaje("El id de la noticia no es válido. Redirigiendo a la página principal...", "error");
+            setTimeout(() => (window.location.href = "/index.html"), 1500);
+            throw new Error("Id de noticia inválido");
         }
 
         let urlImagenActual = "";
@@ -218,23 +218,15 @@
 
         // VISTA PREVIA DE LA IMAGEN
 
-        inputImagen.addEventListener("change", function () {
+        inputImagen.addEventListener("change", async function () {
             const archivo = this.files[0];
             if (!archivo) return;
 
-            if (
-                archivo &&
-                archivo.type !== "image/webp" &&
-                archivo.type !== "image/jpeg" &&
-                archivo.type !== "image/png" &&
-                archivo.type !== "image/jpg" &&
-                !archivo.name.toLowerCase().endsWith(".webp") &&
-                !archivo.name.toLowerCase().endsWith(".jpeg") &&
-                !archivo.name.toLowerCase().endsWith(".jpg") &&
-                !archivo.name.toLowerCase().endsWith(".png")
-            ) {
-                mostrarMensaje("La imagen debe estar en formato .webp/.jpeg/.jpg/.png.", "error");
+            const errorImagen = await validarImagen(archivo);
+            if (errorImagen) {
+                mostrarMensaje(errorImagen, "error");
                 inputImagen.value = "";
+                previaImagen.src = urlImagenActual || "https://placehold.co/400x220/e6e6e6/999999?text=Imagen";
                 return;
             }
 
@@ -312,19 +304,62 @@
 
         //Validar los campos del formulario
 
+        const hoy = () => new Date().toLocaleDateString("sv-SE");
+
         function validarNoticia({ titulo, subtitulo, parrafo, fecha }) {
             const errores = [];
 
-            if (titulo.length < 3 || titulo.length > 100)
-                errores.push("El título debe tener entre 3 y 100 caracteres.");
-            if (subtitulo.length < 3 || subtitulo.length > 150)
-                errores.push("El subtítulo debe tener entre 3 y 150 caracteres.");
-            if (parrafo.length < 10 || parrafo.length > 5000)
-                errores.push("El párrafo debe tener entre 10 y 5000 caracteres.");
-            if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha) || isNaN(new Date(fecha)))
-                errores.push("La fecha no es válida.");
+            if (!titulo) errores.push("El título es obligatorio.");
+            else if (titulo.length < 10 || titulo.length > 100)
+                errores.push("El título debe tener entre 10 y 100 caracteres.");
+
+            if (!subtitulo) errores.push("El subtítulo es obligatorio.");
+            else if (subtitulo.length < 15 || subtitulo.length > 150)
+                errores.push("El subtítulo debe tener entre 15 y 150 caracteres.");
+
+            if (!parrafo) errores.push("El párrafo es obligatorio.");
+            else if (parrafo.length < 20 || parrafo.length > 5000)
+                errores.push("El párrafo debe tener entre 20 y 5000 caracteres.");
+
+            if (!fecha) {
+                errores.push("La fecha es obligatoria.");
+            } else {
+                const existe = /^\d{4}-\d{2}-\d{2}$/.test(fecha) &&
+                    new Date(fecha + "T00:00:00").toLocaleDateString("sv-SE") === fecha;
+
+                if (!existe) errores.push("La fecha no es válida.");
+                else if (fecha > hoy()) errores.push("La fecha no puede ser mayor que la fecha actual.");
+            }
 
             return errores;
+        }
+
+        document.getElementById("campo-fecha").max = hoy();
+
+        // Validar imagen (formato, peso máximo 15 MB y que sea una imagen de verdad)
+
+        const MAX_IMAGEN = 15 * 1024 * 1024;
+
+        async function esImagenReal(archivo) {
+            const b = new Uint8Array(await archivo.slice(0, 12).arrayBuffer());
+            const igual = (...bytes) => bytes.every((v, i) => b[i] === v);
+
+            const png = igual(0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A);
+            const jpg = igual(0xFF, 0xD8, 0xFF);
+            const webp = igual(0x52, 0x49, 0x46, 0x46) &&
+                b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50;
+
+            return png || jpg || webp;
+        }
+
+        async function validarImagen(archivo) {
+            if (!/\.(jpe?g|png|webp)$/i.test(archivo.name))
+                return "La imagen debe estar en formato .webp/.jpeg/.jpg/.png.";
+            if (archivo.size > MAX_IMAGEN)
+                return "La imagen no puede pesar más de 15 MB.";
+            if (!(await esImagenReal(archivo)))
+                return "El archivo no es una imagen válida (PNG, JPG o WEBP).";
+            return null;
         }
 
         async function guardarCambios() {
@@ -348,21 +383,12 @@
                 // SI SUBIERON UNA IMAGEN NUEVA, LA SUBIMOS
 
                 if (archivo) {
-                    if (
-                        archivo.type !== "image/webp" &&
-                        archivo.type !== "image/jpeg" &&
-                        archivo.type !== "image/jpg" &&
-                        archivo.type !== "image/png" &&
-                        !archivo.name.toLowerCase().endsWith(".webp") &&
-                        !archivo.name.toLowerCase().endsWith(".jpeg") &&
-                        !archivo.name.toLowerCase().endsWith(".jpg") &&
-                        !archivo.name.toLowerCase().endsWith(".png")
-                    ) {
-                        mostrarMensaje("La imagen debe estar en formato .webp/.jpeg/.jpg/.png.", "error");
+                    const errorImagen = await validarImagen(archivo);
+                    if (errorImagen) {
+                        mostrarMensaje(errorImagen, "error");
                         return;
                     }
 
-                    console.log("Convirtiendo imagen a WebP...");
                     const webpBlob = await convertirAWebP(archivo);
 
                     // Mismo contenido = mismo nombre
@@ -439,6 +465,10 @@
                     throw new Error(
                         resultado.message || "No se pudo guardar los cambios.",
                     );
+                }
+
+                if (!Array.isArray(resultado) || resultado.length === 0) {
+                    throw new Error("La noticia no existe o no tenés permiso para editarla.");
                 }
 
                 mostrarMensaje("¡Noticia actualizada correctamente!", "success");

@@ -154,27 +154,18 @@
 
     // VISTA PREVIA DE LA IMAGEN
 
-    inputImagen.addEventListener("change", function () {
+    inputImagen.addEventListener("change", async function () {
       const archivo = this.files[0];
 
       if (!archivo) {
         return;
       }
 
-      // Verificar que tipo de archivo sea una imagen válida (webp, jpeg, jpg, png)
-
-      if (
-        archivo.type !== "image/webp" &&
-        archivo.type !== "image/jpeg" &&
-        archivo.type !== "image/png" &&
-        archivo.type !== "image/jpg" &&
-        !archivo.name.toLowerCase().endsWith(".webp") &&
-        !archivo.name.toLowerCase().endsWith(".jpeg") &&
-        !archivo.name.toLowerCase().endsWith(".jpg") &&
-        !archivo.name.toLowerCase().endsWith(".png")
-      ) {
-        mostrarMensaje("La imagen debe estar en formato .webp/.jpeg/.jpg/.png.", "error");
+      const errorImagen = await validarImagen(archivo);
+      if (errorImagen) {
+        mostrarMensaje(errorImagen, "error");
         inputImagen.value = "";
+        previaImagen.src = "https://placehold.co/400x220/e6e6e6/999999?text=Imagen";
         return;
       }
 
@@ -218,21 +209,63 @@
 
     // VALIDAR CAMPOS
 
+    const hoy = () => new Date().toLocaleDateString("sv-SE");
+
     function validarNoticia({ titulo, subtitulo, parrafo, fecha }) {
       const errores = [];
 
-      if (!titulo || !parrafo || !subtitulo || !fecha)
-        errores.push("Por favor completá todos los campos.");
-      if (titulo && (titulo.length < 10 || titulo.length > 100))
+      if (!titulo) errores.push("El título es obligatorio.");
+      else if (titulo.length < 10 || titulo.length > 100)
         errores.push("El título debe tener entre 10 y 100 caracteres.");
-      if (subtitulo && (subtitulo.length < 15 || subtitulo.length > 150))
+
+      if (!subtitulo) errores.push("El subtítulo es obligatorio.");
+      else if (subtitulo.length < 15 || subtitulo.length > 150)
         errores.push("El subtítulo debe tener entre 15 y 150 caracteres.");
-      if (parrafo && (parrafo.length < 20 || parrafo.length > 5000))
+
+      if (!parrafo) errores.push("El párrafo es obligatorio.");
+      else if (parrafo.length < 20 || parrafo.length > 5000)
         errores.push("El párrafo debe tener entre 20 y 5000 caracteres.");
-      if (fecha && (!/^\d{4}-\d{2}-\d{2}$/.test(fecha) || isNaN(new Date(fecha))))
-        errores.push("La fecha no es válida.");
+
+      if (!fecha) {
+        errores.push("La fecha es obligatoria.");
+      } else {
+        const existe = /^\d{4}-\d{2}-\d{2}$/.test(fecha) &&
+          new Date(fecha + "T00:00:00").toLocaleDateString("sv-SE") === fecha;
+
+        if (!existe) errores.push("La fecha no es válida.");
+        else if (fecha > hoy()) errores.push("La fecha no puede ser mayor que la fecha actual.");
+      }
 
       return errores;
+    }
+
+    document.getElementById("campo-fecha").max = hoy();
+
+    // VALIDAR IMAGEN (formato, peso máximo 15 MB y que sea una imagen de verdad)
+
+    const MAX_IMAGEN = 15 * 1024 * 1024;
+
+    async function esImagenReal(archivo) {
+      const b = new Uint8Array(await archivo.slice(0, 12).arrayBuffer());
+      const igual = (...bytes) => bytes.every((v, i) => b[i] === v);
+
+      const png = igual(0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A);
+      const jpg = igual(0xFF, 0xD8, 0xFF);
+      const webp = igual(0x52, 0x49, 0x46, 0x46) && igual(0, 0, 0, 0, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50) === false
+        ? (b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50)
+        : false;
+
+      return png || jpg || webp;
+    }
+
+    async function validarImagen(archivo) {
+      if (!/\.(jpe?g|png|webp)$/i.test(archivo.name))
+        return "La imagen debe estar en formato .webp/.jpeg/.jpg/.png.";
+      if (archivo.size > MAX_IMAGEN)
+        return "La imagen no puede pesar más de 15 MB.";
+      if (!(await esImagenReal(archivo)))
+        return "El archivo no es una imagen válida (PNG, JPG o WEBP).";
+      return null;
     }
 
     // CONVERTIR IMAGEN A WEBP
@@ -309,19 +342,12 @@
 
       // Validar imagen (opcional)
 
-      if (
-        archivo &&
-        archivo.type !== "image/webp" &&
-        archivo.type !== "image/jpeg" &&
-        archivo.type !== "image/jpg" &&
-        archivo.type !== "image/png" &&
-        !archivo.name.toLowerCase().endsWith(".webp") &&
-        !archivo.name.toLowerCase().endsWith(".jpeg") &&
-        !archivo.name.toLowerCase().endsWith(".jpg") &&
-        !archivo.name.toLowerCase().endsWith(".png")
-      ) {
-        mostrarMensaje("La imagen debe estar en formato .webp/.jpeg/.jpg/.png.", "error");
-        return;
+      if (archivo) {
+        const errorImagen = await validarImagen(archivo);
+        if (errorImagen) {
+          mostrarMensaje(errorImagen, "error");
+          return;
+        }
       }
 
       try {
