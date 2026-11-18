@@ -410,6 +410,50 @@ html.tv-mode :focus-visible {
   transform: scale(1.04);
   z-index: 5;
 }
+
+.card-joven .btn-editar {
+    background: none;
+    color: var(--azul-900);
+    font-weight: 700;
+    border: 2px solid var(--azul-900);
+    border-radius: 6px;
+}
+.card-joven .btn-editar:hover {
+    color: green;
+    border: 2px solid green;
+  }
+
+.card-joven .btn-borrar {
+    background: none;
+    color: var(--azul-900);
+
+    font-weight: 700;
+    border: 2px solid var(--azul-900);
+    border-radius: 6px;
+}
+  .card-joven .btn-borrar:hover {
+    color: red;
+    border: 2px solid red;
+  }
+
+.btn-agregar-joven {
+  background: #1e8a4c;
+  color: #fff;
+  border: 2px solid #166a39;
+  border-radius: 8px;
+  padding: .35rem .9rem;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, transform .15s;
+}
+.btn-agregar-joven:hover {
+  background: #166a39;
+  transform: translateY(-1px);
+}
+.btn-agregar-joven:active {
+  transform: translateY(0);
+}
 /* MODAL PARA AMPLIAR IMÁGENES :) */
 
 .modal-imagen {
@@ -517,6 +561,40 @@ body img:not(#imagenAmpliada) {
 body:has(.modal-imagen[style*="display: flex"]) {
     overflow: hidden;
 }
+
+.carrusel-jovenes { padding: 0 3rem; }
+.carrusel-pista {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.carrusel-pista::-webkit-scrollbar { display: none; }
+.carrusel-pista .card-joven {
+  flex: 0 0 calc((100% - 3rem) / 3);
+  scroll-snap-align: start;
+}
+.carrusel-pista .card-joven img {
+  width: 150px; height: 150px; object-fit: cover;
+}
+@media (max-width: 991px) {
+  .carrusel-pista .card-joven { flex-basis: calc((100% - 1.5rem) / 2); }
+}
+@media (max-width: 575px) {
+  .carrusel-pista .card-joven { flex-basis: 100%; }
+  .carrusel-jovenes { padding: 0 2.5rem; }
+}
+.flecha {
+  position: absolute; top: 40%; transform: translateY(-50%); z-index: 2;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 2px solid #0c3b66; background: #fff; color: #0c3b66;
+  font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+.flecha-izq { left: 0; }
+.flecha-der { right: 0; }
+.flecha:disabled { opacity: .35; cursor: default; }
 
 /*MOVILES*/
 @media (max-width: 767.98px) {

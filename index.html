@@ -202,36 +202,37 @@
   <!--Apartado para los jovenes de la asociación-->
   <section id="jovenes" class="py-5 seccion-clara">
     <div class="container">
-               <div class="row g-4">
-        <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="1">
-            <img src="https://placehold.co/150x150/8fc4ea/0c3b66?text=Joven+1" alt="Joven 1"
-              class="rounded-circle mb-3">
-            <h6>Asociación persona</h6>
-            <p class="small text-secondary">Participa activamente en los talleres de arte y ha expuesto sus obras en
-              la feria anual.</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="2">
-            <img src="https://placehold.co/150x150/ffc94d/0c3b66?text=Joven+2" alt="Joven 2"
-              class="rounded-circle mb-3">
-            <h6>Asociación persona</h6>
-            <p class="small text-secondary">Destacada en el coro Mariposa, ha participado en varias presentaciones
-              locales y regionales.</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="card-joven p-3 d-flex flex-column align-items-center h-100 text-center" data-joven="3">
-            <img src="https://placehold.co/150x150/ff8b6b/ffffff?text=Joven+3" alt="Joven 3"
-              class="rounded-circle mb-3">
-            <h6>Asociación persona</h6>
-            <p class="small text-secondary">
-              Ha demostrado gran habilidad en las actividades deportivas, siendo un referente para sus compañeros.
-            </p>
-          </div>
-        </div>
+    <div class="carrusel-jovenes position-relative">
+      <button type="button" class="flecha flecha-izq" id="jovPrev" aria-label="Anterior">&#8249;</button>
+      <div class="carrusel-pista" id="jovenesPista"></div>
+      <button type="button" class="flecha flecha-der" id="jovNext" aria-label="Siguiente">&#8250;</button>
+    </div>
+
+<div class="text-center mb-4">
+  <button type="button" class="btn-agregar-joven" id="btnAgregarJoven" style="display:none">
+    + Agregar joven
+  </button>
+</div>
+
+    <!-- Modal para agregar joven -->
+    <div class="modal fade" id="modalBorrarJoven" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Borrar joven</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
+      <div class="modal-body">
+        <p class="mb-1">¿Seguro que querés borrar a <strong id="borrarJovenNombre"></strong>? Esta acción no se puede deshacer.</p>
+        <p id="borrarJovenMensaje" class="text-danger small mb-0"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmarBorrarJoven">Sí, borrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!--Modal editar jovenes-->
   <div class="modal fade" id="modalJoven" tabindex="-1" aria-labelledby="modalJovenLabel" aria-hidden="true">
@@ -537,39 +538,88 @@
     let jovenEnEdicion = null;
     let urlTemporalJoven = null;
 
-    function urlFotoJoven(nombreArchivo) {
-      return clienteSupabase.storage.from(BUCKET_FOTOS).getPublicUrl(nombreArchivo).data.publicUrl;
+    const pista = document.getElementById("jovenesPista");
+const btnPrev = document.getElementById("jovPrev");
+const btnNext = document.getElementById("jovNext");
+
+function paso() {
+  const card = pista.querySelector(".card-joven");
+  return card ? card.offsetWidth + 24 : 300;
+}
+
+function actualizarFlechas() {
+  btnPrev.disabled = pista.scrollLeft <= 5;
+  btnNext.disabled = pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 5;
+}
+
+function abrirModalAgregarJoven() {
+  jovenEnEdicion = null;
+  formJoven.reset();
+  limpiarUrlTemporalJoven();
+  jovenMensaje.textContent = "";
+  jovenPreview.removeAttribute("src");
+  jovenPreview.classList.add("d-none");
+  document.getElementById("modalJovenLabel").textContent = "Agregar joven";
+  modalJoven.show();
+}
+
+document.getElementById("btnAgregarJoven").addEventListener("click", abrirModalAgregarJoven);
+
+btnPrev.addEventListener("click", () => pista.scrollBy({ left: -paso() }));
+btnNext.addEventListener("click", () => pista.scrollBy({ left: paso() }));
+pista.addEventListener("scroll", actualizarFlechas);
+window.addEventListener("resize", actualizarFlechas);
+
+function mostrarJovenes() {
+  pista.innerHTML = "";
+  document.getElementById("btnAgregarJoven").style.display = esAdmin ? "inline-block" : "none";
+
+  jovenes.forEach((j) => {
+    const card = document.createElement("div");
+    card.className = "card-joven p-3 d-flex flex-column align-items-center h-100 text-center";
+    card.dataset.joven = j.id;
+
+    if (esAdmin) {
+      const acciones = document.createElement("div");
+      acciones.className = "d-flex gap-2 mb-3";
+
+const editar = document.createElement("button");
+editar.type = "button";
+editar.className = "fw-bold text-decoration-none btn-editar";
+editar.textContent = "Editar";
+editar.addEventListener("click", () => abrirModalJoven(j.id));
+
+const borrar = document.createElement("button");
+borrar.type = "button";
+borrar.className = "fw-bold text-decoration-none btn-borrar";
+borrar.textContent = "Borrar";
+borrar.addEventListener("click", () => abrirModalBorrarJoven(j.id));
+
+      acciones.append(borrar, editar);
+      card.appendChild(acciones);
     }
 
-    function mostrarJovenes() {
-      jovenes.forEach((j) => {
-        const tarjeta = document.querySelector(`.card-joven[data-joven="${j.id}"]`);
-        if (!tarjeta) return;
+    const img = document.createElement("img");
+    img.src = j.foto ? urlFotoJoven(j.foto) : "https://placehold.co/150x150?text=Foto";
+    img.alt = j.nombre;
+    img.className = "rounded-circle mb-3";
 
-        const img = tarjeta.querySelector("img");
-        if (j.foto) {
-          img.src = urlFotoJoven(j.foto);
-          img.style.width = "150px";
-          img.style.height = "150px";
-          img.style.objectFit = "cover";
-        }
-        img.alt = j.nombre;
+    const h = document.createElement("h6");
+    h.textContent = j.nombre;
 
-        tarjeta.querySelector("h6").textContent = j.nombre;
-        tarjeta.querySelector("p").textContent = j.descripcion;
+    const p = document.createElement("p");
+    p.className = "small text-secondary";
+    p.textContent = j.descripcion;
 
-        // Botón de editar arriba del círculo (solo administrador)
-        tarjeta.querySelector(".btn-editar-joven")?.remove();
+    card.append(img, h, p);
+    pista.appendChild(card);
+  });
 
-        if (esAdmin) {
-          const editar = document.createElement("button");
-          editar.type = "button";
-          editar.className = "btn btn-outline-primary btn-sm mb-3 btn-editar-joven";
-          editar.textContent = "Editar";
-          editar.addEventListener("click", () => abrirModalJoven(j.id));
-          tarjeta.prepend(editar);
-        }
-      });
+  actualizarFlechas();
+}
+
+    function urlFotoJoven(nombreArchivo) {
+      return clienteSupabase.storage.from(BUCKET_FOTOS).getPublicUrl(nombreArchivo).data.publicUrl;
     }
 
     async function cargarJovenes() {
@@ -599,6 +649,7 @@
       if (!j) return;
 
       jovenEnEdicion = id;
+      document.getElementById("modalJovenLabel").textContent = "Editar joven";
       formJoven.reset();
       limpiarUrlTemporalJoven();
       jovenMensaje.textContent = "";
@@ -677,48 +728,91 @@
       return nombreArchivo;
     }
 
-    formJoven.addEventListener("submit", async (evento) => {
-      evento.preventDefault();
+formJoven.addEventListener("submit", async (evento) => {
+  evento.preventDefault();
 
-      jovenMensaje.textContent = "";
-      jovenGuardar.disabled = true;
-      jovenGuardar.textContent = "Guardando...";
+  jovenMensaje.textContent = "";
+  jovenGuardar.disabled = true;
+  jovenGuardar.textContent = "Guardando...";
 
-      try {
-        const nombre = jovenNombre.value.trim();
-        const descripcion = jovenDescripcion.value.trim();
+  try {
+    const nombre = jovenNombre.value.trim();
+    const descripcion = jovenDescripcion.value.trim();
+    if (!nombre) throw new Error("Escribí un nombre.");
 
-        if (!nombre) throw new Error("Escribí un nombre.");
+    const esNuevo = jovenEnEdicion === null;
+    const actual = jovenes.find(x => x.id === jovenEnEdicion);
+    let foto = actual ? actual.foto : null;
 
-        const actual = jovenes.find(x => x.id === jovenEnEdicion);
-        let foto = actual ? actual.foto : null;
+    const archivo = jovenFoto.files[0];
+    if (archivo) {
+      foto = await subirImagenJoven(await convertirAWebP(archivo));
+    }
 
-        const archivo = jovenFoto.files[0];
-        if (archivo) {
-          foto = await subirImagenJoven(await convertirAWebP(archivo));
-        }
+    const consulta = esNuevo
+      ? clienteSupabase.from("destacados").insert({ nombre, descripcion, foto })
+      : clienteSupabase.from("destacados").update({ nombre, descripcion, foto }).eq("id", jovenEnEdicion);
 
-        const { data, error } = await clienteSupabase
-          .from("destacados")
-          .update({ nombre, descripcion, foto })
-          .eq("id", jovenEnEdicion)
-          .select();
+    const { data, error } = await consulta.select();
 
-        if (error || !data || data.length === 0) {
-          console.error("Error al guardar:", error);
-          throw new Error("No se pudo guardar. Revisá que tengas permiso de administrador.");
-        }
+    if (error || !data || data.length === 0) {
+      console.error("Error al guardar:", error);
+      throw new Error("No se pudo guardar. Revisá que tengas permiso de administrador.");
+    }
 
-        modalJoven.hide();
-        await cargarJovenes();
+    modalJoven.hide();
+    await cargarJovenes();
 
-      } catch (e) {
-        jovenMensaje.textContent = e.message || "Ocurrió un error. Intentá de nuevo.";
-      } finally {
-        jovenGuardar.disabled = false;
-        jovenGuardar.textContent = "Guardar";
-      }
-    });
+    if (esNuevo) pista.scrollTo({ left: pista.scrollWidth, behavior: "smooth" });
+
+  } catch (e) {
+    jovenMensaje.textContent = e.message || "Ocurrió un error. Intentá de nuevo.";
+  } finally {
+    jovenGuardar.disabled = false;
+    jovenGuardar.textContent = "Guardar";
+  }
+});
+
+const modalBorrarJoven = new bootstrap.Modal(document.getElementById("modalBorrarJoven"));
+const btnConfirmarBorrarJoven = document.getElementById("btnConfirmarBorrarJoven");
+const borrarJovenMensaje = document.getElementById("borrarJovenMensaje");
+let jovenPorBorrar = null;
+
+function abrirModalBorrarJoven(id) {
+  const j = jovenes.find(x => x.id === id);
+  if (!j) return;
+  jovenPorBorrar = id;
+  borrarJovenMensaje.textContent = "";
+  document.getElementById("borrarJovenNombre").textContent = j.nombre;
+  modalBorrarJoven.show();
+}
+
+btnConfirmarBorrarJoven.addEventListener("click", async () => {
+  if (jovenPorBorrar === null) return;
+  btnConfirmarBorrarJoven.disabled = true;
+
+  try {
+    const { data, error } = await clienteSupabase
+      .from("destacados")
+      .delete()
+      .eq("id", jovenPorBorrar)
+      .select();
+
+    if (error || !data || data.length === 0) {
+      console.error("Error al borrar:", error);
+      throw new Error("No se pudo borrar. Revisá que tengas permiso de administrador.");
+    }
+
+    modalBorrarJoven.hide();
+    jovenPorBorrar = null;
+    await cargarJovenes();
+  } catch (e) {
+    borrarJovenMensaje.textContent = e.message;
+  } finally {
+    btnConfirmarBorrarJoven.disabled = false;
+  }
+});
+
 // AMPLIAR IMÁGENES
 
 const modalImagen = document.getElementById("modalImagen");
